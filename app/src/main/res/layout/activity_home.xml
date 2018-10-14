@@ -17,6 +17,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/homeImageViewProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <TextView
             android:id="@+id/homeTextViewName"
             android:layout_width="wrap_content"
@@ -34,7 +39,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15dp"
             android:background="@color/colorPrimaryDark"
-            android:text="Logout"
+            android:text="@string/activity_home_btn_logout"
             android:textAllCaps="false"
             android:textColor="#cdd8f1" />
 

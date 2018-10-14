@@ -11,6 +11,9 @@
     <string name="fragment_enter_code_edit_txt_code">Enter verification code</string>
     <string name="fragment_enter_code_btn_continue">Sign in</string>
 
+    <!-- Activity home -->
+    <string name="activity_home_btn_logout">Logout</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

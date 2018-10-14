@@ -3,6 +3,7 @@ package com.example.juan.aswitch.activities
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.bumptech.glide.Glide
 import com.example.juan.aswitch.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -20,6 +21,12 @@ class HomeActivity : AppCompatActivity() {
 
         mAuth.currentUser?.uid?.let {
             homeTextViewName.text = it
+        }
+
+        mAuth.currentUser?.photoUrl?.let {
+            Glide.with(this)
+                    .load(it)
+                    .into(homeImageViewProfile)
         }
 
         homeButtonLogout.setOnClickListener {
