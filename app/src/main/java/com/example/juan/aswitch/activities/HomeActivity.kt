@@ -3,8 +3,10 @@ package com.example.juan.aswitch.activities
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.bumptech.glide.Glide
 import com.example.juan.aswitch.R
+import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_home.*
@@ -23,14 +25,14 @@ class HomeActivity : AppCompatActivity() {
             homeTextViewName.text = it
         }
 
-        mAuth.currentUser?.photoUrl?.let {
-            Glide.with(this)
-                    .load(it)
-                    .into(homeImageViewProfile)
-        }
+//        mAuth.currentUser?.photoUrl?.let {
+//            Glide.with(this)
+//                    .load(it)
+//                    .into(homeImageViewProfile)
+//        }
 
         homeButtonLogout.setOnClickListener {
-            mAuth!!.signOut()
+            mAuth.signOut()
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }

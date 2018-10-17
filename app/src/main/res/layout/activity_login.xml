@@ -6,10 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".activities.LoginActivity">
 
-    <FrameLayout
-        android:id="@+id/login_frame_container"
+    <!--<FrameLayout-->
+        <!--android:id="@+id/login_frame_container"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+    <!--</FrameLayout>-->
+
+    <View
+        android:id="@+id/login_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </FrameLayout>
+    </View>
 
 </android.support.constraint.ConstraintLayout>

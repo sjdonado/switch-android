@@ -1,16 +1,6 @@
 <resources>
     <string name="app_name">Switch</string>
 
-    <!-- Fragment enter number -->
-    <string name="fragment_enter_number_txt_view_message">May I ask your phone number?</string>
-    <string name="fragment_enter_number_edit_txt_phone">Enter your mobile number</string>
-    <string name="fragment_enter_number_btn_continue">Continue</string>
-
-    <!-- Fragment enter code -->
-    <string name="fragment_enter_code_txt_view_message">Wait for the code I sent You</string>
-    <string name="fragment_enter_code_edit_txt_code">Enter verification code</string>
-    <string name="fragment_enter_code_btn_continue">Sign in</string>
-
     <!-- Activity home -->
     <string name="activity_home_btn_logout">Logout</string>
 
