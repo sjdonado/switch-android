@@ -27,7 +27,7 @@ class LoginActivity : AppCompatActivity() {
         verifyAuth()
     }
 
-    private fun signIn(){
+    private fun signIn() {
         val phoneConfigWithDefaultNumber = IdpConfig.PhoneBuilder()
                 .setDefaultCountryIso("co")
                 .build()
@@ -82,7 +82,7 @@ class LoginActivity : AppCompatActivity() {
         if (!isUserSignedIn) {
             signIn()
         } else {
-            val intent = Intent(this, HomeActivity::class.java)
+            val intent = Intent(this, MenuActivity::class.java)
             startActivity(intent)
         }
     }

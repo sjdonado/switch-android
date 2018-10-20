@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "438933893092-n70k55jtjurkfuo9plbnaan459n879ev.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.juan.aswitch",
+            "certificate_hash": "a6a8060323d95537191836fd5e763d93a3ed6c10"
+          }
+        },
+        {
           "client_id": "438933893092-puv7kg8hcfrna4oj061rfakfac9hq24i.apps.googleusercontent.com",
           "client_type": 3
         }
