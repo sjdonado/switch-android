@@ -1,14 +1,20 @@
 <resources>
     <string name="app_name">Switch</string>
 
+    <!-- Menu titles -->
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_users">Users</string>
+
     <!-- Activity home -->
     <string name="activity_home_btn_logout">Logout</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="title_activity_home">HomeActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_users">Users</string>
+    <!-- Users Fragment -->
+    <string name="users_fragment_name">Name</string>
+    <string name="users_fragment_email">Email</string>
+
 </resources>

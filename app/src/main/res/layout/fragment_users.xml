@@ -6,20 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".fragments.UsersFragment">
 
-    <TextView
-        android:id="@+id/homeTextViewName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="112dp"
-        android:text="test"
-        android:textColor="@color/colorPrimary"
-        app:layout_constraintBottom_toTopOf="@+id/homeButtonLogout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.512"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <EditText
         android:id="@+id/homeEditTextName"
         android:layout_width="350dp"
@@ -30,11 +16,12 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:hint="Nombre"
+        android:hint="@string/users_fragment_name"
         app:layout_constraintBottom_toTopOf="@+id/homeEditTextEmail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:inputType="textPersonName"/>
 
     <EditText
         android:id="@+id/homeEditTextEmail"
@@ -45,12 +32,13 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:hint="Correo electronico"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/homeTextViewName"
+        android:hint="@string/users_fragment_email"
+        app:layout_constraintBottom_toTopOf="@+id/homeButtonLogout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:inputType="textEmailAddress" />
 
     <Button
         android:id="@+id/homeButtonLogout"
