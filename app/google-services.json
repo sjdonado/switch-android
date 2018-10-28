@@ -1,35 +1,27 @@
 {
   "project_info": {
-    "project_number": "1062870793708",
-    "firebase_url": "https://switch-219623.firebaseio.com",
-    "project_id": "switch-219623",
-    "storage_bucket": "switch-219623.appspot.com"
+    "project_number": "700950436211",
+    "firebase_url": "https://switch-dev-smartrends.firebaseio.com",
+    "project_id": "switch-dev-smartrends",
+    "storage_bucket": "switch-dev-smartrends.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1062870793708:android:02fd7de2c4572a2e",
+        "mobilesdk_app_id": "1:700950436211:android:02fd7de2c4572a2e",
         "android_client_info": {
           "package_name": "com.example.juan.aswitch"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1062870793708-n52dsocdfmdpu3qp219788o0542vf94g.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.juan.aswitch",
-            "certificate_hash": "a6a8060323d95537191836fd5e763d93a3ed6c10"
-          }
-        },
-        {
-          "client_id": "1062870793708-ocht85uqlr4s0r3693lv8qnara0uva2l.apps.googleusercontent.com",
+          "client_id": "700950436211-basno0f1lc55radi2nsmqg3utqehd27j.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCXGajHpIjlhwk0tjxhRdxLEcXQOK-9m74"
+          "current_key": "AIzaSyAjrSGPSmA8fqswx5p91YzP8_0jVzvOJwU"
         }
       ],
       "services": {
@@ -37,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1062870793708-ocht85uqlr4s0r3693lv8qnara0uva2l.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

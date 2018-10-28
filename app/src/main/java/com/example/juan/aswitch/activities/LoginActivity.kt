@@ -4,7 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import com.example.juan.aswitch.R
+import com.example.juan.aswitch.helpers.HttpClient
 import com.example.juan.aswitch.helpers.showSnackbar
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
@@ -13,6 +15,9 @@ import java.util.*
 import com.firebase.ui.auth.AuthUI.IdpConfig
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.GetTokenResult
 
 
 class LoginActivity : AppCompatActivity() {
@@ -77,13 +82,21 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    fun verifyAuth() {
-        val isUserSignedIn = FirebaseAuth.getInstance().currentUser != null
-        if (!isUserSignedIn) {
+    private fun verifyAuth() {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser == null) {
             signIn()
         } else {
-            val intent = Intent(this, MenuActivity::class.java)
-            startActivity(intent)
+            currentUser.getIdToken(true).addOnCompleteListener(object : OnCompleteListener<GetTokenResult> {
+                override fun onComplete(task: Task<GetTokenResult>) {
+                    if (task.isSuccessful) {
+                        val idToken = task.result!!.token
+                        HttpClient.TOKEN = "Bearer ${idToken!!}"
+                        Log.i("TOKEN_HIJUEPUTA", idToken)
+                    }
+                }
+            })
+            startActivity(Intent(this, MenuActivity::class.java))
         }
     }
 

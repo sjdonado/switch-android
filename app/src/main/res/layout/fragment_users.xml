@@ -6,22 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".fragments.UsersFragment">
 
+    <ImageView
+        android:id="@+id/homeImageViewProfilePicture"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/homeEditTextName"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="64dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
         android:hint="@string/users_fragment_name"
-        app:layout_constraintBottom_toTopOf="@+id/homeEditTextEmail"
+        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:inputType="textPersonName"/>
+        app:layout_constraintTop_toBottomOf="@+id/homeImageViewProfilePicture" />
 
     <EditText
         android:id="@+id/homeEditTextEmail"
@@ -29,16 +40,15 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="52dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
         android:hint="@string/users_fragment_email"
-        app:layout_constraintBottom_toTopOf="@+id/homeButtonLogout"
+        android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.555"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:inputType="textEmailAddress" />
+        app:layout_constraintTop_toBottomOf="@+id/homeEditTextName" />
 
     <Button
         android:id="@+id/homeButtonLogout"
@@ -46,15 +56,17 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="68dp"
+        android:layout_marginBottom="40dp"
         android:background="@color/colorPrimaryDark"
         android:text="@string/activity_home_btn_logout"
         android:textAllCaps="false"
         android:textColor="#cdd8f1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/homeEditTextEmail" />
 
 </android.support.constraint.ConstraintLayout>

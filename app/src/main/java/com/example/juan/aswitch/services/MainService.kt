@@ -1,16 +1,8 @@
 package com.example.juan.aswitch.services
 
-open class MainService {
+import com.example.juan.aswitch.helpers.HttpClient
+import com.google.firebase.auth.FirebaseAuth
 
-    companion object {
-        const val API_URL = "http://localhost"
-    }
+open class MainService (){
 
-    constructor() {
-
-    }
-
-    fun getUsers() {
-        //     HttpClient.get()
-    }
 }

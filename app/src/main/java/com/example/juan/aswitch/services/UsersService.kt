@@ -4,7 +4,7 @@ import com.example.juan.aswitch.helpers.HttpClient
 
 open class UsersService {
 
-    fun getUsers() {
-   //     HttpClient.get()
-    }
+//    fun getUsers() {
+//        HttpClient.get()
+//    }
 }
