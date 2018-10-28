@@ -18,6 +18,7 @@ import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.juan.aswitch.activities.LoginActivity
 import com.example.juan.aswitch.helpers.HttpClient
 import pl.aprilapps.easyphotopicker.EasyImage
@@ -79,6 +80,7 @@ class UsersFragment : Fragment() {
                     }
                     Glide.with(this)
                             .load(image)
+                            .apply(RequestOptions.circleCropTransform())
                             .into(homeImageViewProfilePicture)
                 }
             }

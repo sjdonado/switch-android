@@ -8,8 +8,9 @@ import java.io.File
 open class HttpClient {
 
     companion object {
-        const val API_URL = "https://us-central1-switch-dev-smartrends.cloudfunctions.net/switchDev/api/v1"
-        var TOKEN : String = ""
+
+        const val API_URL = "http://10.0.2.2:8010/switch-dev-smartrends/us-central1/switchDev/api/v1"
+        var TOKEN: String? = null
 
         fun get (path : String, callback: (response : String) -> Unit) {
             val request = Request.Builder()
