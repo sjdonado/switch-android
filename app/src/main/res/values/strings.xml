@@ -8,6 +8,7 @@
     <string name="title_users">Users</string>
 
     <!-- Activity home -->
+    <string name="activity_home_btn_save">Save</string>
     <string name="activity_home_btn_logout">Logout</string>
 
     <!-- TODO: Remove or change this placeholder text -->

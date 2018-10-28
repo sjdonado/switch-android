@@ -6,8 +6,9 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.example.juan.aswitch.R
+import com.example.juan.aswitch.fragments.UsersFragment
+import com.example.juan.aswitch.helpers.Functions
 import com.example.juan.aswitch.helpers.HttpClient
-import com.example.juan.aswitch.helpers.showSnackbar
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
@@ -17,7 +18,9 @@ import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GetTokenResult
+import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
 
@@ -52,30 +55,39 @@ class LoginActivity : AppCompatActivity() {
             when {
                 resultCode == Activity.RESULT_OK -> {
                     // Successfully signed in
-                    showSnackbar(login_view, "SignIn successful")
-                    verifyAuth()
+                    Functions.showSnackbar(login_fragment_container, "SignIn successful")
+                    setToken(FirebaseAuth.getInstance().currentUser) {
+                        HttpClient.post("/users", JSONObject()) { response ->
+                            val userFragment = UsersFragment().apply {
+                                arguments = Bundle().apply {
+                                    putBoolean("signUp", true)
+                                }
+                            }
+                            Functions.openFragment(this, R.id.login_fragment_container, userFragment)
+                        }
+                    }
                     return
                 }
                 response == null -> {
                     // Sign in failed
                     // User pressed back button
-                    showSnackbar(login_view, "Sign in cancelled")
+                    Functions.showSnackbar(login_fragment_container, "Sign in cancelled")
                     return
                 }
                 response.error?.errorCode == ErrorCodes.NO_NETWORK -> {
                     // Sign in failed
                     //No Internet Connection
-                    showSnackbar(login_view, "No Internet connection")
+                    Functions.showSnackbar(login_fragment_container, "No Internet connection")
                     return
                 }
                 response.error?.errorCode == ErrorCodes.UNKNOWN_ERROR -> {
                     // Sign in failed
                     //Unknown Error
-                    showSnackbar(login_view, "Unknown error")
+                    Functions.showSnackbar(login_fragment_container, "Unknown error")
                     return
                 }
                 else -> {
-                    showSnackbar(login_view, "Unknown Response")
+                    Functions.showSnackbar(login_fragment_container, "Unknown Response")
                 }
             }
         }
@@ -86,16 +98,22 @@ class LoginActivity : AppCompatActivity() {
         if (currentUser == null) {
             signIn()
         } else {
-            currentUser.getIdToken(true).addOnCompleteListener(object : OnCompleteListener<GetTokenResult> {
-                override fun onComplete(task: Task<GetTokenResult>) {
-                    if (task.isSuccessful) {
-                        val idToken = task.result!!.token
-                        HttpClient.TOKEN = "Bearer ${idToken!!}"
-                    }
-                }
-            })
-            startActivity(Intent(this, MenuActivity::class.java))
+            setToken(currentUser) {
+                startActivity(Intent(this, MenuActivity::class.java))
+            }
         }
+    }
+
+    private fun setToken(currentUser: FirebaseUser?, callback: () -> Unit) {
+        currentUser!!.getIdToken(true).addOnCompleteListener(object : OnCompleteListener<GetTokenResult> {
+            override fun onComplete(task: Task<GetTokenResult>) {
+                if (task.isSuccessful) {
+                    val idToken = task.result!!.token
+                    HttpClient.TOKEN = "Bearer ${idToken!!}"
+                    callback()
+                }
+            }
+        })
     }
 
 }

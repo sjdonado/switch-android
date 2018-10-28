@@ -3,10 +3,10 @@ package com.example.juan.aswitch.activities
 import com.example.juan.aswitch.R
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import com.example.juan.aswitch.fragments.HomeFragment
 import com.example.juan.aswitch.fragments.UsersFragment
+import com.example.juan.aswitch.helpers.Functions
 import kotlinx.android.synthetic.main.activity_menu.*
 
 class MenuActivity : AppCompatActivity() {
@@ -18,12 +18,12 @@ class MenuActivity : AppCompatActivity() {
             }
             R.id.navigation_home -> {
                 val homeFragment = HomeFragment.newInstance()
-                openFragment(homeFragment)
+                Functions.openFragment(this, R.id.menu_fragment_container, homeFragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_users -> {
-                val usersFragment = UsersFragment.newInstance()
-                openFragment(usersFragment)
+                val usersFragment = UsersFragment.getInstance()
+                Functions.openFragment(this, R.id.menu_fragment_container, usersFragment)
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -34,17 +34,8 @@ class MenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
 
-        val usersFragment = UsersFragment.newInstance()
-        openFragment(usersFragment)
-
-        navigation.menu.getItem(2).setChecked(true)
-    }
-
-    private fun openFragment(fragment: Fragment) {
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.menu_fragment_container, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
+        Functions.openFragment(this, R.id.menu_fragment_container, UsersFragment.getInstance())
+        navigation.menu.getItem(2).isChecked = true
     }
 
 }
