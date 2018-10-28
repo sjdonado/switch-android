@@ -19,7 +19,6 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.GetTokenResult
 
-
 class LoginActivity : AppCompatActivity() {
 
     companion object {
@@ -92,7 +91,6 @@ class LoginActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         val idToken = task.result!!.token
                         HttpClient.TOKEN = "Bearer ${idToken!!}"
-                        Log.i("TOKEN_HIJUEPUTA", idToken)
                     }
                 }
             })

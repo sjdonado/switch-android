@@ -1,14 +1,8 @@
 package com.example.juan.aswitch.helpers
 
 import android.util.Log
-import co.metalab.asyncawait.async
-import com.google.firebase.auth.FirebaseAuth
 import okhttp3.*
-import java.io.InputStream
 import java.io.File
-import org.json.JSONObject
-
-
 
 
 open class HttpClient {
@@ -41,6 +35,7 @@ open class HttpClient {
                     .header("Authorization", TOKEN)
                     .post(requestBody)
                     .build()
+            Log.i("REQUEST_TO_SEND", request.toString())
             executeRequest(path, request, callback)
         }
 
