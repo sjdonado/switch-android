@@ -4,9 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import com.example.juan.aswitch.R
-import com.example.juan.aswitch.fragments.UsersFragment
+import com.example.juan.aswitch.fragments.UserFragment
 import com.example.juan.aswitch.helpers.Functions
 import com.example.juan.aswitch.helpers.HttpClient
 import com.example.juan.aswitch.services.UserService
@@ -21,7 +20,6 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GetTokenResult
-import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
 
@@ -59,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
                     Functions.showSnackbar(login_fragment_container, "SignIn successful")
                     setToken(FirebaseAuth.getInstance().currentUser) {
                         UserService.signUp("/") { response ->
-                            val userFragment = UsersFragment().apply {
+                            val userFragment = UserFragment().apply {
                                 arguments = Bundle().apply {
                                     putBoolean("signUp", true)
                                 }

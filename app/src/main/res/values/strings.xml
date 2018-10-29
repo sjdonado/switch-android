@@ -17,5 +17,6 @@
     <!-- Users Fragment -->
     <string name="users_fragment_name">Name</string>
     <string name="users_fragment_email">Email</string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>

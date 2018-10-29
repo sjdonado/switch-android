@@ -8,7 +8,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.juan.aswitch"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -43,6 +43,7 @@ dependencies {
     implementation "com.android.support:cardview-v7:28.0.0"
 
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation 'com.google.android.gms:play-services-maps:16.0.0'
     kapt 'com.github.bumptech.glide:compiler:4.4.0'
 
     implementation 'com.android.support:design:28.0.0'

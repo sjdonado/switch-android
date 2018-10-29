@@ -12,7 +12,7 @@ import com.example.juan.aswitch.R
 class HomeFragment : Fragment() {
 
     companion object {
-        fun newInstance(): HomeFragment = HomeFragment()
+        fun getInstance(): HomeFragment = HomeFragment()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

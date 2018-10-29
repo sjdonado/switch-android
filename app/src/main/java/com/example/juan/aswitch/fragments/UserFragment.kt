@@ -28,12 +28,12 @@ import com.example.juan.aswitch.helpers.Functions
 import com.example.juan.aswitch.services.UserService
 
 
-class UsersFragment : Fragment() {
+class UserFragment : Fragment() {
 
     lateinit var mAuth: FirebaseAuth
 
     companion object {
-        fun getInstance(): UsersFragment = UsersFragment()
+        fun getInstance(): UserFragment = UserFragment()
         private val PICK_IMAGE = 0
     }
 
@@ -60,20 +60,21 @@ class UsersFragment : Fragment() {
             userButtonAction.text = "Next"
         } else {
             userButtonAction.text = "Save"
-            UserService.get("/") { res ->
-                Log.i("PROFILE_PICTURE_URL", res.getString("profile_picture"))
-                activity!!.runOnUiThread {
-                    Glide.with(activity)
-                            .load(res.getString("profile_picture"))
-                            .apply(RequestOptions()
-                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                    .skipMemoryCache(true))
-                            .apply(RequestOptions.circleCropTransform())
-                            .into(userImageViewProfilePicture)
-                    userEditTextName.setText(res.getString("name"))
-                    userEditTextEmail.setText(res.getString("email"))
-                }
-            }
+//            UserService.get("/") { res ->
+//                if(!res.getString("profile_picture").isNullOrEmpty()) {
+//                    activity!!.runOnUiThread {
+//                        Glide.with(activity)
+//                                .load(res.getString("profile_picture"))
+//                                .apply(RequestOptions()
+//                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                                        .skipMemoryCache(true))
+//                                .apply(RequestOptions.circleCropTransform())
+//                                .into(userImageViewProfilePicture)
+//                    }
+//                }
+//                if(!res.getString("name").isNullOrEmpty()) userEditTextName.setText(res.getString("name"))
+//                if(!res.getString("email").isNullOrEmpty()) userEditTextName.setText(res.getString("email"))
+//            }
         }
 
         userImageViewProfilePicture.setOnClickListener {
@@ -110,7 +111,7 @@ class UsersFragment : Fragment() {
                             Log.i("PROFILE_PICTURE_URL", res.getString("profile_picture"))
                             Glide.get(activity!!.applicationContext).clearMemory()
                             Glide.with(activity)
-                                    .load(res.getString("profile_picture"))
+                                    .load(image)
                                     .apply(RequestOptions()
                                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                                             .skipMemoryCache(true))

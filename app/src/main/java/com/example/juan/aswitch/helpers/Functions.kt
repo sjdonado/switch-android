@@ -18,6 +18,7 @@ open class Functions {
         fun openFragment(activity: AppCompatActivity, fragment_id : Int, fragment: Fragment) {
             val transaction = activity.supportFragmentManager.beginTransaction()
             transaction.replace(fragment_id, fragment)
+//            transaction.setCustomAnimations(R.anim.design_bottom_sheet_slide_in, R.anim.design_bottom_sheet_slide_out)
             transaction.addToBackStack(null)
             transaction.commit()
         }
