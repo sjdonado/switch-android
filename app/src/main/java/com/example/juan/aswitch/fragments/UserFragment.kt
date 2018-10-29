@@ -60,21 +60,21 @@ class UserFragment : Fragment() {
             userButtonAction.text = "Next"
         } else {
             userButtonAction.text = "Save"
-//            UserService.get("/") { res ->
-//                if(!res.getString("profile_picture").isNullOrEmpty()) {
-//                    activity!!.runOnUiThread {
-//                        Glide.with(activity)
-//                                .load(res.getString("profile_picture"))
-//                                .apply(RequestOptions()
-//                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-//                                        .skipMemoryCache(true))
-//                                .apply(RequestOptions.circleCropTransform())
-//                                .into(userImageViewProfilePicture)
-//                    }
-//                }
-//                if(!res.getString("name").isNullOrEmpty()) userEditTextName.setText(res.getString("name"))
-//                if(!res.getString("email").isNullOrEmpty()) userEditTextName.setText(res.getString("email"))
-//            }
+            UserService.get("/") { res ->
+                if(res.toString().contains("profile_picture")) {
+                    activity!!.runOnUiThread {
+                        Glide.with(activity)
+                                .load(res.getString("profile_picture"))
+                                .apply(RequestOptions()
+                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                        .skipMemoryCache(true))
+                                .apply(RequestOptions.circleCropTransform())
+                                .into(userImageViewProfilePicture)
+                        if(res.toString().contains("name")) userEditTextName.setText(res.getString("name"))
+                        if(res.toString().contains("email")) userEditTextEmail.setText(res.getString("email"))
+                    }
+                }
+            }
         }
 
         userImageViewProfilePicture.setOnClickListener {
@@ -128,7 +128,7 @@ class UserFragment : Fragment() {
     }
 
     private fun copyInputStreamToFile(input: InputStream, mimeType : String) : File {
-        val file = File(activity!!.cacheDir, "file_tmp.$mimeType")
+        val file = File(activity!!.cacheDir, "${System.currentTimeMillis()/1000}.$mimeType")
         try {
             val output = FileOutputStream(file)
             try {

@@ -1,8 +1,11 @@
 package com.example.juan.aswitch.helpers
 
+import android.util.Log
 import okhttp3.*
 import org.json.JSONObject
 import okhttp3.FormBody
+import java.io.IOException
+
 
 open class HttpClient {
 
@@ -48,11 +51,16 @@ open class HttpClient {
         }
 
         private fun executeRequest(path : String, request: Request, callback: (response: JSONObject) -> Unit) {
-            Thread {
-                val response = OkHttpClient().newCall(request).execute()
-                val body = JSONObject(response.body()!!.string()).getJSONObject("data")
-                callback(body)
-            }.start()
+            OkHttpClient().newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call?, e: IOException?) {
+                    Log.i("HTTP_RESPONSE", "${e?.message}")
+                }
+
+                override fun onResponse(call: Call?, response: Response?) {
+                    val body = JSONObject(response?.body()?.string()).getJSONObject("data")
+                    callback(body)
+                }
+            })
         }
     }
 }
