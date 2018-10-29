@@ -9,6 +9,7 @@ import com.example.juan.aswitch.R
 import com.example.juan.aswitch.fragments.UsersFragment
 import com.example.juan.aswitch.helpers.Functions
 import com.example.juan.aswitch.helpers.HttpClient
+import com.example.juan.aswitch.services.UserService
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
@@ -57,7 +58,7 @@ class LoginActivity : AppCompatActivity() {
                     // Successfully signed in
                     Functions.showSnackbar(login_fragment_container, "SignIn successful")
                     setToken(FirebaseAuth.getInstance().currentUser) {
-                        HttpClient.post("/users", JSONObject()) { response ->
+                        UserService.signUp("/") { response ->
                             val userFragment = UsersFragment().apply {
                                 arguments = Bundle().apply {
                                     putBoolean("signUp", true)

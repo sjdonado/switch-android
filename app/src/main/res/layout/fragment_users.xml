@@ -7,20 +7,21 @@
     tools:context=".fragments.UsersFragment">
 
     <ImageView
-        android:id="@+id/homeImageViewProfilePicture"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:id="@+id/userImageViewProfilePicture"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:background="@android:color/darker_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/homeEditTextName"
+        android:id="@+id/userEditTextName"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -32,10 +33,10 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/homeImageViewProfilePicture" />
+        app:layout_constraintTop_toBottomOf="@+id/userImageViewProfilePicture" />
 
     <EditText
-        android:id="@+id/homeEditTextEmail"
+        android:id="@+id/userEditTextEmail"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -48,10 +49,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.555"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/homeEditTextName" />
+        app:layout_constraintTop_toBottomOf="@+id/userEditTextName" />
 
     <Button
-        android:id="@+id/homeButtonAction"
+        android:id="@+id/userButtonAction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -66,7 +67,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/homeEditTextEmail"
+        app:layout_constraintTop_toBottomOf="@+id/userEditTextEmail"
         app:layout_constraintVertical_bias="0.767" />
 
 </android.support.constraint.ConstraintLayout>

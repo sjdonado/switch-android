@@ -16,17 +16,16 @@ import android.util.Log
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.juan.aswitch.activities.LoginActivity
-import com.example.juan.aswitch.helpers.HttpClient
 import org.json.JSONObject
 import java.io.*
 import android.webkit.MimeTypeMap
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.juan.aswitch.activities.MenuActivity
 import com.example.juan.aswitch.helpers.Functions
-import kotlin.math.sign
+import com.example.juan.aswitch.services.UserService
 
 
 class UsersFragment : Fragment() {
@@ -57,9 +56,27 @@ class UsersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
 
-        if (signUp) homeButtonAction.text = "Next" else homeButtonAction.text = "Save"
+        if (signUp){
+            userButtonAction.text = "Next"
+        } else {
+            userButtonAction.text = "Save"
+            UserService.get("/") { res ->
+                Log.i("PROFILE_PICTURE_URL", res.getString("profile_picture"))
+                activity!!.runOnUiThread {
+                    Glide.with(activity)
+                            .load(res.getString("profile_picture"))
+                            .apply(RequestOptions()
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                    .skipMemoryCache(true))
+                            .apply(RequestOptions.circleCropTransform())
+                            .into(userImageViewProfilePicture)
+                    userEditTextName.setText(res.getString("name"))
+                    userEditTextEmail.setText(res.getString("email"))
+                }
+            }
+        }
 
-        homeImageViewProfilePicture.setOnClickListener {
+        userImageViewProfilePicture.setOnClickListener {
             val intent = Intent()
             intent.type = "image/*"
             intent.action = Intent.ACTION_GET_CONTENT
@@ -67,24 +84,15 @@ class UsersFragment : Fragment() {
             startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE)
         }
 
-        homeButtonAction.setOnClickListener {
+        userButtonAction.setOnClickListener {
             val jsonObject = JSONObject()
-            jsonObject.put("name", homeEditTextName.text)
-            HttpClient.put("/users", jsonObject) { response ->
-                Log.i("RESPONSE", response)
-            }
-            if(signUp) {
-                requireActivity().startActivity(Intent(activity!!, MenuActivity::class.java))
-            }else{
+            jsonObject.put("name", userEditTextName.text)
+            jsonObject.put("email", userEditTextEmail.text)
+            UserService.put("/", jsonObject) {
                 Functions.showSnackbar(getView()!!, "Info updated!")
             }
+            if(signUp) requireActivity().startActivity(Intent(activity!!, MenuActivity::class.java))
         }
-
-//        homeButtonLogout.setOnClickListener {
-//            mAuth.signOut()
-//            val intent = Intent(activity!!, LoginActivity::class.java)
-//            requireActivity().startActivity(intent)
-//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -96,13 +104,20 @@ class UsersFragment : Fragment() {
                     val image = copyInputStreamToFile(
                             activity!!.contentResolver!!.openInputStream(data.data!!)!!,
                             getMimeType(activity!!, data.data!!)!!)
-                    HttpClient.uploadImage("/users/upload", "profile_picture", image) { response ->
-                        Log.i("RESPONSE", response.toString())
+                    UserService.uploadImage("/upload", "profile_picture", image) { res ->
+                        Functions.showSnackbar(view!!, "Info updated!")
+                        activity!!.runOnUiThread {
+                            Log.i("PROFILE_PICTURE_URL", res.getString("profile_picture"))
+                            Glide.get(activity!!.applicationContext).clearMemory()
+                            Glide.with(activity)
+                                    .load(res.getString("profile_picture"))
+                                    .apply(RequestOptions()
+                                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                            .skipMemoryCache(true))
+                                    .apply(RequestOptions.circleCropTransform())
+                                    .into(userImageViewProfilePicture)
+                        }
                     }
-                    Glide.with(this)
-                            .load(image)
-                            .apply(RequestOptions.circleCropTransform())
-                            .into(homeImageViewProfilePicture)
                 }
             }
             else -> {
@@ -112,7 +127,7 @@ class UsersFragment : Fragment() {
     }
 
     private fun copyInputStreamToFile(input: InputStream, mimeType : String) : File {
-        val file = File(activity!!.cacheDir, "file_tmp.${mimeType}")
+        val file = File(activity!!.cacheDir, "file_tmp.$mimeType")
         try {
             val output = FileOutputStream(file)
             try {
