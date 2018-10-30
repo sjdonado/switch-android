@@ -1,8 +1,39 @@
 package com.example.juan.aswitch.services
 
+import android.app.Activity
+import android.view.View
 import com.example.juan.aswitch.helpers.HttpClient
-import com.google.firebase.auth.FirebaseAuth
+import okhttp3.FormBody
+import okhttp3.MultipartBody
+import org.json.JSONObject
+import kotlin.properties.Delegates
 
-open class MainService (){
+open class MainService (path : String, activity: Activity, progressBar: View){
+
+    var path : String by Delegates.notNull()
+    var activity : Activity by Delegates.notNull()
+    var progressBar : View by Delegates.notNull()
+
+    init {
+        this.path = path
+        this.activity = activity
+        this.progressBar = progressBar
+    }
+
+    fun get(path: String, callback: (response: JSONObject) -> Unit) {
+        HttpClient.get(this.path + path, this.activity, this.progressBar, callback)
+    }
+
+    fun post(path: String, formBody: FormBody, callback: (response: JSONObject) -> Unit) {
+        HttpClient.post(this.path + path, this.activity, this.progressBar, formBody, callback)
+    }
+
+    fun put(path: String, formBody: FormBody, callback: (response: JSONObject) -> Unit) {
+        HttpClient.put(this.path + path, this.activity, this.progressBar, formBody, callback)
+    }
+
+    fun upload(path : String, multipartBody : MultipartBody, callback : (response : JSONObject) -> Unit) {
+        HttpClient.upload(this.path + path, this.activity, this.progressBar, multipartBody, callback)
+    }
 
 }

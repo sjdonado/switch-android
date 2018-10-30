@@ -1,50 +1,47 @@
 package com.example.juan.aswitch.services
 
-import android.util.Log
-import com.example.juan.aswitch.helpers.HttpClient
+import android.app.Activity
+import android.view.View
 import okhttp3.*
 import org.json.JSONObject
 import java.io.File
 
-open class UserService {
+open class UserService (activity: Activity, progressBar: View) : MainService("/users", activity, progressBar) {
 
-    companion object {
-        private const val PATH = "/users"
+    fun getInfo(path: String, callback: (response: JSONObject) -> Unit) {
+        super.get(path, callback)
+    }
 
-        fun get(path: String, callback: (response: JSONObject) -> Unit) {
-            HttpClient.get(PATH + path, callback)
-        }
+    fun signUp(path: String, callback: (response: JSONObject) -> Unit) {
+        super.post(path, FormBody.Builder().build(), callback)
+    }
 
-        fun signUp(path: String, callback: (response: JSONObject) -> Unit) {
-            HttpClient.post(PATH + path, FormBody.Builder().build(), callback)
-        }
+    fun post(path: String, jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
+        val formBody = FormBody.Builder()
+                .add("name", jsonObject.getString("name"))
+                .add("email", jsonObject.getString("email"))
+                .build()
+        super.post(path, formBody, callback)
+    }
 
-        fun post(path: String, jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
-            HttpClient.post(PATH + path, formBuilder(jsonObject), callback)
-        }
+    fun put(path: String, jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
+        val formBody = FormBody.Builder()
+                .add("name", jsonObject.getString("name"))
+                .add("email", jsonObject.getString("email"))
+                .build()
+        super.put(path, formBody, callback)
+    }
 
-        fun put(path: String, jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
-            HttpClient.put(PATH + path, formBuilder(jsonObject), callback)
-        }
+    fun uploadImage(path : String, field : String, image : File, callback: (response : JSONObject) -> Unit) {
+        val mediaType = if (image.endsWith("png"))
+            MediaType.parse("image/png")
+        else
+            MediaType.parse("image/jpeg")
 
-        fun uploadImage(path : String, field : String, image : File, callback: (response : JSONObject) -> Unit) {
-            val mediaType = if (image.endsWith("png"))
-                MediaType.parse("image/png")
-            else
-                MediaType.parse("image/jpeg")
-
-            val multipartBody = MultipartBody.Builder()
-                    .setType(MultipartBody.FORM)
-                    .addFormDataPart(field, image.name, RequestBody.create(mediaType, image))
-                    .build()
-            HttpClient.uploadImage(PATH + path, multipartBody, callback)
-        }
-
-        private fun formBuilder(jsonObject: JSONObject) : FormBody{
-            return FormBody.Builder()
-                    .add("name", jsonObject.getString("name"))
-                    .add("email", jsonObject.getString("email"))
-                    .build()
-        }
+        val multipartBody = MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart(field, image.name, RequestBody.create(mediaType, image))
+                .build()
+        super.upload(path, multipartBody, callback)
     }
 }

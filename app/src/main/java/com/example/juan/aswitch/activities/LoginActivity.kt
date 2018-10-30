@@ -20,8 +20,11 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GetTokenResult
+import kotlinx.android.synthetic.main.activity_menu.*
 
 class LoginActivity : AppCompatActivity() {
+
+    lateinit var userService : UserService
 
     companion object {
         const val RC_SIGN_IN = 123
@@ -30,6 +33,8 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        userService = UserService(this, login_progress_bar)
+
         verifyAuth()
     }
 
@@ -56,7 +61,7 @@ class LoginActivity : AppCompatActivity() {
                     // Successfully signed in
                     Functions.showSnackbar(login_fragment_container, "SignIn successful")
                     setToken(FirebaseAuth.getInstance().currentUser) {
-                        UserService.signUp("/") { response ->
+                        userService.signUp("/") { response ->
                             val userFragment = UserFragment().apply {
                                 arguments = Bundle().apply {
                                     putBoolean("signUp", true)

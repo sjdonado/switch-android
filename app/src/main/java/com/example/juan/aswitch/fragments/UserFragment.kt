@@ -26,18 +26,19 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.juan.aswitch.activities.MenuActivity
 import com.example.juan.aswitch.helpers.Functions
 import com.example.juan.aswitch.services.UserService
+import kotlinx.android.synthetic.main.activity_menu.*
 
 
 class UserFragment : Fragment() {
 
     lateinit var mAuth: FirebaseAuth
+    lateinit var userService : UserService
+    private var signUp = false
 
     companion object {
         fun getInstance(): UserFragment = UserFragment()
         private val PICK_IMAGE = 0
     }
-
-    private var signUp = false
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -55,12 +56,13 @@ class UserFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
+        userService = UserService(activity!!, activity!!.menu_progress_bar)
 
         if (signUp){
             userButtonAction.text = "Next"
         } else {
             userButtonAction.text = "Save"
-            UserService.get("/") { res ->
+            userService.getInfo("/") { res ->
                 if(res.toString().contains("profile_picture")) {
                     activity!!.runOnUiThread {
                         Glide.with(activity)
@@ -89,7 +91,7 @@ class UserFragment : Fragment() {
             val jsonObject = JSONObject()
             jsonObject.put("name", userEditTextName.text)
             jsonObject.put("email", userEditTextEmail.text)
-            UserService.put("/", jsonObject) {
+            userService.put("/", jsonObject) {
                 Functions.showSnackbar(getView()!!, "Info updated!")
             }
             if(signUp) requireActivity().startActivity(Intent(activity!!, MenuActivity::class.java))
@@ -105,7 +107,7 @@ class UserFragment : Fragment() {
                     val image = copyInputStreamToFile(
                             activity!!.contentResolver!!.openInputStream(data.data!!)!!,
                             getMimeType(activity!!, data.data!!)!!)
-                    UserService.uploadImage("/upload", "profile_picture", image) { res ->
+                    userService.uploadImage("/upload", "profile_picture", image) { res ->
                         Functions.showSnackbar(view!!, "Info updated!")
                         activity!!.runOnUiThread {
                             Log.i("PROFILE_PICTURE_URL", res.getString("profile_picture"))

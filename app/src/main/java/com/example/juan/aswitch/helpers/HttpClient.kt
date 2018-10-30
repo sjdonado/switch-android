@@ -1,11 +1,12 @@
 package com.example.juan.aswitch.helpers
 
+import android.app.Activity
 import android.util.Log
+import android.view.View
 import okhttp3.*
 import org.json.JSONObject
 import okhttp3.FormBody
 import java.io.IOException
-
 
 open class HttpClient {
 
@@ -15,48 +16,52 @@ open class HttpClient {
         const val API_URL = "http://10.0.2.2:8010/switch-dev-smartrends/us-central1/switchDev/api/v1"
         var TOKEN: String? = null
 
-        fun get(path: String, callback: (response: JSONObject) -> Unit) {
+        fun get(path : String, activity : Activity, progressBar : View, callback : (response : JSONObject) -> Unit) {
             val request = Request.Builder()
                     .header("Authorization", TOKEN!!)
                     .url(API_URL + path)
                     .build()
-            executeRequest(path, request, callback)
+            executeRequest(request, activity, progressBar, callback)
         }
 
-        fun post(path: String, formBody: FormBody, callback: (response: JSONObject) -> Unit) {
+        fun post(path : String, activity : Activity, progressBar : View, formBody : FormBody, callback : (response: JSONObject) -> Unit) {
             val request = Request.Builder()
                     .header("Authorization", TOKEN!!)
                     .url(API_URL + path)
                     .post(formBody)
                     .build()
-            executeRequest(path, request, callback)
+            executeRequest(request, activity, progressBar, callback)
         }
 
-        fun put(path: String, formBody: FormBody, callback: (response: JSONObject) -> Unit) {
+        fun put(path : String, activity : Activity, progressBar : View, formBody : FormBody, callback : (response : JSONObject) -> Unit) {
             val request = Request.Builder()
                     .header("Authorization", TOKEN!!)
                     .url(API_URL + path)
                     .put(formBody)
                     .build()
-            executeRequest(path, request, callback)
+            executeRequest(request, activity, progressBar, callback)
         }
 
-        fun uploadImage(path : String, multipartBody: MultipartBody, callback: (response : JSONObject) -> Unit) {
+        fun upload(path : String, activity : Activity, progressBar : View, multipartBody : MultipartBody, callback : (response : JSONObject) -> Unit) {
             val request = Request.Builder()
                     .url(API_URL + path)
                     .header("Authorization", TOKEN!!)
                     .post(multipartBody)
                     .build()
-            executeRequest(path, request, callback)
+            executeRequest(request, activity, progressBar, callback)
         }
 
-        private fun executeRequest(path : String, request: Request, callback: (response: JSONObject) -> Unit) {
+        private fun executeRequest(request : Request, activity : Activity, progressBar : View, callback : (response : JSONObject) -> Unit) {
+            progressBar.visibility = View.VISIBLE
             OkHttpClient().newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call?, e: IOException?) {
                     Log.i("HTTP_RESPONSE", "${e?.message}")
                 }
 
-                override fun onResponse(call: Call?, response: Response?) {
+                override fun onResponse(call : Call?, response : Response?) {
+                    activity!!.runOnUiThread {
+                        progressBar.visibility = View.INVISIBLE
+                    }
                     val body = JSONObject(response?.body()?.string()).getJSONObject("data")
                     callback(body)
                 }

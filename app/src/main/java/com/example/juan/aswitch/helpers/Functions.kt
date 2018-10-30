@@ -14,7 +14,7 @@ open class Functions {
     companion object {
 
         private const val MOVE_DEFAULT_TIME: Long = 1000
-        private const val FADE_DEFAULT_TIME: Long = 300
+        private const val FADE_DEFAULT_TIME: Long = 150
 
         fun showSnackbar (rootLayout : View, text : String ) {
             Snackbar.make(
@@ -35,10 +35,10 @@ open class Functions {
 //            enterTransitionSet.setStartDelay(FADE_DEFAULT_TIME)
 //            fragment.setSharedElementEnterTransition(enterTransitionSet)
 //
-//            val enterFade = Fade()
-//            enterFade.startDelay = FADE_DEFAULT_TIME
-//            enterFade.duration = FADE_DEFAULT_TIME
-//            fragment.enterTransition = enterFade
+            val enterFade = Fade()
+            enterFade.startDelay = FADE_DEFAULT_TIME
+            enterFade.duration = FADE_DEFAULT_TIME
+            fragment.enterTransition = enterFade
 
             val transaction = activity.supportFragmentManager.beginTransaction()
             transaction.replace(fragment_id, fragment)
