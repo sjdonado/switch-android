@@ -4,11 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
 import com.example.juan.aswitch.R
 import com.example.juan.aswitch.fragments.UserFragment
 import com.example.juan.aswitch.helpers.Functions
-import com.example.juan.aswitch.helpers.HttpClient
 import com.example.juan.aswitch.services.UserService
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
@@ -17,16 +15,10 @@ import java.util.*
 import com.firebase.ui.auth.AuthUI.IdpConfig
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GetTokenResult
-import kotlinx.android.synthetic.main.activity_menu.*
-import kotlinx.android.synthetic.main.fragment_users.*
 
 class LoginActivity : AppCompatActivity() {
 
-    lateinit var userService : UserService
+    private lateinit var userService : UserService
 
     companion object {
         const val RC_SIGN_IN = 123
@@ -37,11 +29,12 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         setSupportActionBar(login_toolbar)
+
         val actionBar = supportActionBar!!
-        actionBar.title = "User"
+        actionBar.title = "Switch"
 
         userService = UserService(this)
-        verifyAuth()
+        signIn()
     }
 
     private fun signIn() {
@@ -66,12 +59,12 @@ class LoginActivity : AppCompatActivity() {
                 resultCode == Activity.RESULT_OK -> {
                     // Successfully signed in
                     Functions.showSnackbar(login_fragment_container, "SignIn successful")
-                    setToken(FirebaseAuth.getInstance().currentUser) {
+                    Functions.setToken(this, FirebaseAuth.getInstance().currentUser) {
                         userService.signUp("/") { res ->
+                            Functions.setSharedPreferencesValue(this, "USER_OBJECT", res.toString())
                             val userFragment = UserFragment().apply {
                                 arguments = Bundle().apply {
                                     putBoolean("signUp", true)
-                                    putString("userObject", res.toString())
                                 }
                             }
                             Functions.openFragment(this, R.id.login_fragment_container, userFragment)
@@ -102,33 +95,6 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private fun verifyAuth() {
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        if (currentUser == null) {
-            signIn()
-        } else {
-            setToken(currentUser) {
-                val menuActivityIntent = Intent(this, MenuActivity::class.java)
-                userService.getInfo("/") { res ->
-                    menuActivityIntent.putExtra("userObject", res.toString())
-                    startActivity(menuActivityIntent)
-                }
-            }
-        }
-    }
-
-    private fun setToken(currentUser: FirebaseUser?, callback: () -> Unit) {
-        currentUser!!.getIdToken(true).addOnCompleteListener(object : OnCompleteListener<GetTokenResult> {
-            override fun onComplete(task: Task<GetTokenResult>) {
-                if (task.isSuccessful) {
-                    val idToken = task.result!!.token
-                    HttpClient.TOKEN = "Bearer ${idToken!!}"
-                    callback()
-                }
-            }
-        })
     }
 
 }

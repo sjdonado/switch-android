@@ -22,7 +22,6 @@ import android.webkit.MimeTypeMap
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.juan.aswitch.activities.MenuActivity
 import com.example.juan.aswitch.helpers.Functions
 import com.example.juan.aswitch.services.UserService
@@ -57,19 +56,21 @@ class UserFragment : androidx.fragment.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
+
         userService = UserService(activity!!)
 
-        val userObject = JSONObject(arguments!!.getString("userObject"))
+        val userObjectValue = Functions.getSharedPreferencesValue(activity!!, "USER_OBJECT")
+        if(userObjectValue != null) {
+            val userObject = JSONObject(userObjectValue)
+            if(!userObject.getString("profile_picture").isNullOrEmpty()) {
+                Glide.with(activity!!)
+                        .load(userObject.getString("profile_picture"))
+                        .into(userImageViewProfilePicture)
+            }
 
-
-        if(!userObject.getString("profile_picture").isNullOrEmpty()) {
-            Glide.with(activity!!)
-                    .load(userObject.getString("profile_picture"))
-                    .into(userImageViewProfilePicture)
+            if(!userObject.getString("name").isNullOrEmpty()) userEditTextName.editText!!.setText(userObject.getString("name"))
+            if(!userObject.getString("email").isNullOrEmpty()) userEditTextEmail.editText!!.setText(userObject.getString("email"))
         }
-
-        if(!userObject.getString("name").isNullOrEmpty()) userEditTextName.editText!!.setText(userObject.getString("name"))
-        if(!userObject.getString("email").isNullOrEmpty()) userEditTextEmail.editText!!.setText(userObject.getString("email"))
 
         if (signUp){
             userButtonAction.text = "Next"
@@ -100,10 +101,14 @@ class UserFragment : androidx.fragment.app.Fragment() {
             val jsonObject = JSONObject()
             jsonObject.put("name", userEditTextName.editText!!.text)
             jsonObject.put("email", userEditTextEmail.editText!!.text)
-            userService.put("/", jsonObject) {
+            userService.put("/", jsonObject) { res ->
                 Functions.showSnackbar(getView()!!, "Info updated!")
+                Functions.updateSharedPreferencesObjectValue(activity!!, "USER_OBJECT", res)
             }
-            if(signUp) requireActivity().startActivity(Intent(activity!!, MenuActivity::class.java))
+            if(signUp){
+                val menuActivityIntent = Intent(activity!!, MenuActivity::class.java)
+                requireActivity().startActivity(menuActivityIntent)
+            }
         }
     }
 
@@ -120,7 +125,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
                         Functions.showSnackbar(view!!, "Info updated!")
                         activity!!.runOnUiThread {
                             Log.i("PROFILE_PICTURE_URL", res.getString("profile_picture"))
-                            Glide.get(activity!!.applicationContext).clearMemory()
+                            Functions.updateSharedPreferencesObjectValue(activity!!, "USER_OBJECT", res)
                             Glide.with(activity)
                                     .load(image)
                                     .into(userImageViewProfilePicture)

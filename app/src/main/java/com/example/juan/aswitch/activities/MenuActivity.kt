@@ -45,15 +45,24 @@ class MenuActivity : AppCompatActivity() {
 
             override fun onDrawerOpened(drawerView: View) {
                 super.onDrawerOpened(drawerView)
-                val userObject = JSONObject(intent.getStringExtra("userObject"))
-                if(!userObject.getString("profile_picture").isNullOrEmpty()) {
-                    Glide.with(this@MenuActivity)
-                            .load(userObject.getString("profile_picture"))
-                            .into(navigation_account_header_current)
+                val userObjectValue = Functions.getSharedPreferencesValue(this@MenuActivity, "USER_OBJECT")
+                if(userObjectValue != null) {
+                    val userObject = JSONObject(userObjectValue)
+                    if(!userObject.getString("profile_picture").isNullOrEmpty()) {
+                        Glide.with(this@MenuActivity)
+                                .load(userObject.getString("profile_picture"))
+                                .into(navigation_account_header_current)
+                    }
+                    if(!userObject.getString("name").isNullOrEmpty()) navigation_account_header_name.text = userObject.getString("name")
+                    if(!userObject.getString("email").isNullOrEmpty()) navigation_account_header_email.text = userObject.getString("email")
                 }
 
-                if(!userObject.getString("name").isNullOrEmpty()) navigation_account_header_name.text = userObject.getString("name")
-                if(!userObject.getString("email").isNullOrEmpty()) navigation_account_header_email.text = userObject.getString("email")
+                navigation_account_header.setOnClickListener {
+                    val userFragment = UserFragment.getInstance()
+                    actionBar.title = "User"
+                    Functions.openFragment(this@MenuActivity, R.id.menu_fragment_container, userFragment)
+                    drawer_layout.closeDrawer(GravityCompat.START)
+                }
             }
         }
 
@@ -64,25 +73,19 @@ class MenuActivity : AppCompatActivity() {
 
         navigation.setNavigationItemSelectedListener {
             when (it.itemId){
-                R.id.navigation_dashboard -> {}
+//                R.id.navigation_dashboard -> {}
                 R.id.navigation_home -> {
                     actionBar.title = "Home"
                     val homeFragment = HomeFragment.getInstance()
                     Functions.openFragment(this, R.id.menu_fragment_container, homeFragment)
                 }
-                R.id.navigation_users -> {
-                    val userFragment = UserFragment.getInstance()
-                    actionBar.title = "User"
-                    val args = Bundle()
-                    args.putString("userObject", intent!!.getStringExtra("userObject"))
-                    userFragment.arguments = args
-                    Functions.openFragment(this, R.id.menu_fragment_container, userFragment)
-                }
+//                R.id.navigation_users -> {
+//                    openUserFragment()
+//                }
             }
             // Close the drawer
             drawer_layout.closeDrawer(GravityCompat.START)
             true
         }
     }
-
 }

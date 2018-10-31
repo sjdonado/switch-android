@@ -8,6 +8,18 @@ import androidx.appcompat.app.AppCompatActivity
 import android.transition.TransitionInflater
 import android.transition.TransitionSet
 import android.view.View
+import android.R.id.edit
+import android.app.Activity
+import android.content.SharedPreferences
+import android.content.Context.MODE_PRIVATE
+import android.util.Log
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GetTokenResult
+import org.json.JSONObject
+import org.json.JSONException
+
 
 open class Functions {
 
@@ -44,6 +56,77 @@ open class Functions {
             transaction.replace(fragment_id, fragment)
             transaction.addToBackStack(null)
             transaction.commit()
+        }
+
+        fun setSharedPreferencesValue(activity: Activity, keyName : String, data: String) {
+            val sp = activity.getSharedPreferences("SWITCH_DATA", MODE_PRIVATE)
+            val editor = sp.edit()
+            editor.putString(keyName, data)
+            editor.apply()
+        }
+
+        fun getSharedPreferencesValue(activity: Activity, keyName: String) : String? {
+            val sp = activity.getSharedPreferences("SWITCH_DATA", MODE_PRIVATE)
+            return sp.getString(keyName, null)
+        }
+
+        fun onSharedPreferencesValue(activity: Activity, keyName: String, callback : (response: String) -> Unit) {
+            val sp = activity.getSharedPreferences("SWITCH_DATA", MODE_PRIVATE)
+            sp.registerOnSharedPreferenceChangeListener { sharedPreferences, key ->
+                if(key == keyName) callback(sharedPreferences.getString(key, null)!!)
+            }
+        }
+
+        fun updateSharedPreferencesObjectValue(activity: Activity, keyName: String, jsonObject: JSONObject) {
+            val sp = activity.getSharedPreferences("SWITCH_DATA", MODE_PRIVATE)
+            val oldJsonObjectValue = sp.getString(keyName, null)
+
+            if(oldJsonObjectValue != null) {
+                val newJsonObject = merge(arrayListOf(JSONObject(oldJsonObjectValue), jsonObject))
+                Log.i("NEW_JSON_OBJECT", newJsonObject.toString())
+                setSharedPreferencesValue(activity, keyName, newJsonObject.toString())
+            } else {
+                setSharedPreferencesValue(activity, keyName, jsonObject.toString())
+            }
+        }
+
+        fun merge(objects: List<JSONObject>): JSONObject {
+            var i = 0
+            var j = 1
+            while (i < objects.size - 1) {
+                merge(objects[i], objects[j])
+                i++
+                j++
+            }
+            return objects[objects.size - 1]
+        }
+
+        private fun merge(j1: JSONObject, j2: JSONObject) {
+            val keys = j1.keys()
+            var obj1: Any
+            var obj2: Any
+            while (keys.hasNext()) {
+                val next = keys.next()
+                if (j1.isNull(next)) continue
+                obj1 = j1.get(next)
+                if (!j2.has(next)) j2.putOpt(next, obj1)
+                obj2 = j2.get(next)
+                if (obj1 is JSONObject && obj2 is JSONObject) {
+                    merge(obj1, obj2)
+                }
+            }
+        }
+
+        fun setToken(activity: Activity, currentUser: FirebaseUser?, callback: () -> Unit) {
+            currentUser!!.getIdToken(true).addOnCompleteListener(object : OnCompleteListener<GetTokenResult> {
+                override fun onComplete(task: Task<GetTokenResult>) {
+                    if (task.isSuccessful) {
+                        val idToken = task.result!!.token
+                        setSharedPreferencesValue(activity, "USER_TOKEN", "Bearer ${idToken!!}")
+                        callback()
+                    }
+                }
+            })
         }
     }
 }

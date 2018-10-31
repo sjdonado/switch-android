@@ -1,5 +1,6 @@
 package com.example.juan.aswitch
 
+import com.example.juan.aswitch.R
 import android.Manifest
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -9,24 +10,28 @@ import android.os.Build
 import android.content.pm.PackageManager
 import androidx.annotation.RequiresApi
 import android.annotation.TargetApi
-import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AlertDialog
+import com.example.juan.aswitch.activities.MenuActivity
+import com.example.juan.aswitch.helpers.Functions
+import com.example.juan.aswitch.services.UserService
+import com.google.firebase.auth.FirebaseAuth
 
 
 class MainActivity : AppCompatActivity() {
 
+    lateinit var userService : UserService
     private val permissions = arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION)
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val loginIntent = Intent(this, LoginActivity::class.java)
-        startActivity(loginIntent)
+        userService = UserService(this)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             if (arePermissionsEnabled()) {
-
+                verifyAuth()
             } else {
                 requestMultiplePermissions()
             }
@@ -71,6 +76,22 @@ class MainActivity : AppCompatActivity() {
             }
             val loginIntent = Intent(this, LoginActivity::class.java)
             startActivity(loginIntent)
+        }
+    }
+
+    private fun verifyAuth() {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser == null) {
+            val loginIntent = Intent(this, LoginActivity::class.java)
+            startActivity(loginIntent)
+        } else {
+            Functions.setToken(this, currentUser) {
+                userService.getInfo("/") { res ->
+                    Functions.setSharedPreferencesValue(this, "USER_OBJECT", res.toString())
+                    val menuActivityIntent = Intent(this, MenuActivity::class.java)
+                    startActivity(menuActivityIntent)
+                }
+            }
         }
     }
 

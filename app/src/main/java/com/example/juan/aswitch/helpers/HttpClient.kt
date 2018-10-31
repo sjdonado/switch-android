@@ -11,18 +11,16 @@ import java.io.IOException
 import android.widget.ProgressBar
 
 
-
 open class HttpClient {
 
     companion object {
 //        http://10.0.2.2:8010/switch-dev-smartrends/us-central1/switchDev/api/v1
 //        https://us-central1-switch-dev-smartrends.cloudfunctions.net/switchDev/api/v1
         const val API_URL = "https://us-central1-switch-dev-smartrends.cloudfunctions.net/switchDev/api/v1"
-        var TOKEN: String? = null
 
         fun get(path : String, activity : Activity, callback : (response : JSONObject) -> Unit) {
             val request = Request.Builder()
-                    .header("Authorization", TOKEN!!)
+                    .header("Authorization", Functions.getSharedPreferencesValue(activity, "USER_TOKEN")!!)
                     .url(API_URL + path)
                     .build()
             executeRequest(request, activity, callback)
@@ -30,7 +28,7 @@ open class HttpClient {
 
         fun post(path : String, activity : Activity, formBody : FormBody, callback : (response: JSONObject) -> Unit) {
             val request = Request.Builder()
-                    .header("Authorization", TOKEN!!)
+                    .header("Authorization", Functions.getSharedPreferencesValue(activity, "USER_TOKEN")!!)
                     .url(API_URL + path)
                     .post(formBody)
                     .build()
@@ -39,7 +37,7 @@ open class HttpClient {
 
         fun put(path : String, activity : Activity, formBody : FormBody, callback : (response : JSONObject) -> Unit) {
             val request = Request.Builder()
-                    .header("Authorization", TOKEN!!)
+                    .header("Authorization", Functions.getSharedPreferencesValue(activity, "USER_TOKEN")!!)
                     .url(API_URL + path)
                     .put(formBody)
                     .build()
@@ -49,14 +47,13 @@ open class HttpClient {
         fun upload(path : String, activity : Activity, multipartBody : MultipartBody, callback : (response : JSONObject) -> Unit) {
             val request = Request.Builder()
                     .url(API_URL + path)
-                    .header("Authorization", TOKEN!!)
+                    .header("Authorization", Functions.getSharedPreferencesValue(activity, "USER_TOKEN")!!)
                     .post(multipartBody)
                     .build()
             executeRequest(request, activity, callback)
         }
 
         private fun executeRequest(request : Request, activity : Activity, callback : (response : JSONObject) -> Unit) {
-
             val progressDialog = Dialog(activity)
             val dialog = ProgressBar(activity)
             dialog.isIndeterminate = true
