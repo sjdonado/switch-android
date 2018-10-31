@@ -15,8 +15,16 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Users Fragment -->
-    <string name="users_fragment_name">Name</string>
+    <string name="users_fragment_name_user">Name</string>
+    <string name="users_fragment_name_company">Company name</string>
     <string name="users_fragment_email">Email</string>
+    <string name="users_fragment_location">Location</string>
+    <string name="users_fragment_nit">NIT</string>
+    <string name="users_fragment_signboard">Signboard</string>
+
+    <string name="users_fragment_account_type_user">User account</string>
+    <string name="users_fragment_account_type_company">Company account</string>
+
     <string name="title_activity_maps">Map</string>
 
     <string name="drawer_open">Drawer open</string>

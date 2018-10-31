@@ -27,12 +27,14 @@ import com.example.juan.aswitch.helpers.Functions
 import com.example.juan.aswitch.services.UserService
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.navigation_header.*
+import android.widget.CompoundButton
 
 
 class UserFragment : androidx.fragment.app.Fragment() {
 
-    lateinit var mAuth: FirebaseAuth
-    lateinit var userService : UserService
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var userService : UserService
+    private var userTypeAccount = false
     private var signUp = false
 
     companion object {
@@ -62,31 +64,40 @@ class UserFragment : androidx.fragment.app.Fragment() {
         val userObjectValue = Functions.getSharedPreferencesValue(activity!!, "USER_OBJECT")
         if(userObjectValue != null) {
             val userObject = JSONObject(userObjectValue)
-            if(!userObject.getString("profile_picture").isNullOrEmpty()) {
+            if(!userObject.isNull("profile_picture")) {
                 Glide.with(activity!!)
                         .load(userObject.getString("profile_picture"))
                         .into(userImageViewProfilePicture)
             }
 
-            if(!userObject.getString("name").isNullOrEmpty()) userEditTextName.editText!!.setText(userObject.getString("name"))
-            if(!userObject.getString("email").isNullOrEmpty()) userEditTextEmail.editText!!.setText(userObject.getString("email"))
+            if(!userObject.isNull("name")) userEditTextName.editText!!.setText(userObject.getString("name"))
+            if(!userObject.isNull("email")) userEditTextEmail.editText!!.setText(userObject.getString("email"))
+            if(!userObject.isNull("nit")) userEditTextNit.editText!!.setText(userObject.getString("nit"))
+            if(!userObject.isNull("signboard")) userEditTextSignboard.editText!!.setText(userObject.getString("signboard"))
+            if(!userObject.isNull("userType")) {
+                userEditTextNit.visibility = View.VISIBLE
+                userEditTextSignboard.visibility = View.VISIBLE
+            }
         }
 
         if (signUp){
+            userSwitchAccountType.visibility = View.VISIBLE
             userButtonAction.text = "Next"
         } else {
             userButtonAction.text = "Save"
-//            userService.getInfo("/") { res ->
-//                if(res.toString().contains("profile_picture")) {
-//                    activity!!.runOnUiThread {
-//                        Glide.with(activity)
-//                                .load(res.getString("profile_picture"))
-//                                .into(userImageViewProfilePicture)
-//                        if(res.toString().contains("name")) userEditTextName.editText!!.setText(res.getString("name"))
-//                        if(res.toString().contains("email")) userEditTextEmail.editText!!.setText(res.getString("email"))
-//                    }
-//                }
-//            }
+        }
+
+        userSwitchAccountType.setOnCheckedChangeListener { compoundButton, bChecked ->
+            userTypeAccount = bChecked
+            if (bChecked) {
+                userSwitchAccountType.setText(R.string.users_fragment_account_type_company)
+                userEditTextNit.visibility = View.VISIBLE
+                userEditTextSignboard.visibility = View.VISIBLE
+            } else {
+                userSwitchAccountType.setText(R.string.users_fragment_account_type_user)
+                userEditTextNit.visibility = View.INVISIBLE
+                userEditTextSignboard.visibility = View.INVISIBLE
+            }
         }
 
         userImageViewProfilePicture.setOnClickListener {
@@ -101,6 +112,10 @@ class UserFragment : androidx.fragment.app.Fragment() {
             val jsonObject = JSONObject()
             jsonObject.put("name", userEditTextName.editText!!.text)
             jsonObject.put("email", userEditTextEmail.editText!!.text)
+            jsonObject.put("userType", userTypeAccount)
+            if(!userEditTextNit.editText!!.text.isNullOrBlank()) jsonObject.put("nit", userEditTextNit.editText!!.text)
+            if(!userEditTextSignboard.editText!!.text.isNullOrBlank()) jsonObject.put("signboard", userEditTextSignboard.editText!!.text)
+
             userService.put("/", jsonObject) { res ->
                 Functions.showSnackbar(getView()!!, "Info updated!")
                 Functions.updateSharedPreferencesObjectValue(activity!!, "USER_OBJECT", res)
@@ -164,7 +179,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
     fun getMimeType(context: Context, uri: Uri): String? {
         val extension: String?
         //Check uri format to avoid null
-        if (uri.scheme.equals(ContentResolver.SCHEME_CONTENT)) {
+        if (uri.scheme!! == ContentResolver.SCHEME_CONTENT) {
             //If scheme is a content
             val mime = MimeTypeMap.getSingleton()
             extension = mime.getExtensionFromMimeType(context.contentResolver.getType(uri))

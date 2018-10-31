@@ -48,13 +48,13 @@ class MenuActivity : AppCompatActivity() {
                 val userObjectValue = Functions.getSharedPreferencesValue(this@MenuActivity, "USER_OBJECT")
                 if(userObjectValue != null) {
                     val userObject = JSONObject(userObjectValue)
-                    if(!userObject.getString("profile_picture").isNullOrEmpty()) {
+                    if(!userObject.isNull("profile_picture")) {
                         Glide.with(this@MenuActivity)
                                 .load(userObject.getString("profile_picture"))
                                 .into(navigation_account_header_current)
                     }
-                    if(!userObject.getString("name").isNullOrEmpty()) navigation_account_header_name.text = userObject.getString("name")
-                    if(!userObject.getString("email").isNullOrEmpty()) navigation_account_header_email.text = userObject.getString("email")
+                    if(!userObject.isNull("name")) navigation_account_header_name.text = userObject.getString("name")
+                    if(!userObject.isNull("email")) navigation_account_header_email.text = userObject.getString("email")
                 }
 
                 navigation_account_header.setOnClickListener {

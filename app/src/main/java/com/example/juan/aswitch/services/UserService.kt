@@ -20,6 +20,9 @@ open class UserService (activity: Activity) : MainService("/users", activity) {
         val formBody = FormBody.Builder()
                 .add("name", jsonObject.getString("name"))
                 .add("email", jsonObject.getString("email"))
+                .add("nit", jsonObject.getString("nit"))
+                .add("signboard", jsonObject.getString("signboard"))
+                .add("userType", jsonObject.getString("userType"))
                 .build()
         super.post(path, formBody, callback)
     }
@@ -28,6 +31,9 @@ open class UserService (activity: Activity) : MainService("/users", activity) {
         val formBody = FormBody.Builder()
                 .add("name", jsonObject.getString("name"))
                 .add("email", jsonObject.getString("email"))
+                .add("nit", jsonObject.getString("nit"))
+                .add("signboard", jsonObject.getString("signboard"))
+                .add("userType", jsonObject.getString("userType"))
                 .build()
         super.put(path, formBody, callback)
     }
