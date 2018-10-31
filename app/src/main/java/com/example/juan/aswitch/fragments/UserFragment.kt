@@ -27,6 +27,7 @@ import com.example.juan.aswitch.activities.MenuActivity
 import com.example.juan.aswitch.helpers.Functions
 import com.example.juan.aswitch.services.UserService
 import kotlinx.android.synthetic.main.activity_menu.*
+import kotlinx.android.synthetic.main.navigation_header.*
 
 
 class UserFragment : androidx.fragment.app.Fragment() {
@@ -56,27 +57,35 @@ class UserFragment : androidx.fragment.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
-        userService = UserService(activity!!, activity!!.menu_progress_bar)
+        userService = UserService(activity!!)
+
+        val userObject = JSONObject(arguments!!.getString("userObject"))
+
+
+        if(!userObject.getString("profile_picture").isNullOrEmpty()) {
+            Glide.with(activity!!)
+                    .load(userObject.getString("profile_picture"))
+                    .into(userImageViewProfilePicture)
+        }
+
+        if(!userObject.getString("name").isNullOrEmpty()) userEditTextName.editText!!.setText(userObject.getString("name"))
+        if(!userObject.getString("email").isNullOrEmpty()) userEditTextEmail.editText!!.setText(userObject.getString("email"))
 
         if (signUp){
             userButtonAction.text = "Next"
         } else {
             userButtonAction.text = "Save"
-            userService.getInfo("/") { res ->
-                if(res.toString().contains("profile_picture")) {
-                    activity!!.runOnUiThread {
-                        Glide.with(activity)
-                                .load(res.getString("profile_picture"))
-                                .apply(RequestOptions()
-                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                        .skipMemoryCache(true))
-                                .apply(RequestOptions.circleCropTransform())
-                                .into(userImageViewProfilePicture)
-                        if(res.toString().contains("name")) userEditTextName.editText!!.setText(res.getString("name"))
-                        if(res.toString().contains("email")) userEditTextEmail.editText!!.setText(res.getString("email"))
-                    }
-                }
-            }
+//            userService.getInfo("/") { res ->
+//                if(res.toString().contains("profile_picture")) {
+//                    activity!!.runOnUiThread {
+//                        Glide.with(activity)
+//                                .load(res.getString("profile_picture"))
+//                                .into(userImageViewProfilePicture)
+//                        if(res.toString().contains("name")) userEditTextName.editText!!.setText(res.getString("name"))
+//                        if(res.toString().contains("email")) userEditTextEmail.editText!!.setText(res.getString("email"))
+//                    }
+//                }
+//            }
         }
 
         userImageViewProfilePicture.setOnClickListener {
@@ -114,10 +123,6 @@ class UserFragment : androidx.fragment.app.Fragment() {
                             Glide.get(activity!!.applicationContext).clearMemory()
                             Glide.with(activity)
                                     .load(image)
-                                    .apply(RequestOptions()
-                                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                            .skipMemoryCache(true))
-                                    .apply(RequestOptions.circleCropTransform())
                                     .into(userImageViewProfilePicture)
                         }
                     }

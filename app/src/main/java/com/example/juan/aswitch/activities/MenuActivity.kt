@@ -3,49 +3,38 @@ package com.example.juan.aswitch.activities
 import com.example.juan.aswitch.R
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import com.bumptech.glide.Glide
 import com.example.juan.aswitch.fragments.HomeFragment
 import com.example.juan.aswitch.fragments.UserFragment
 import com.example.juan.aswitch.helpers.Functions
 import kotlinx.android.synthetic.main.activity_menu.*
+import kotlinx.android.synthetic.main.fragment_users.*
+import kotlinx.android.synthetic.main.navigation_header.*
+import org.json.JSONObject
 
 class MenuActivity : AppCompatActivity() {
 
-//    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-//        when (item.itemId) {
-//            R.id.navigation_dashboard -> {
-//                return@OnNavigationItemSelectedListener true
-//            }
-//            R.id.navigation_home -> {
-//
-//                return@OnNavigationItemSelectedListener true
-//            }
-//            R.id.navigation_users -> {
-//
-//                return@OnNavigationItemSelectedListener true
-//            }
-//        }
-//        false
-//    }
+
+    private lateinit var actionBar : ActionBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
 
         // Configure action bar
-        setSupportActionBar(toolbar)
-        val actionBar = supportActionBar
-        actionBar?.title = "Hello Toolbar"
-
+        setSupportActionBar(menu_toolbar)
+        actionBar = supportActionBar!!
+        actionBar.title = "Inicio"
 
         // Initialize the action bar drawer toggle instance
         val drawerToggle: ActionBarDrawerToggle = object : ActionBarDrawerToggle(
                 this,
                 drawer_layout,
-                toolbar,
+                menu_toolbar,
                 R.string.drawer_open,
                 R.string.drawer_close
         ){
@@ -54,9 +43,17 @@ class MenuActivity : AppCompatActivity() {
                 //toast("Drawer closed")
             }
 
-            override fun onDrawerOpened(drawerView: View){
+            override fun onDrawerOpened(drawerView: View) {
                 super.onDrawerOpened(drawerView)
-                //toast("Drawer opened")
+                val userObject = JSONObject(intent.getStringExtra("userObject"))
+                if(!userObject.getString("profile_picture").isNullOrEmpty()) {
+                    Glide.with(this@MenuActivity)
+                            .load(userObject.getString("profile_picture"))
+                            .into(navigation_account_header_current)
+                }
+
+                if(!userObject.getString("name").isNullOrEmpty()) navigation_account_header_name.text = userObject.getString("name")
+                if(!userObject.getString("email").isNullOrEmpty()) navigation_account_header_email.text = userObject.getString("email")
             }
         }
 
@@ -69,11 +66,16 @@ class MenuActivity : AppCompatActivity() {
             when (it.itemId){
                 R.id.navigation_dashboard -> {}
                 R.id.navigation_home -> {
+                    actionBar.title = "Home"
                     val homeFragment = HomeFragment.getInstance()
                     Functions.openFragment(this, R.id.menu_fragment_container, homeFragment)
                 }
                 R.id.navigation_users -> {
                     val userFragment = UserFragment.getInstance()
+                    actionBar.title = "User"
+                    val args = Bundle()
+                    args.putString("userObject", intent!!.getStringExtra("userObject"))
+                    userFragment.arguments = args
                     Functions.openFragment(this, R.id.menu_fragment_container, userFragment)
                 }
             }

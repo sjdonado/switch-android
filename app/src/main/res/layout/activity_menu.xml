@@ -11,23 +11,15 @@
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/menu_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:minHeight="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             android:elevation="4dp"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             android:fitsSystemWindows="true">
         </androidx.appcompat.widget.Toolbar>
-
-        <ProgressBar
-            android:id="@+id/menu_progress_bar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:visibility="invisible"
-            android:max="100" />
 
         <FrameLayout
             android:id="@+id/menu_fragment_container"

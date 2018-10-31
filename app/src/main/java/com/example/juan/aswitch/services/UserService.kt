@@ -6,7 +6,7 @@ import okhttp3.*
 import org.json.JSONObject
 import java.io.File
 
-open class UserService (activity: Activity, progressBar: View) : MainService("/users", activity, progressBar) {
+open class UserService (activity: Activity) : MainService("/users", activity) {
 
     fun getInfo(path: String, callback: (response: JSONObject) -> Unit) {
         super.get(path, callback)

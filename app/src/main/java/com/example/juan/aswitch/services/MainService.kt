@@ -8,32 +8,30 @@ import okhttp3.MultipartBody
 import org.json.JSONObject
 import kotlin.properties.Delegates
 
-open class MainService (path : String, activity: Activity, progressBar: View){
+open class MainService (path : String, activity: Activity){
 
     var path : String by Delegates.notNull()
     var activity : Activity by Delegates.notNull()
-    var progressBar : View by Delegates.notNull()
 
     init {
         this.path = path
         this.activity = activity
-        this.progressBar = progressBar
     }
 
     fun get(path: String, callback: (response: JSONObject) -> Unit) {
-        HttpClient.get(this.path + path, this.activity, this.progressBar, callback)
+        HttpClient.get(this.path + path, this.activity, callback)
     }
 
     fun post(path: String, formBody: FormBody, callback: (response: JSONObject) -> Unit) {
-        HttpClient.post(this.path + path, this.activity, this.progressBar, formBody, callback)
+        HttpClient.post(this.path + path, this.activity, formBody, callback)
     }
 
     fun put(path: String, formBody: FormBody, callback: (response: JSONObject) -> Unit) {
-        HttpClient.put(this.path + path, this.activity, this.progressBar, formBody, callback)
+        HttpClient.put(this.path + path, this.activity, formBody, callback)
     }
 
     fun upload(path : String, multipartBody : MultipartBody, callback : (response : JSONObject) -> Unit) {
-        HttpClient.upload(this.path + path, this.activity, this.progressBar, multipartBody, callback)
+        HttpClient.upload(this.path + path, this.activity, multipartBody, callback)
     }
 
 }

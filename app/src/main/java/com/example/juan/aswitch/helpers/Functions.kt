@@ -35,10 +35,10 @@ open class Functions {
 //            enterTransitionSet.setStartDelay(FADE_DEFAULT_TIME)
 //            fragment.setSharedElementEnterTransition(enterTransitionSet)
 //
-            val enterFade = Fade()
-            enterFade.startDelay = FADE_DEFAULT_TIME
-            enterFade.duration = FADE_DEFAULT_TIME
-            fragment.enterTransition = enterFade
+//            val enterFade = Fade()
+//            enterFade.startDelay = FADE_DEFAULT_TIME
+//            enterFade.duration = FADE_DEFAULT_TIME
+//            fragment.enterTransition = enterFade
 
             val transaction = activity.supportFragmentManager.beginTransaction()
             transaction.replace(fragment_id, fragment)
