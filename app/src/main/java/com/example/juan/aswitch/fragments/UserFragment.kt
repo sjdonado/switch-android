@@ -4,7 +4,7 @@ package com.example.juan.aswitch.fragments
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +29,7 @@ import com.example.juan.aswitch.services.UserService
 import kotlinx.android.synthetic.main.activity_menu.*
 
 
-class UserFragment : Fragment() {
+class UserFragment : androidx.fragment.app.Fragment() {
 
     lateinit var mAuth: FirebaseAuth
     lateinit var userService : UserService
@@ -72,8 +72,8 @@ class UserFragment : Fragment() {
                                         .skipMemoryCache(true))
                                 .apply(RequestOptions.circleCropTransform())
                                 .into(userImageViewProfilePicture)
-                        if(res.toString().contains("name")) userEditTextName.setText(res.getString("name"))
-                        if(res.toString().contains("email")) userEditTextEmail.setText(res.getString("email"))
+                        if(res.toString().contains("name")) userEditTextName.editText!!.setText(res.getString("name"))
+                        if(res.toString().contains("email")) userEditTextEmail.editText!!.setText(res.getString("email"))
                     }
                 }
             }
@@ -89,8 +89,8 @@ class UserFragment : Fragment() {
 
         userButtonAction.setOnClickListener {
             val jsonObject = JSONObject()
-            jsonObject.put("name", userEditTextName.text)
-            jsonObject.put("email", userEditTextEmail.text)
+            jsonObject.put("name", userEditTextName.editText!!.text)
+            jsonObject.put("email", userEditTextEmail.editText!!.text)
             userService.put("/", jsonObject) {
                 Functions.showSnackbar(getView()!!, "Info updated!")
             }

@@ -1,10 +1,10 @@
 package com.example.juan.aswitch.helpers
 
 import com.example.juan.aswitch.R
-import android.support.design.widget.Snackbar
+import com.google.android.material.snackbar.Snackbar
 import android.transition.Fade
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import android.transition.TransitionInflater
 import android.transition.TransitionSet
 import android.view.View
@@ -24,7 +24,7 @@ open class Functions {
             ).show()
         }
 
-        fun openFragment(activity: AppCompatActivity, fragment_id : Int, fragment: Fragment) {
+        fun openFragment(activity: AppCompatActivity, fragment_id : Int, fragment: androidx.fragment.app.Fragment) {
 //            val exitFade = Fade()
 //            exitFade.setDuration(FADE_DEFAULT_TIME)
 //            previousFragment.setExitTransition(exitFade)
