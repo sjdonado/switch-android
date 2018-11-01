@@ -75,8 +75,10 @@ class UserFragment : androidx.fragment.app.Fragment() {
             if(!userObject.isNull("nit")) userEditTextNit.editText!!.setText(userObject.getString("nit"))
             if(!userObject.isNull("signboard")) userEditTextSignboard.editText!!.setText(userObject.getString("signboard"))
             if(!userObject.isNull("userType")) {
-                userEditTextNit.visibility = View.VISIBLE
-                userEditTextSignboard.visibility = View.VISIBLE
+                if(userObject.getBoolean("userType")) {
+                    userEditTextNit.visibility = View.VISIBLE
+                    userEditTextSignboard.visibility = View.VISIBLE
+                }
             }else {
                 if(signUp) userSwitchAccountType.visibility = View.VISIBLE
             }

@@ -14,7 +14,6 @@ import okhttp3.RequestBody
 
 open class HttpClient {
 
-
     companion object {
 //        http://10.0.2.2:8010/switch-dev-smartrends/us-central1/switchDev/api/v1
 //        https://us-central1-switch-dev-smartrends.cloudfunctions.net/switchDev/api/v1
