@@ -65,9 +65,9 @@ class MainActivity : AppCompatActivity() {
                 if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                     if (shouldShowRequestPermissionRationale(permissions[i])) {
                         AlertDialog.Builder(this)
-                                .setMessage("Your error message here")
-                                .setPositiveButton("Allow") { dialog, which -> requestMultiplePermissions() }
-                                .setNegativeButton("Cancel") { dialog, which -> dialog.dismiss() }
+                                .setMessage(getString(R.string.permissions_error))
+                                .setPositiveButton(getString(R.string.permissions_button_allow)) { dialog, which -> requestMultiplePermissions() }
+                                .setNegativeButton(getString(R.string.permissions_button_cancel)) { dialog, which -> dialog.dismiss() }
                                 .create()
                                 .show()
                     }

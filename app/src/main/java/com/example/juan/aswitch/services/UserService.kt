@@ -13,29 +13,29 @@ open class UserService (activity: Activity) : MainService("/users", activity) {
     }
 
     fun signUp(path: String, callback: (response: JSONObject) -> Unit) {
-        super.post(path, FormBody.Builder().build(), callback)
+        super.post(path, JSONObject().toString(), callback)
     }
 
     fun post(path: String, jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
-        val formBody = FormBody.Builder()
-                .add("name", jsonObject.getString("name"))
-                .add("email", jsonObject.getString("email"))
-                .add("nit", jsonObject.getString("nit"))
-                .add("signboard", jsonObject.getString("signboard"))
-                .add("userType", jsonObject.getString("userType"))
-                .build()
-        super.post(path, formBody, callback)
+//        val formBody = FormBody.Builder()
+//                .add("name", jsonObject.getString("name"))
+//                .add("email", jsonObject.getString("email"))
+//                .add("nit", jsonObject.getString("nit"))
+//                .add("signboard", jsonObject.getString("signboard"))
+//                .add("userType", jsonObject.getString("userType"))
+//                .build()
+        super.post(path, jsonObject.toString(), callback)
     }
 
     fun put(path: String, jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
         val formBody = FormBody.Builder()
-                .add("name", jsonObject.getString("name"))
-                .add("email", jsonObject.getString("email"))
-                .add("nit", jsonObject.getString("nit"))
-                .add("signboard", jsonObject.getString("signboard"))
-                .add("userType", jsonObject.getString("userType"))
-                .build()
-        super.put(path, formBody, callback)
+//                .add("name", jsonObject.getString("name"))
+//                .add("email", jsonObject.getString("email"))
+//                .add("nit", jsonObject.getString("nit"))
+//                .add("signboard", jsonObject.getString("signboard"))
+//                .add("userType", jsonObject.getString("userType"))
+//                .build()
+        super.put(path, jsonObject.toString(), callback)
     }
 
     fun uploadImage(path : String, field : String, image : File, callback: (response : JSONObject) -> Unit) {

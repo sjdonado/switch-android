@@ -9,14 +9,17 @@ import org.json.JSONObject
 import okhttp3.FormBody
 import java.io.IOException
 import android.widget.ProgressBar
+import okhttp3.RequestBody
 
 
 open class HttpClient {
+
 
     companion object {
 //        http://10.0.2.2:8010/switch-dev-smartrends/us-central1/switchDev/api/v1
 //        https://us-central1-switch-dev-smartrends.cloudfunctions.net/switchDev/api/v1
         const val API_URL = "https://us-central1-switch-dev-smartrends.cloudfunctions.net/switchDev/api/v1"
+        val JSON = MediaType.parse("application/json; charset=utf-8")
 
         fun get(path : String, activity : Activity, callback : (response : JSONObject) -> Unit) {
             val request = Request.Builder()
@@ -26,20 +29,22 @@ open class HttpClient {
             executeRequest(request, activity, callback)
         }
 
-        fun post(path : String, activity : Activity, formBody : FormBody, callback : (response: JSONObject) -> Unit) {
+        fun post(path : String, activity : Activity, json : String, callback : (response: JSONObject) -> Unit) {
+            val jsonBody = RequestBody.create(JSON, json)
             val request = Request.Builder()
                     .header("Authorization", Functions.getSharedPreferencesValue(activity, "USER_TOKEN")!!)
                     .url(API_URL + path)
-                    .post(formBody)
+                    .post(jsonBody)
                     .build()
             executeRequest(request, activity, callback)
         }
 
-        fun put(path : String, activity : Activity, formBody : FormBody, callback : (response : JSONObject) -> Unit) {
+        fun put(path : String, activity : Activity, json : String, callback : (response : JSONObject) -> Unit) {
+            val jsonBody = RequestBody.create(JSON, json)
             val request = Request.Builder()
                     .header("Authorization", Functions.getSharedPreferencesValue(activity, "USER_TOKEN")!!)
                     .url(API_URL + path)
-                    .put(formBody)
+                    .put(jsonBody)
                     .build()
             executeRequest(request, activity, callback)
         }

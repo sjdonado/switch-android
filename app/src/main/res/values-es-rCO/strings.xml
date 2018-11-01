@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Switch</string>
+    <string name="internet_no_internet_connection">Desconectado de internet</string>
+    <string name="internet_unknown_error">Error desconocido</string>
+    <string name="internet_unknown_response">Respuesta desconocida</string>
+    <string name="alert_sign_in_successful">Bienvenido</string>
+    <string name="alert_sign_in_canceled">Inicio de sesión cancelado</string>
+    <string name="alert_info_updated">Información actualizada</string>
+    <string name="alert_profile_picture_updated">Imagen de perfil actualizada</string>
+    <string name="permissions_error">Switch necesita saber tu ubicación</string>
+    <string name="permissions_button_allow">Siempre</string>
+    <string name="permissions_button_cancel">Cancelar</string>
+    <string name="title_activity_home">Inicio</string>
+    <string name="title_activity_user">Configuración de la cuenta</string>
+    <string name="activity_home_btn_save">Guardar</string>
+    <string name="activity_home_btn_logout">Cerrar sesión</string>
+    <string name="hello_blank_fragment">Fragmento vacío</string>
+    <string name="users_fragment_name_user">Nombre</string>
+    <string name="users_fragment_name_company">Nombre de la compañía</string>
+    <string name="users_fragment_email">Correo electrónico</string>
+    <string name="users_fragment_location">Ubicación</string>
+    <string name="users_fragment_nit">NIT</string>
+    <string name="users_fragment_signboard">Razón social</string>
+    <string name="users_fragment_account_type_user">Cuenta de usuario</string>
+    <string name="users_fragment_account_type_company">Cuenta de comañia</string>
+    <string name="user_fragment_next_button">Siguiente</string>
+    <string name="user_fragment_save_button">Guardar</string>
+    <string name="user_fragment_select_picture">Selecciona una imagen</string>
+    <string name="title_activity_maps">Mapa</string>
+    <string name="drawer_open">Abrir</string>
+    <string name="drawer_close">Cerrar</string>
+    <string name="country_iso_code">co</string>
+</resources>

@@ -77,15 +77,15 @@ class UserFragment : androidx.fragment.app.Fragment() {
             if(!userObject.isNull("userType")) {
                 userEditTextNit.visibility = View.VISIBLE
                 userEditTextSignboard.visibility = View.VISIBLE
+            }else {
+                if(signUp) userSwitchAccountType.visibility = View.VISIBLE
             }
         }
 
-        if (signUp){
-            userSwitchAccountType.visibility = View.VISIBLE
-            userButtonAction.text = "Next"
-        } else {
-            userButtonAction.text = "Save"
-        }
+        if (signUp)
+            userButtonAction.text = getString(R.string.user_fragment_next_button)
+        else
+            userButtonAction.text = getString(R.string.user_fragment_save_button)
 
         userSwitchAccountType.setOnCheckedChangeListener { compoundButton, bChecked ->
             userTypeAccount = bChecked
@@ -105,7 +105,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
             intent.type = "image/*"
             intent.action = Intent.ACTION_GET_CONTENT
             intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE)
+            startActivityForResult(Intent.createChooser(intent, getString(R.string.user_fragment_select_picture)), PICK_IMAGE)
         }
 
         userButtonAction.setOnClickListener {
@@ -117,7 +117,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
             if(!userEditTextSignboard.editText!!.text.isNullOrBlank()) jsonObject.put("signboard", userEditTextSignboard.editText!!.text)
 
             userService.put("/", jsonObject) { res ->
-                Functions.showSnackbar(getView()!!, "Info updated!")
+                Functions.showSnackbar(getView()!!, getString(R.string.alert_info_updated))
                 Functions.updateSharedPreferencesObjectValue(activity!!, "USER_OBJECT", res)
             }
             if(signUp){
@@ -137,7 +137,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
                             activity!!.contentResolver!!.openInputStream(data.data!!)!!,
                             getMimeType(activity!!, data.data!!)!!)
                     userService.uploadImage("/upload", "profile_picture", image) { res ->
-                        Functions.showSnackbar(view!!, "Info updated!")
+                        Functions.showSnackbar(view!!, getString(R.string.alert_profile_picture_updated))
                         activity!!.runOnUiThread {
                             Log.i("PROFILE_PICTURE_URL", res.getString("profile_picture"))
                             Functions.updateSharedPreferencesObjectValue(activity!!, "USER_OBJECT", res)
@@ -149,7 +149,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
                 }
             }
             else -> {
-                Toast.makeText(context,"Unrecognized request code", Toast.LENGTH_SHORT).show()
+                Log.e("INTENT", "Unrecognized request code")
             }
         }
     }

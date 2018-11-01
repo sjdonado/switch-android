@@ -28,7 +28,7 @@ class MenuActivity : AppCompatActivity() {
         // Configure action bar
         setSupportActionBar(menu_toolbar)
         actionBar = supportActionBar!!
-        actionBar.title = "Inicio"
+        actionBar.title = getString(R.string.title_activity_home)
 
         // Initialize the action bar drawer toggle instance
         val drawerToggle: ActionBarDrawerToggle = object : ActionBarDrawerToggle(
@@ -59,7 +59,7 @@ class MenuActivity : AppCompatActivity() {
 
                 navigation_account_header.setOnClickListener {
                     val userFragment = UserFragment.getInstance()
-                    actionBar.title = "User"
+                    actionBar.title = getString(R.string.title_activity_user)
                     Functions.openFragment(this@MenuActivity, R.id.menu_fragment_container, userFragment)
                     drawer_layout.closeDrawer(GravityCompat.START)
                 }
@@ -75,7 +75,7 @@ class MenuActivity : AppCompatActivity() {
             when (it.itemId){
 //                R.id.navigation_dashboard -> {}
                 R.id.navigation_home -> {
-                    actionBar.title = "Home"
+                    actionBar.title = getString(R.string.title_activity_home)
                     val homeFragment = HomeFragment.getInstance()
                     Functions.openFragment(this, R.id.menu_fragment_container, homeFragment)
                 }

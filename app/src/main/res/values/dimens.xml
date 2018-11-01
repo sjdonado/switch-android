@@ -15,4 +15,7 @@
     <dimen name="navigation_account_header_dropdown">22dp</dimen>
     <dimen name="navigation_account_header_dropdown_guideline">80dp</dimen>
     <dimen name="navigation_account_header_dropdown_margin_bottom">18dp</dimen>
+
+    <dimen name="toolbar_elevation">4dp</dimen>
+
 </resources>

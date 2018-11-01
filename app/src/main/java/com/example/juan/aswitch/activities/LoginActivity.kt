@@ -31,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
         setSupportActionBar(login_toolbar)
 
         val actionBar = supportActionBar!!
-        actionBar.title = "Switch"
+        actionBar.title = getString(R.string.app_name)
 
         userService = UserService(this)
         signIn()
@@ -39,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun signIn() {
         val phoneConfigWithDefaultNumber = IdpConfig.PhoneBuilder()
-                .setDefaultCountryIso("co")
+                .setDefaultCountryIso(getString(R.string.country_iso_code))
                 .build()
         startActivityForResult(
                 AuthUI.getInstance()
@@ -58,7 +58,7 @@ class LoginActivity : AppCompatActivity() {
             when {
                 resultCode == Activity.RESULT_OK -> {
                     // Successfully signed in
-                    Functions.showSnackbar(login_fragment_container, "SignIn successful")
+                    Functions.showSnackbar(login_fragment_container, getString(R.string.alert_sign_in_successful))
                     Functions.setToken(this, FirebaseAuth.getInstance().currentUser) {
                         userService.signUp("/") { res ->
                             Functions.setSharedPreferencesValue(this, "USER_OBJECT", res.toString())
@@ -75,23 +75,23 @@ class LoginActivity : AppCompatActivity() {
                 response == null -> {
                     // Sign in failed
                     // User pressed back button
-                    Functions.showSnackbar(login_fragment_container, "Sign in cancelled")
+                    Functions.showSnackbar(login_fragment_container, getString(R.string.alert_sign_in_canceled))
                     return
                 }
                 response.error?.errorCode == ErrorCodes.NO_NETWORK -> {
                     // Sign in failed
                     //No Internet Connection
-                    Functions.showSnackbar(login_fragment_container, "No Internet connection")
+                    Functions.showSnackbar(login_fragment_container, getString(R.string.internet_no_internet_connection))
                     return
                 }
                 response.error?.errorCode == ErrorCodes.UNKNOWN_ERROR -> {
                     // Sign in failed
                     //Unknown Error
-                    Functions.showSnackbar(login_fragment_container, "Unknown error")
+                    Functions.showSnackbar(login_fragment_container, getString(R.string.internet_unknown_error))
                     return
                 }
                 else -> {
-                    Functions.showSnackbar(login_fragment_container, "Unknown Response")
+                    Functions.showSnackbar(login_fragment_container, getString(R.string.internet_unknown_response))
                 }
             }
         }
