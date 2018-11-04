@@ -12,29 +12,16 @@ open class UserService (activity: Activity) : MainService("/users", activity) {
         super.get(path, callback)
     }
 
-    fun signUp(path: String, callback: (response: JSONObject) -> Unit) {
-        super.post(path, JSONObject().toString(), callback)
+    fun signUp(callback: (response: JSONObject) -> Unit) {
+        super.post("/signup", JSONObject().toString(), callback)
     }
 
     fun post(path: String, jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
-//        val formBody = FormBody.Builder()
-//                .add("name", jsonObject.getString("name"))
-//                .add("email", jsonObject.getString("email"))
-//                .add("nit", jsonObject.getString("nit"))
-//                .add("signboard", jsonObject.getString("signboard"))
-//                .add("userType", jsonObject.getString("userType"))
-//                .build()
         super.post(path, jsonObject.toString(), callback)
     }
 
     fun put(path: String, jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
         val formBody = FormBody.Builder()
-//                .add("name", jsonObject.getString("name"))
-//                .add("email", jsonObject.getString("email"))
-//                .add("nit", jsonObject.getString("nit"))
-//                .add("signboard", jsonObject.getString("signboard"))
-//                .add("userType", jsonObject.getString("userType"))
-//                .build()
         super.put(path, jsonObject.toString(), callback)
     }
 

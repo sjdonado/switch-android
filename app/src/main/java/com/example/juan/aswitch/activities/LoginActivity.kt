@@ -60,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
                     // Successfully signed in
                     Functions.showSnackbar(login_fragment_container, getString(R.string.alert_sign_in_successful))
                     Functions.setToken(this, FirebaseAuth.getInstance().currentUser) {
-                        userService.signUp("/") { res ->
+                        userService.signUp() { res ->
                             Functions.setSharedPreferencesValue(this, "USER_OBJECT", res.toString())
                             val userFragment = UserFragment().apply {
                                 arguments = Bundle().apply {

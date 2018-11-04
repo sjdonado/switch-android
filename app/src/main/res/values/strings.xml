@@ -4,6 +4,7 @@
 
     <!-- Internet -->
     <string name="internet_no_internet_connection">No Internet connection</string>
+    <string name="internet_server_error">Server Error</string>
     <string name="internet_unknown_error">Unknown error</string>
     <string name="internet_unknown_response">Unknown Response</string>
 

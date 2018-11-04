@@ -31,4 +31,5 @@
     <string name="drawer_open">Abrir</string>
     <string name="drawer_close">Cerrar</string>
     <string name="country_iso_code">co</string>
+    <string name="internet_server_error">Error en el servidor</string>
 </resources>

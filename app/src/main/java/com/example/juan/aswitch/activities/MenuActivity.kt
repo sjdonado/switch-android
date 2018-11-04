@@ -50,7 +50,7 @@ class MenuActivity : AppCompatActivity() {
                     val userObject = JSONObject(userObjectValue)
                     if(!userObject.isNull("profile_picture")) {
                         Glide.with(this@MenuActivity)
-                                .load(userObject.getString("profile_picture"))
+                                .load(userObject.getJSONObject("profile_picture").getString("url"))
                                 .into(navigation_account_header_current)
                     }
                     if(!userObject.isNull("name")) navigation_account_header_name.text = userObject.getString("name")

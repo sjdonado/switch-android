@@ -4,7 +4,6 @@ package com.example.juan.aswitch.fragments
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +12,7 @@ import com.example.juan.aswitch.R
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_users.*
 import android.util.Log
-import android.widget.Toast
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import org.json.JSONObject
 import java.io.*
 import android.webkit.MimeTypeMap
@@ -27,8 +24,6 @@ import com.example.juan.aswitch.helpers.Functions
 import com.example.juan.aswitch.services.UserService
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.navigation_header.*
-import android.widget.CompoundButton
-
 
 class UserFragment : androidx.fragment.app.Fragment() {
 
@@ -66,7 +61,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
             val userObject = JSONObject(userObjectValue)
             if(!userObject.isNull("profile_picture")) {
                 Glide.with(activity!!)
-                        .load(userObject.getString("profile_picture"))
+                        .load(userObject.getJSONObject("profile_picture").getString("url"))
                         .into(userImageViewProfilePicture)
             }
 
@@ -141,10 +136,9 @@ class UserFragment : androidx.fragment.app.Fragment() {
                     userService.uploadImage("/upload", "profile_picture", image) { res ->
                         Functions.showSnackbar(view!!, getString(R.string.alert_profile_picture_updated))
                         activity!!.runOnUiThread {
-                            Log.i("PROFILE_PICTURE_URL", res.getString("profile_picture"))
                             Functions.updateSharedPreferencesObjectValue(activity!!, "USER_OBJECT", res)
                             Glide.with(activity)
-                                    .load(image)
+                                    .load(res.getJSONObject("profile_picture").getString("url"))
                                     .into(userImageViewProfilePicture)
                         }
                     }

@@ -1,24 +1,25 @@
 package com.example.juan.aswitch.helpers
 
+import com.example.juan.aswitch.R
 import android.app.Activity
 import android.app.Dialog
 import android.util.Log
 import android.view.View
 import okhttp3.*
 import org.json.JSONObject
-import okhttp3.FormBody
 import java.io.IOException
 import android.widget.ProgressBar
+import android.widget.Toast
 import okhttp3.RequestBody
 
 
 open class HttpClient {
 
     companion object {
-//        http://10.0.2.2:8010/switch-dev-smartrends/us-central1/switchDev/api/v1
-//        https://us-central1-switch-dev-smartrends.cloudfunctions.net/switchDev/api/v1
-        const val API_URL = "https://us-central1-switch-dev-smartrends.cloudfunctions.net/switchDev/api/v1"
-        val JSON = MediaType.parse("application/json; charset=utf-8")
+        private const val PROD_URl = "https://us-central1-switch-dev-smartrends.cloudfunctions.net"
+        private const val DEV_URL = "http://10.0.2.2:8010/switch-dev-smartrends/us-central1"
+        private const val API_URL = "$PROD_URl/switchDev/api/v1"
+        private val JSON = MediaType.parse("application/json; charset=utf-8")
 
         fun get(path : String, activity : Activity, callback : (response : JSONObject) -> Unit) {
             val request = Request.Builder()
@@ -76,8 +77,16 @@ open class HttpClient {
                     activity.runOnUiThread {
                         progressDialog.hide()
                     }
-                    val body = JSONObject(response?.body()?.string()).getJSONObject("data")
-                    callback(body)
+                    if(response!!.code() == 200) {
+                        val body = JSONObject(response.body()!!.string()).getJSONObject("data")
+                        callback(body)
+                    }else{
+                        activity.runOnUiThread {
+                            Toast.makeText(activity.applicationContext, activity.getString(R.string.internet_server_error), Toast.LENGTH_SHORT).show()
+                        }
+                        callback(JSONObject())
+                    }
+
                 }
             })
         }
