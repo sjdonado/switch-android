@@ -21,7 +21,6 @@ open class UserService (activity: Activity) : MainService("/users", activity) {
     }
 
     fun put(path: String, jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
-        val formBody = FormBody.Builder()
         super.put(path, jsonObject.toString(), callback)
     }
 

@@ -22,8 +22,11 @@ import android.net.Uri
 import com.example.juan.aswitch.activities.MenuActivity
 import com.example.juan.aswitch.helpers.Functions
 import com.example.juan.aswitch.services.UserService
-import kotlinx.android.synthetic.main.activity_menu.*
-import kotlinx.android.synthetic.main.navigation_header.*
+import com.google.android.gms.location.places.ui.PlacePicker
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
+
 
 class UserFragment : androidx.fragment.app.Fragment() {
 
@@ -31,10 +34,12 @@ class UserFragment : androidx.fragment.app.Fragment() {
     private lateinit var userService : UserService
     private var userTypeAccount = false
     private var signUp = false
+    private var userObject: JSONObject = JSONObject()
 
     companion object {
         fun getInstance(): UserFragment = UserFragment()
         private val PICK_IMAGE = 0
+        var PLACE_PICKER_REQUEST = 1
     }
 
     override fun onAttach(context: Context?) {
@@ -57,32 +62,54 @@ class UserFragment : androidx.fragment.app.Fragment() {
         userService = UserService(activity!!)
 
         val userObjectValue = Functions.getSharedPreferencesValue(activity!!, "USER_OBJECT")
-        if(userObjectValue != null) {
-            val userObject = JSONObject(userObjectValue)
-            if(!userObject.isNull("profile_picture")) {
-                Glide.with(activity!!)
-                        .load(userObject.getJSONObject("profile_picture").getString("url"))
-                        .into(userImageViewProfilePicture)
-            }
+        if(userObjectValue != null) userObject = JSONObject(userObjectValue)
 
-            if(!userObject.isNull("name")) userEditTextName.editText!!.setText(userObject.getString("name"))
-            if(!userObject.isNull("email")) userEditTextEmail.editText!!.setText(userObject.getString("email"))
-            if(!userObject.isNull("nit")) userEditTextNit.editText!!.setText(userObject.getString("nit"))
-            if(!userObject.isNull("signboard")) userEditTextSignboard.editText!!.setText(userObject.getString("signboard"))
-            if(!userObject.isNull("userType")) {
-                if(userObject.getBoolean("userType")) {
-                    userEditTextNit.visibility = View.VISIBLE
-                    userEditTextSignboard.visibility = View.VISIBLE
-                }
-            }else {
-                if(signUp) userSwitchAccountType.visibility = View.VISIBLE
+        if(!userObject.isNull("profile_picture")) {
+            Glide.with(activity!!)
+                    .load(userObject.getJSONObject("profile_picture").getString("url"))
+                    .into(userImageViewProfilePicture)
+        }
+
+        if(!userObject.isNull("name"))
+            userEditTextName.editText!!.setText(userObject.getString("name"))
+        if(!userObject.isNull("email"))
+            userEditTextEmail.editText!!.setText(userObject.getString("email"))
+        if(!userObject.isNull("nit"))
+            userEditTextNit.editText!!.setText(userObject.getString("nit"))
+        if(!userObject.isNull("location"))
+            userEditTextLocation.editText!!
+                    .setText(userObject.getJSONObject("location").getString("address"))
+        if(!userObject.isNull("signboard"))
+            userEditTextSignboard.editText!!.setText(userObject.getString("signboard"))
+        if(!userObject.isNull("userType")) {
+            if(userObject.getBoolean("userType")) {
+                userEditTextNit.visibility = View.VISIBLE
+                userEditTextSignboard.visibility = View.VISIBLE
             }
+        }else {
+            if(signUp) userSwitchAccountType.visibility = View.VISIBLE
+        }
+
+        userEditTextLocation.editText!!.setOnClickListener {
+            val builder = PlacePicker.IntentBuilder()
+            if(!userObject.isNull("location")) {
+                val southwest = userObject.getJSONObject("location")
+                        .getJSONObject("viewport").getJSONObject("southwest")
+                val northeast = userObject.getJSONObject("location")
+                        .getJSONObject("viewport").getJSONObject("northeast")
+                builder.setLatLngBounds(LatLngBounds(
+                        LatLng(southwest.getString("lat").toDouble(),
+                                southwest.getString("lng").toDouble()),
+                        LatLng(northeast.getString("lat").toDouble(),
+                                northeast.getString("lng").toDouble())))
+            }
+            startActivityForResult(builder.build(activity!!), PLACE_PICKER_REQUEST)
         }
 
         if (signUp)
-            userButtonAction.text = getString(R.string.user_fragment_next_button)
+            userButtonAction.setImageResource(R.drawable.ic_arrow_forward_white_24dp)
         else
-            userButtonAction.text = getString(R.string.user_fragment_save_button)
+            userButtonAction.setImageResource(R.drawable.ic_save_white_24dp)
 
         userSwitchAccountType.setOnCheckedChangeListener { compoundButton, bChecked ->
             userTypeAccount = bChecked
@@ -102,7 +129,8 @@ class UserFragment : androidx.fragment.app.Fragment() {
             intent.type = "image/*"
             intent.action = Intent.ACTION_GET_CONTENT
             intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            startActivityForResult(Intent.createChooser(intent, getString(R.string.user_fragment_select_picture)), PICK_IMAGE)
+            startActivityForResult(Intent.createChooser(intent,
+                    getString(R.string.user_fragment_select_picture)), PICK_IMAGE)
         }
 
         userButtonAction.setOnClickListener {
@@ -110,8 +138,10 @@ class UserFragment : androidx.fragment.app.Fragment() {
             jsonObject.put("name", userEditTextName.editText!!.text)
             jsonObject.put("email", userEditTextEmail.editText!!.text)
             jsonObject.put("userType", userTypeAccount)
-            if(!userEditTextNit.editText!!.text.isNullOrBlank()) jsonObject.put("nit", userEditTextNit.editText!!.text)
-            if(!userEditTextSignboard.editText!!.text.isNullOrBlank()) jsonObject.put("signboard", userEditTextSignboard.editText!!.text)
+            if(!userEditTextNit.editText!!.text.isNullOrBlank())
+                jsonObject.put("nit", userEditTextNit.editText!!.text)
+            if(!userEditTextSignboard.editText!!.text.isNullOrBlank())
+                jsonObject.put("signboard", userEditTextSignboard.editText!!.text)
 
             userService.put("/", jsonObject) { res ->
                 Functions.showSnackbar(getView()!!, getString(R.string.alert_info_updated))
@@ -137,10 +167,42 @@ class UserFragment : androidx.fragment.app.Fragment() {
                         Functions.showSnackbar(view!!, getString(R.string.alert_profile_picture_updated))
                         activity!!.runOnUiThread {
                             Functions.updateSharedPreferencesObjectValue(activity!!, "USER_OBJECT", res)
-                            Glide.with(activity)
+                            Glide.with(activity!!)
                                     .load(res.getJSONObject("profile_picture").getString("url"))
                                     .into(userImageViewProfilePicture)
                         }
+                    }
+                }
+            }
+            PLACE_PICKER_REQUEST ->{
+                if (resultCode == AppCompatActivity.RESULT_OK) {
+                    val place = PlacePicker.getPlace(activity!!, data)
+                    val jsonObject = JSONObject()
+                    val locationObject = JSONObject()
+                    val viewPort = JSONObject()
+                    val southwest = JSONObject()
+                    val northeast = JSONObject()
+                    southwest.put("lat", place.viewport!!.southwest.latitude)
+                    southwest.put("lng", place.viewport!!.southwest.longitude)
+
+                    northeast.put("lat", place.viewport!!.northeast.latitude)
+                    northeast.put("lng", place.viewport!!.northeast.longitude)
+
+                    viewPort.put("southwest", southwest)
+                    viewPort.put("northeast", northeast)
+
+                    locationObject.put("lat", place.latLng.latitude)
+                    locationObject.put("lng", place.latLng.longitude)
+                    locationObject.put("viewport", viewPort)
+                    locationObject.put("address", place.address)
+                    jsonObject.put("location", locationObject)
+
+                    userService.put("/", jsonObject) { res ->
+                        Functions.showSnackbar(view!!, getString(R.string.alert_info_updated))
+                        activity!!.runOnUiThread {
+                            userEditTextLocation.editText!!.setText(res.getJSONObject("location").getString("address"))
+                        }
+                        Functions.updateSharedPreferencesObjectValue(activity!!, "USER_OBJECT", res)
                     }
                 }
             }

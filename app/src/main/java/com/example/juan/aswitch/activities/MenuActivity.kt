@@ -1,8 +1,10 @@
 package com.example.juan.aswitch.activities
 
+import android.content.Intent
 import com.example.juan.aswitch.R
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.juan.aswitch.fragments.HomeFragment
 import com.example.juan.aswitch.fragments.UserFragment
 import com.example.juan.aswitch.helpers.Functions
+import com.google.android.gms.location.places.ui.PlacePicker
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.fragment_users.*
 import kotlinx.android.synthetic.main.navigation_header.*
@@ -88,4 +91,5 @@ class MenuActivity : AppCompatActivity() {
             true
         }
     }
+
 }

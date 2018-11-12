@@ -19,6 +19,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GetTokenResult
 import org.json.JSONObject
 import org.json.JSONException
+import android.content.Context.MODE_PRIVATE
+import com.google.firebase.auth.FirebaseAuth
 
 
 open class Functions {
@@ -127,6 +129,16 @@ open class Functions {
                     }
                 }
             })
+        }
+
+        fun clearUserInfo(activity: Activity){
+            val sp = activity.getSharedPreferences("SWITCH_DATA", MODE_PRIVATE)
+            sp.edit().clear().apply()
+        }
+
+        fun logout(activity: Activity) {
+            FirebaseAuth.getInstance().signOut()
+            clearUserInfo(activity)
         }
     }
 }

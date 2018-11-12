@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.juan.aswitch.MainActivity
 import com.example.juan.aswitch.R
 import com.example.juan.aswitch.fragments.UserFragment
 import com.example.juan.aswitch.helpers.Functions
@@ -60,14 +61,22 @@ class LoginActivity : AppCompatActivity() {
                     // Successfully signed in
                     Functions.showSnackbar(login_fragment_container, getString(R.string.alert_sign_in_successful))
                     Functions.setToken(this, FirebaseAuth.getInstance().currentUser) {
-                        userService.signUp() { res ->
-                            Functions.setSharedPreferencesValue(this, "USER_OBJECT", res.toString())
-                            val userFragment = UserFragment().apply {
-                                arguments = Bundle().apply {
-                                    putBoolean("signUp", true)
+                        userService.signUp { res ->
+                            if(res.length() == 0) {
+                                Functions.logout(this)
+                                val mainActivity = Intent(this, MainActivity::class.java)
+                                startActivity(mainActivity)
+                            }else{
+                                Functions.setSharedPreferencesValue(
+                                        this, "USER_OBJECT", res.toString())
+                                val userFragment = UserFragment().apply {
+                                    arguments = Bundle().apply {
+                                        putBoolean("signUp", true)
+                                    }
                                 }
+                                Functions.openFragment(this,
+                                        R.id.login_fragment_container, userFragment)
                             }
-                            Functions.openFragment(this, R.id.login_fragment_container, userFragment)
                         }
                     }
                     return

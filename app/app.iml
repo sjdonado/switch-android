@@ -22,14 +22,13 @@
       </configuration>
     </facet>
     <facet type="kotlin-language" name="Kotlin">
-      <configuration version="3" platform="JVM 1.8" useProjectSettings="false">
+      <configuration version="3" platform="JVM 1.6" useProjectSettings="false">
         <compilerSettings />
         <compilerArguments>
           <option name="destination" value="$MODULE_DIR$/build/tmp/kotlin-classes/debug" />
           <option name="noStdlib" value="true" />
           <option name="noReflect" value="true" />
           <option name="moduleName" value="app_debug" />
-          <option name="jvmTarget" value="1.8" />
           <option name="addCompilerBuiltIns" value="true" />
           <option name="loadBuiltInsFromDependencies" value="true" />
           <option name="languageVersion" value="1.2" />
@@ -46,6 +45,7 @@
               <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-android-extensions/1.2.51/1755c607e5fabf4ba949ef626c73fc7421d35123/kotlin-android-extensions-1.2.51.jar" />
             </array>
           </option>
+          <option name="coroutinesState" value="warn" />
         </compilerArguments>
       </configuration>
     </facet>
@@ -159,18 +159,18 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Gradle: androidx.slidingpanelayout:slidingpanelayout-1.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-auth-api-phone-15.0.1" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.firebase:firebase-core-16.0.4" level="project" />
     <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-service-2.0.0-rc01" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.firebase:firebase-core-16.0.5" level="project" />
     <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-livedata-2.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-tasks-16.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-common-16.0.3" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.firebase:firebase-analytics-16.0.4" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-measurement-base-16.0.3" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.firebase:firebase-analytics-16.0.5" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-flags-16.0.1" level="project" />
     <orderEntry type="library" name="Gradle: androidx.cardview:cardview-1.0.0" level="project" />
-    <orderEntry type="library" name="Gradle: androidx.appcompat:appcompat-1.0.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-measurement-base-16.0.4" level="project" />
     <orderEntry type="library" name="Gradle: com.mikepenz:fastadapter-3.3.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.firebase:firebase-measurement-connector-impl-17.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: androidx.appcompat:appcompat-1.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.firebase:firebase-measurement-connector-impl-17.0.3" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.material:material-1.0.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.squareup:javawriter:2.1.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.versionedparcelable:versionedparcelable-1.0.0" level="project" />
@@ -186,10 +186,11 @@
     <orderEntry type="library" scope="TEST" name="Gradle: javax.inject:javax.inject:1@jar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.recyclerview:recyclerview-1.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-auth-interop-16.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-places-placereport-16.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.mikepenz:materialize-1.2.0" level="project" />
     <orderEntry type="library" name="Gradle: androidx.interpolator:interpolator-1.0.0" level="project" />
+    <orderEntry type="library" name="Gradle: androidx.vectordrawable:vectordrawable-1.0.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.test.espresso:espresso-idling-resource-3.1.0" level="project" />
-    <orderEntry type="library" name="Gradle: androidx.vectordrawable:vectordrawable-1.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.mikepenz:fastadapter-commons-3.3.0" level="project" />
     <orderEntry type="library" name="Gradle: androidx.legacy:legacy-support-v4-1.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-auth-16.0.0" level="project" />
@@ -211,9 +212,9 @@
     <orderEntry type="library" name="Gradle: androidx.media:media-1.0.0" level="project" />
     <orderEntry type="library" name="Gradle: androidx.constraintlayout:constraintlayout-solver:2.0.0-alpha2@jar" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.2.51@jar" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-measurement-api-16.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-measurement-api-16.0.3" level="project" />
     <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-livedata-core-2.0.0" level="project" />
-    <orderEntry type="library" name="Gradle: androidx.core:core-1.0.0" level="project" />
+    <orderEntry type="library" name="Gradle: androidx.core:core-1.0.1" level="project" />
     <orderEntry type="library" name="Gradle: me.zhanghai.android.materialprogressbar:library-1.4.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.test.espresso:espresso-core-3.1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-stats-16.0.1" level="project" />
@@ -248,7 +249,8 @@
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.test:monitor-1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: androidx.cursoradapter:cursoradapter-1.0.0" level="project" />
     <orderEntry type="library" name="Gradle: androidx.print:print-1.0.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.firebase:firebase-analytics-impl-16.2.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.firebase:firebase-analytics-impl-16.2.3" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-places-16.0.0" level="project" />
     <orderEntry type="library" name="Gradle: androidx.collection:collection:1.0.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-iid-17.0.3" level="project" />
   </component>
