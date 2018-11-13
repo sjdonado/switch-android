@@ -18,7 +18,7 @@ open class HttpClient {
     companion object {
         private const val PROD_URl = "https://us-central1-switch-dev-smartrends.cloudfunctions.net"
         private const val DEV_URL = "http://10.0.2.2:8010/switch-dev-smartrends/us-central1"
-        private const val API_URL = "$PROD_URl/switchDev/api/v1"
+        private const val API_URL = "$DEV_URL/switchDev/api/v1"
         private val JSON = MediaType.parse("application/json; charset=utf-8")
 
         fun get(path : String, activity : Activity, callback : (response : JSONObject) -> Unit) {
