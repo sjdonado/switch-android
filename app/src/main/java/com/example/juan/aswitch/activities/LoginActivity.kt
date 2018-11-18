@@ -35,7 +35,11 @@ class LoginActivity : AppCompatActivity() {
         actionBar.title = getString(R.string.app_name)
 
         userService = UserService(this)
-        signIn()
+        if(Functions.getSharedPreferencesBooleanValue(this, "SIGN_UP")!!){
+            openUserFragment()
+        }else{
+            signIn()
+        }
     }
 
     private fun signIn() {
@@ -61,21 +65,16 @@ class LoginActivity : AppCompatActivity() {
                     // Successfully signed in
                     Functions.showSnackbar(login_fragment_container, getString(R.string.alert_sign_in_successful))
                     Functions.setToken(this, FirebaseAuth.getInstance().currentUser) {
-                        userService.signUp { res ->
+                        userService.getInfo { res ->
                             if(res.length() == 0) {
                                 Functions.logout(this)
                                 val mainActivity = Intent(this, MainActivity::class.java)
                                 startActivity(mainActivity)
                             }else{
-                                Functions.setSharedPreferencesValue(
+                                Functions.setSharedPreferencesStringValue(
                                         this, "USER_OBJECT", res.toString())
-                                val userFragment = UserFragment().apply {
-                                    arguments = Bundle().apply {
-                                        putBoolean("signUp", true)
-                                    }
-                                }
-                                Functions.openFragment(this,
-                                        R.id.login_fragment_container, userFragment)
+                                Functions.setSharedPreferencesBooleanValue(this, "SIGN_UP", true)
+                                openUserFragment()
                             }
                         }
                     }
@@ -104,6 +103,12 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun openUserFragment(){
+        val userFragment = UserFragment()
+        Functions.openFragment(this,
+                R.id.login_fragment_container, userFragment)
     }
 
 }

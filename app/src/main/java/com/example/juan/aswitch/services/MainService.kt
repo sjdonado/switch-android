@@ -1,9 +1,7 @@
 package com.example.juan.aswitch.services
 
 import android.app.Activity
-import android.view.View
 import com.example.juan.aswitch.helpers.HttpClient
-import okhttp3.FormBody
 import okhttp3.MultipartBody
 import org.json.JSONObject
 import kotlin.properties.Delegates

@@ -32,4 +32,15 @@
     <string name="drawer_close">Cerrar</string>
     <string name="country_iso_code">co</string>
     <string name="internet_server_error">Error en el servidor</string>
+    <string name="fcm_message">Switch</string>
+    <string name="default_notification_channel_name">switch</string>
+    <string name="users_fragment_name_user_error">Nombre vacío</string>
+    <string name="users_fragment_name_company_error">Nombre de la compañia vacío</string>
+    <string name="users_fragment_email_error">Correo electronico vacío</string>
+    <string name="users_fragment_location_error">Ubicación vacía</string>
+    <string name="users_fragment_nit_error">NIT vacío</string>
+    <string name="users_fragment_signboard_error">Razón social vacío</string>
+    <string name="home_fragment_notification_button">Enviar notificación</string>
+    <string name="home_fragment_notification_message">Mensaje</string>
+    <string name="home_fragment_notification_title">Titulo</string>
 </resources>

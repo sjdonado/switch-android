@@ -15,12 +15,21 @@ import com.example.juan.aswitch.activities.MenuActivity
 import com.example.juan.aswitch.helpers.Functions
 import com.example.juan.aswitch.services.UserService
 import com.google.firebase.auth.FirebaseAuth
+import android.app.NotificationManager
+import android.app.NotificationChannel
+import android.util.Log
+import android.widget.Toast
+import com.google.firebase.messaging.FirebaseMessaging
 
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var userService : UserService
     private val permissions = arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION)
+
+    companion object {
+        private const val TAG = "MainActivity"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
@@ -35,6 +44,41 @@ class MainActivity : AppCompatActivity() {
             } else {
                 requestMultiplePermissions()
             }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create channel to show notifications.
+            val channelId = getString(R.string.default_notification_channel_id)
+            val channelName = getString(R.string.default_notification_channel_name)
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(NotificationChannel(channelId,
+                    channelName, NotificationManager.IMPORTANCE_LOW))
+        }
+
+        FirebaseMessaging.getInstance().subscribeToTopic("switch")
+                .addOnCompleteListener { task ->
+                    var msg = getString(R.string.msg_subscribed)
+                    if (!task.isSuccessful) {
+                        msg = getString(R.string.msg_subscribe_failed)
+                    }
+                    Log.d("NotificationService", msg)
+//                    Toast.makeText(this@MainActivity, msg, Toast.LENGTH_SHORT).show()
+                }
+
+//        FirebaseInstanceId.getInstance().instanceId
+//                .addOnCompleteListener(OnCompleteListener { task ->
+//                    if (!task.isSuccessful) {
+//                        Log.w(TAG, "getInstanceId failed", task.exception)
+//                        return@OnCompleteListener
+//                    }
+//
+//                    // Get new Instance ID token
+//                    val token = task.result!!.token
+//
+//                    // Log and toast
+//                    val msg = getString(R.string.msg_token_fmt, token)
+//                    Log.d(TAG, msg)
+//                    Toast.makeText(this@MainActivity, msg, Toast.LENGTH_SHORT).show()
+//                })
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -86,10 +130,15 @@ class MainActivity : AppCompatActivity() {
             startActivity(loginIntent)
         } else {
             Functions.setToken(this, currentUser) {
-                userService.getInfo("/") { res ->
-                    Functions.setSharedPreferencesValue(this, "USER_OBJECT", res.toString())
-                    val menuActivityIntent = Intent(this, MenuActivity::class.java)
-                    startActivity(menuActivityIntent)
+                userService.getInfo { res ->
+                    Functions.setSharedPreferencesStringValue(this, "USER_OBJECT", res.toString())
+                    if(Functions.getSharedPreferencesBooleanValue(this, "SIGN_UP")!!){
+                        val loginActivityIntent = Intent(this, LoginActivity::class.java)
+                        startActivity(loginActivityIntent)
+                    }else{
+                        val menuActivityIntent = Intent(this, MenuActivity::class.java)
+                        startActivity(menuActivityIntent)
+                    }
                 }
             }
         }

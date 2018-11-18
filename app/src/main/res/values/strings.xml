@@ -2,6 +2,14 @@
     <string name="app_name">Switch</string>
     <string name="country_iso_code">co</string>
 
+    <!-- Firebase notifications -->
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="default_notification_channel_name">switch</string>
+    <string name="fcm_message">Switch Notification title</string>
+    <string name="msg_subscribed" translatable="false">Subscribed to switch topic</string>
+    <string name="msg_subscribe_failed" translatable="false">Failed to subscribe to switch topic</string>
+    <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
+
     <!-- Internet -->
     <string name="internet_no_internet_connection">No Internet connection</string>
     <string name="internet_server_error">Server Error</string>
@@ -38,6 +46,13 @@
     <string name="users_fragment_nit">NIT</string>
     <string name="users_fragment_signboard">Signboard</string>
 
+    <string name="users_fragment_name_user_error">Empty name</string>
+    <string name="users_fragment_name_company_error">Empty company name</string>
+    <string name="users_fragment_email_error">Empty email</string>
+    <string name="users_fragment_location_error">Empty location</string>
+    <string name="users_fragment_nit_error">Empty NIT</string>
+    <string name="users_fragment_signboard_error">Empty Signboard</string>
+
     <string name="users_fragment_account_type_user">User account</string>
     <string name="users_fragment_account_type_company">Company account</string>
     <string name="user_fragment_next_button">Next</string>
@@ -48,5 +63,11 @@
 
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+
+    <!-- Home Fragment -->
+    <string name="home_fragment_notification_button">Send notification</string>
+    <string name="home_fragment_notification_title">Title</string>
+    <string name="home_fragment_notification_message">Message</string>
+
 
 </resources>

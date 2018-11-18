@@ -8,20 +8,16 @@ import java.io.File
 
 open class UserService (activity: Activity) : MainService("/users", activity) {
 
-    fun getInfo(path: String, callback: (response: JSONObject) -> Unit) {
-        super.get(path, callback)
+    fun getInfo(callback: (response: JSONObject) -> Unit) {
+        super.get("/", callback)
     }
 
-    fun signUp(callback: (response: JSONObject) -> Unit) {
-        super.post("/signup", JSONObject().toString(), callback)
+    fun sendNotification(jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
+        super.post("/notification", jsonObject.toString(), callback)
     }
 
-    fun post(path: String, jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
-        super.post(path, jsonObject.toString(), callback)
-    }
-
-    fun put(path: String, jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
-        super.put(path, jsonObject.toString(), callback)
+    fun updateUser(jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
+        super.put("/", jsonObject.toString(), callback)
     }
 
     fun uploadImage(path : String, field : String, image : File, callback: (response : JSONObject) -> Unit) {

@@ -32,6 +32,7 @@ class MenuActivity : AppCompatActivity() {
         setSupportActionBar(menu_toolbar)
         actionBar = supportActionBar!!
         actionBar.title = getString(R.string.title_activity_home)
+        Functions.openFragment(this, R.id.menu_fragment_container, HomeFragment.getInstance())
 
         // Initialize the action bar drawer toggle instance
         val drawerToggle: ActionBarDrawerToggle = object : ActionBarDrawerToggle(
@@ -48,12 +49,12 @@ class MenuActivity : AppCompatActivity() {
 
             override fun onDrawerOpened(drawerView: View) {
                 super.onDrawerOpened(drawerView)
-                val userObjectValue = Functions.getSharedPreferencesValue(this@MenuActivity, "USER_OBJECT")
+                val userObjectValue = Functions.getSharedPreferencesStringValue(this@MenuActivity, "USER_OBJECT")
                 if(userObjectValue != null) {
                     val userObject = JSONObject(userObjectValue)
-                    if(!userObject.isNull("profile_picture")) {
+                    if(!userObject.isNull("profilePicture")) {
                         Glide.with(this@MenuActivity)
-                                .load(userObject.getJSONObject("profile_picture").getString("url"))
+                                .load(userObject.getJSONObject("profilePicture").getString("url"))
                                 .into(navigation_account_header_current)
                     }
                     if(!userObject.isNull("name")) navigation_account_header_name.text = userObject.getString("name")

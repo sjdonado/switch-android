@@ -26,14 +26,18 @@ import com.google.android.gms.location.places.ui.PlacePicker
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
+import com.google.android.material.textfield.TextInputLayout
 
 
 class UserFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var mAuth: FirebaseAuth
-    private lateinit var userService : UserService
+    private lateinit var userService: UserService
+    private var signUp: Boolean = false
     private var userTypeAccount = false
-    private var signUp = false
     private var userObject: JSONObject = JSONObject()
 
     companion object {
@@ -44,9 +48,6 @@ class UserFragment : androidx.fragment.app.Fragment() {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        arguments?.getBoolean("signUp")?.let {
-            signUp = it
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -61,12 +62,15 @@ class UserFragment : androidx.fragment.app.Fragment() {
 
         userService = UserService(activity!!)
 
-        val userObjectValue = Functions.getSharedPreferencesValue(activity!!, "USER_OBJECT")
+        val userObjectValue = Functions.getSharedPreferencesStringValue(activity!!, "USER_OBJECT")
+        signUp = Functions.getSharedPreferencesBooleanValue(activity!!, "SIGN_UP")!!
+
+
         if(userObjectValue != null) userObject = JSONObject(userObjectValue)
 
-        if(!userObject.isNull("profile_picture")) {
+        if(!userObject.isNull("profilePicture")) {
             Glide.with(activity!!)
-                    .load(userObject.getJSONObject("profile_picture").getString("url"))
+                    .load(userObject.getJSONObject("profilePicture").getString("url"))
                     .into(userImageViewProfilePicture)
         }
 
@@ -89,6 +93,12 @@ class UserFragment : androidx.fragment.app.Fragment() {
         }else {
             if(signUp) userSwitchAccountType.visibility = View.VISIBLE
         }
+
+        setEditTextValidation(userEditTextName, getString(R.string.users_fragment_name_user_error))
+        setEditTextValidation(userEditTextEmail, getString(R.string.users_fragment_email_error))
+        setEditTextValidation(userEditTextLocation, getString(R.string.users_fragment_location_error))
+        setEditTextValidation(userEditTextNit, getString(R.string.users_fragment_nit_error))
+        setEditTextValidation(userEditTextSignboard, getString(R.string.users_fragment_signboard_error))
 
         userEditTextLocation.editText!!.setOnClickListener {
             val builder = PlacePicker.IntentBuilder()
@@ -134,22 +144,29 @@ class UserFragment : androidx.fragment.app.Fragment() {
         }
 
         userButtonAction.setOnClickListener {
-            val jsonObject = JSONObject()
-            jsonObject.put("name", userEditTextName.editText!!.text)
-            jsonObject.put("email", userEditTextEmail.editText!!.text)
-            jsonObject.put("userType", userTypeAccount)
-            if(!userEditTextNit.editText!!.text.isNullOrBlank())
-                jsonObject.put("nit", userEditTextNit.editText!!.text)
-            if(!userEditTextSignboard.editText!!.text.isNullOrBlank())
+            if(saveButtonValidation(userEditTextName, getString(R.string.users_fragment_name_user_error))
+                && saveButtonValidation(userEditTextEmail, getString(R.string.users_fragment_email_error))
+                && saveButtonValidation(userEditTextLocation, getString(R.string.users_fragment_location_error))
+                && saveButtonValidation(userEditTextNit, getString(R.string.users_fragment_nit_error))
+                && saveButtonValidation(userEditTextSignboard, getString(R.string.users_fragment_signboard_error))) {
+                val jsonObject = JSONObject()
+                jsonObject.put("name", userEditTextName.editText!!.text)
+                jsonObject.put("email", userEditTextEmail.editText!!.text)
+                jsonObject.put("userType", userTypeAccount)
+                if(userEditTextNit.visibility == View.VISIBLE)
+                    jsonObject.put("nit", userEditTextNit.editText!!.text)
+                if(userEditTextSignboard.visibility == View.VISIBLE)
                 jsonObject.put("signboard", userEditTextSignboard.editText!!.text)
 
-            userService.put("/", jsonObject) { res ->
-                Functions.showSnackbar(getView()!!, getString(R.string.alert_info_updated))
-                Functions.updateSharedPreferencesObjectValue(activity!!, "USER_OBJECT", res)
-            }
-            if(signUp){
-                val menuActivityIntent = Intent(activity!!, MenuActivity::class.java)
-                requireActivity().startActivity(menuActivityIntent)
+                userService.updateUser(jsonObject) { res ->
+                    Functions.showSnackbar(getView()!!, getString(R.string.alert_info_updated))
+                    Functions.setSharedPreferencesBooleanValue(activity!!, "SIGN_UP", false)
+                    Functions.updateSharedPreferencesObjectValue(activity!!, "USER_OBJECT", res)
+                }
+                if(signUp){
+                    val menuActivityIntent = Intent(activity!!, MenuActivity::class.java)
+                    requireActivity().startActivity(menuActivityIntent)
+                }
             }
         }
     }
@@ -163,12 +180,12 @@ class UserFragment : androidx.fragment.app.Fragment() {
                     val image = copyInputStreamToFile(
                             activity!!.contentResolver!!.openInputStream(data.data!!)!!,
                             getMimeType(activity!!, data.data!!)!!)
-                    userService.uploadImage("/upload", "profile_picture", image) { res ->
+                    userService.uploadImage("/upload", "profilePicture", image) { res ->
                         Functions.showSnackbar(view!!, getString(R.string.alert_profile_picture_updated))
                         activity!!.runOnUiThread {
                             Functions.updateSharedPreferencesObjectValue(activity!!, "USER_OBJECT", res)
                             Glide.with(activity!!)
-                                    .load(res.getJSONObject("profile_picture").getString("url"))
+                                    .load(res.getJSONObject("profilePicture").getString("url"))
                                     .into(userImageViewProfilePicture)
                         }
                     }
@@ -197,7 +214,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
                     locationObject.put("address", place.address)
                     jsonObject.put("location", locationObject)
 
-                    userService.put("/", jsonObject) { res ->
+                    userService.updateUser(jsonObject) { res ->
                         Functions.showSnackbar(view!!, getString(R.string.alert_info_updated))
                         activity!!.runOnUiThread {
                             userEditTextLocation.editText!!.setText(res.getJSONObject("location").getString("address"))
@@ -247,6 +264,42 @@ class UserFragment : androidx.fragment.app.Fragment() {
             extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(File(uri.path)).toString())
         }
         return extension
+    }
+
+    private fun saveButtonValidation(editTextLayout: TextInputLayout, errorValue: String): Boolean {
+        var valid = true
+        if(editTextLayout.visibility == View.VISIBLE && (editTextLayout.editText!!.text.isEmpty() || editTextLayout.editText!!.text.isNullOrBlank())){
+            editTextLayout.error = errorValue
+            valid = false
+        } else editTextLayout.error = null
+        return valid
+    }
+
+    private fun setEditTextValidation(editTextLayout: TextInputLayout, errorValue: String){
+        editTextLayout.editText!!.afterTextChanged { validateEditText(editTextLayout, editTextLayout.editText!!, errorValue) }
+        editTextLayout.editText!!.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                validateEditText(editTextLayout, editTextLayout.editText!!, errorValue)
+            }
+        }
+    }
+
+    private fun validateEditText(layout: TextInputLayout, editText: EditText, errorValue: String) {
+        if (editText.text.isEmpty()) layout.error = errorValue else layout.error = null
+    }
+
+    private fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
+        this.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun afterTextChanged(editable: Editable?) {
+                afterTextChanged.invoke(editable.toString())
+            }
+        })
     }
 
 }

@@ -60,16 +60,28 @@ open class Functions {
             transaction.commit()
         }
 
-        fun setSharedPreferencesValue(activity: Activity, keyName : String, data: String) {
+        fun setSharedPreferencesStringValue(activity: Activity, keyName : String, data: String) {
             val sp = activity.getSharedPreferences("SWITCH_DATA", MODE_PRIVATE)
             val editor = sp.edit()
             editor.putString(keyName, data)
             editor.apply()
         }
 
-        fun getSharedPreferencesValue(activity: Activity, keyName: String) : String? {
+        fun setSharedPreferencesBooleanValue(activity: Activity, keyName : String, data: Boolean) {
+            val sp = activity.getSharedPreferences("SWITCH_DATA", MODE_PRIVATE)
+            val editor = sp.edit()
+            editor.putBoolean(keyName, data)
+            editor.apply()
+        }
+
+        fun getSharedPreferencesStringValue(activity: Activity, keyName: String) : String? {
             val sp = activity.getSharedPreferences("SWITCH_DATA", MODE_PRIVATE)
             return sp.getString(keyName, null)
+        }
+
+        fun getSharedPreferencesBooleanValue(activity: Activity, keyName: String) : Boolean? {
+            val sp = activity.getSharedPreferences("SWITCH_DATA", MODE_PRIVATE)
+            return sp.getBoolean(keyName, false)
         }
 
         fun onSharedPreferencesValue(activity: Activity, keyName: String, callback : (response: String) -> Unit) {
@@ -86,9 +98,9 @@ open class Functions {
             if(oldJsonObjectValue != null) {
                 val newJsonObject = merge(arrayListOf(JSONObject(oldJsonObjectValue), jsonObject))
                 Log.i("NEW_JSON_OBJECT", newJsonObject.toString())
-                setSharedPreferencesValue(activity, keyName, newJsonObject.toString())
+                setSharedPreferencesStringValue(activity, keyName, newJsonObject.toString())
             } else {
-                setSharedPreferencesValue(activity, keyName, jsonObject.toString())
+                setSharedPreferencesStringValue(activity, keyName, jsonObject.toString())
             }
         }
 
@@ -124,7 +136,7 @@ open class Functions {
                 override fun onComplete(task: Task<GetTokenResult>) {
                     if (task.isSuccessful) {
                         val idToken = task.result!!.token
-                        setSharedPreferencesValue(activity, "USER_TOKEN", "Bearer ${idToken!!}")
+                        setSharedPreferencesStringValue(activity, "USER_TOKEN", "Bearer ${idToken!!}")
                         callback()
                     }
                 }
