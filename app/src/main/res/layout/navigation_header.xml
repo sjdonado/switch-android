@@ -23,7 +23,7 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="0dp" />
 
-    <com.mikepenz.materialdrawer.view.BezelImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/navigation_account_header_current"
         android:layout_width="@dimen/navigation_account_header_selected"
         android:layout_height="@dimen/navigation_account_header_selected"

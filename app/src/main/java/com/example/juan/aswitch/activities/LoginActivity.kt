@@ -65,7 +65,7 @@ class LoginActivity : AppCompatActivity() {
                     // Successfully signed in
                     Functions.showSnackbar(login_fragment_container, getString(R.string.alert_sign_in_successful))
                     Functions.setToken(this, FirebaseAuth.getInstance().currentUser) {
-                        userService.getInfo { res ->
+                        userService.get { res ->
                             if(res.length() == 0) {
                                 Functions.logout(this)
                                 val mainActivity = Intent(this, MainActivity::class.java)

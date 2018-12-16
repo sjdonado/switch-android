@@ -29,6 +29,8 @@ import com.google.android.gms.maps.model.LatLngBounds
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
+import com.bumptech.glide.request.RequestOptions
+import com.example.juan.aswitch.services.PlaceService
 import com.google.android.material.textfield.TextInputLayout
 
 
@@ -37,17 +39,13 @@ class UserFragment : androidx.fragment.app.Fragment() {
     private lateinit var mAuth: FirebaseAuth
     private lateinit var userService: UserService
     private var signUp: Boolean = false
-    private var userTypeAccount = false
+    private var role: Boolean = false
     private var userObject: JSONObject = JSONObject()
 
     companion object {
         fun getInstance(): UserFragment = UserFragment()
         private val PICK_IMAGE = 0
         var PLACE_PICKER_REQUEST = 1
-    }
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -65,12 +63,12 @@ class UserFragment : androidx.fragment.app.Fragment() {
         val userObjectValue = Functions.getSharedPreferencesStringValue(activity!!, "USER_OBJECT")
         signUp = Functions.getSharedPreferencesBooleanValue(activity!!, "SIGN_UP")!!
 
-
         if(userObjectValue != null) userObject = JSONObject(userObjectValue)
 
         if(!userObject.isNull("profilePicture")) {
             Glide.with(activity!!)
                     .load(userObject.getJSONObject("profilePicture").getString("url"))
+                    .apply(Functions.glideRequestOptions(activity!!))
                     .into(userImageViewProfilePicture)
         }
 
@@ -85,11 +83,24 @@ class UserFragment : androidx.fragment.app.Fragment() {
                     .setText(userObject.getJSONObject("location").getString("address"))
         if(!userObject.isNull("signboard"))
             userEditTextSignboard.editText!!.setText(userObject.getString("signboard"))
-        if(!userObject.isNull("userType")) {
-            if(userObject.getBoolean("userType")) {
-                userEditTextNit.visibility = View.VISIBLE
-                userEditTextSignboard.visibility = View.VISIBLE
-            }
+        if(!userObject.isNull("role")) {
+            role = userObject.getBoolean("role")
+//            if(role) {
+//                userEditTextNit.visibility = View.VISIBLE
+//                userEditTextSignboard.visibility = View.VISIBLE
+//                val placeService = PlaceService(activity!!)
+//                placeService.get { place ->
+//                    Functions.updateSharedPreferencesObjectValue(activity!!, "PLACE_OBJECT", place)
+//                    activity!!.runOnUiThread {
+//                        if(!place.isNull("labels") && ) {
+//                            val array = resources.getStringArray(R.array.settings_label_default_values)
+//                            Functions.toStringArray(place.getJSONArray("labels"))!!.forEachIndexed { index, s ->
+//                                array[index] = s
+//                            }
+//                        }
+//                    }
+//                }
+//            }
         }else {
             if(signUp) userSwitchAccountType.visibility = View.VISIBLE
         }
@@ -121,8 +132,8 @@ class UserFragment : androidx.fragment.app.Fragment() {
         else
             userButtonAction.setImageResource(R.drawable.ic_save_white_24dp)
 
-        userSwitchAccountType.setOnCheckedChangeListener { compoundButton, bChecked ->
-            userTypeAccount = bChecked
+        userSwitchAccountType.setOnCheckedChangeListener { _, bChecked ->
+            role = bChecked
             if (bChecked) {
                 userSwitchAccountType.setText(R.string.users_fragment_account_type_company)
                 userEditTextNit.visibility = View.VISIBLE
@@ -152,13 +163,13 @@ class UserFragment : androidx.fragment.app.Fragment() {
                 val jsonObject = JSONObject()
                 jsonObject.put("name", userEditTextName.editText!!.text)
                 jsonObject.put("email", userEditTextEmail.editText!!.text)
-                jsonObject.put("userType", userTypeAccount)
+                if(signUp) jsonObject.put("role", role)
                 if(userEditTextNit.visibility == View.VISIBLE)
                     jsonObject.put("nit", userEditTextNit.editText!!.text)
                 if(userEditTextSignboard.visibility == View.VISIBLE)
                 jsonObject.put("signboard", userEditTextSignboard.editText!!.text)
 
-                userService.updateUser(jsonObject) { res ->
+                userService.update(jsonObject) { res ->
                     Functions.showSnackbar(getView()!!, getString(R.string.alert_info_updated))
                     Functions.setSharedPreferencesBooleanValue(activity!!, "SIGN_UP", false)
                     Functions.updateSharedPreferencesObjectValue(activity!!, "USER_OBJECT", res)
@@ -186,6 +197,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
                             Functions.updateSharedPreferencesObjectValue(activity!!, "USER_OBJECT", res)
                             Glide.with(activity!!)
                                     .load(res.getJSONObject("profilePicture").getString("url"))
+                                    .apply(Functions.glideRequestOptions(activity!!))
                                     .into(userImageViewProfilePicture)
                         }
                     }
@@ -214,7 +226,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
                     locationObject.put("address", place.address)
                     jsonObject.put("location", locationObject)
 
-                    userService.updateUser(jsonObject) { res ->
+                    userService.update(jsonObject) { res ->
                         Functions.showSnackbar(view!!, getString(R.string.alert_info_updated))
                         activity!!.runOnUiThread {
                             userEditTextLocation.editText!!.setText(res.getJSONObject("location").getString("address"))

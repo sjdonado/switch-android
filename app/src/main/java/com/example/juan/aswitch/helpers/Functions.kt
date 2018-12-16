@@ -20,7 +20,13 @@ import com.google.firebase.auth.GetTokenResult
 import org.json.JSONObject
 import org.json.JSONException
 import android.content.Context.MODE_PRIVATE
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
+import com.bumptech.glide.Priority
 import com.google.firebase.auth.FirebaseAuth
+import com.bumptech.glide.request.RequestOptions
+import org.json.JSONArray
+
+
 
 
 open class Functions {
@@ -38,24 +44,26 @@ open class Functions {
             ).show()
         }
 
-        fun openFragment(activity: AppCompatActivity, fragment_id : Int, fragment: androidx.fragment.app.Fragment) {
-//            val exitFade = Fade()
-//            exitFade.setDuration(FADE_DEFAULT_TIME)
-//            previousFragment.setExitTransition(exitFade)
-//
-//            val enterTransitionSet = TransitionSet()
-//            enterTransitionSet.addTransition(TransitionInflater.from(activity).inflateTransition(android.R.transition.move))
-//            enterTransitionSet.setDuration(MOVE_DEFAULT_TIME)
-//            enterTransitionSet.setStartDelay(FADE_DEFAULT_TIME)
-//            fragment.setSharedElementEnterTransition(enterTransitionSet)
-//
-//            val enterFade = Fade()
-//            enterFade.startDelay = FADE_DEFAULT_TIME
-//            enterFade.duration = FADE_DEFAULT_TIME
-//            fragment.enterTransition = enterFade
+        fun openFragment(activity: AppCompatActivity, fragment_container: Int, fragment: androidx.fragment.app.Fragment) {
+
+            val exitFade = Fade()
+            exitFade.duration = FADE_DEFAULT_TIME
+            val previousFragment = activity.supportFragmentManager.findFragmentById(fragment_container)
+            if(previousFragment is Fragment) previousFragment.exitTransition = exitFade
+
+            val enterTransitionSet = TransitionSet()
+            enterTransitionSet.addTransition(TransitionInflater.from(activity).inflateTransition(android.R.transition.move))
+            enterTransitionSet.duration = MOVE_DEFAULT_TIME
+            enterTransitionSet.startDelay = FADE_DEFAULT_TIME
+            fragment.sharedElementEnterTransition = enterTransitionSet
+
+            val enterFade = Fade()
+            enterFade.startDelay = FADE_DEFAULT_TIME
+            enterFade.duration = FADE_DEFAULT_TIME
+            fragment.enterTransition = enterFade
 
             val transaction = activity.supportFragmentManager.beginTransaction()
-            transaction.replace(fragment_id, fragment)
+            transaction.replace(fragment_container, fragment)
             transaction.addToBackStack(null)
             transaction.commit()
         }
@@ -97,7 +105,6 @@ open class Functions {
 
             if(oldJsonObjectValue != null) {
                 val newJsonObject = merge(arrayListOf(JSONObject(oldJsonObjectValue), jsonObject))
-                Log.i("NEW_JSON_OBJECT", newJsonObject.toString())
                 setSharedPreferencesStringValue(activity, keyName, newJsonObject.toString())
             } else {
                 setSharedPreferencesStringValue(activity, keyName, jsonObject.toString())
@@ -151,6 +158,28 @@ open class Functions {
         fun logout(activity: Activity) {
             FirebaseAuth.getInstance().signOut()
             clearUserInfo(activity)
+        }
+
+        fun glideRequestOptions(activity: Activity): RequestOptions {
+            val circularProgressDrawable = CircularProgressDrawable(activity)
+            circularProgressDrawable.strokeWidth = 5f
+            circularProgressDrawable.centerRadius = 30f
+            circularProgressDrawable.start()
+            return RequestOptions()
+                    .centerCrop()
+                    .placeholder(circularProgressDrawable)
+                    .apply(RequestOptions.circleCropTransform())
+                    .priority(Priority.HIGH)
+        }
+
+        fun toStringArray(array: JSONArray?): Array<String?>? {
+            if (array == null)
+                return null
+            val arr = arrayOfNulls<String>(array.length())
+            for (i in arr.indices) {
+                arr[i] = array.optString(i)
+            }
+            return arr
         }
     }
 }

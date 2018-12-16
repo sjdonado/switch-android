@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!--<androidx.preference.CheckBoxPreference-->
+        <!--android:key="key_checkbox"-->
+        <!--android:summary="Tap to check if on or off"-->
+        <!--android:title="Checkbox Preference"-->
+        <!--app:iconSpaceReserved="false" />-->
+    <!--<androidx.preference.MultiSelectListPreference-->
+        <!--android:dialogTitle="key_labels"-->
+        <!--android:key="mode_repeat"-->
+        <!--android:summary=""-->
+        <!--android:title="Labels"-->
+        <!--android:entries="@array/settings_list_preference_titles"-->
+        <!--android:entryValues="@array/settings_list_preference_titles"-->
+        <!--android:defaultValue="@array/empty_array" />-->
+    <!--<androidx.preference.EditTextPreference-->
+        <!--android:dialogTitle="Enter a text"-->
+        <!--android:key="key_labels"-->
+        <!--android:summary="Click to show a text entry dialog"-->
+        <!--android:title="EditText Preference"-->
+        <!--app:iconSpaceReserved="false" />-->
+    <androidx.preference.SeekBarPreference
+        android:dialogTitle="@string/user_settings_dialog_title_distance"
+        android:title="@string/user_settings_title_distance"
+        android:key="@string/user_settings_key_distance"
+        android:max="1000"
+        android:summary="@string/user_settings_summary_distance"
+        app:iconSpaceReserved="false" />
+    <!--<androidx.preference.SwitchPreference-->
+        <!--android:key="key_switch"-->
+        <!--android:title="Switch Preference"-->
+        <!--android:summary="Click to switch on or off"-->
+        <!--android:defaultValue="true"-->
+        <!--app:iconSpaceReserved="false" />-->
+</androidx.preference.PreferenceScreen>

@@ -1,28 +1,32 @@
 package com.example.juan.aswitch.activities
 
-import android.content.Intent
 import com.example.juan.aswitch.R
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.preference.PreferenceFragment
+import androidx.preference.PreferenceFragmentCompat
 import com.bumptech.glide.Glide
-import com.example.juan.aswitch.fragments.HomeFragment
-import com.example.juan.aswitch.fragments.UserFragment
+import com.example.juan.aswitch.R.id.filter_action
+import com.example.juan.aswitch.R.id.navigation_notifications
+import com.example.juan.aswitch.fragments.*
 import com.example.juan.aswitch.helpers.Functions
-import com.google.android.gms.location.places.ui.PlacePicker
+import com.example.juan.aswitch.services.PlaceService
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.fragment_users.*
 import kotlinx.android.synthetic.main.navigation_header.*
 import org.json.JSONObject
 
+
 class MenuActivity : AppCompatActivity() {
 
-
     private lateinit var actionBar : ActionBar
+    private var userObject: JSONObject = JSONObject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +35,7 @@ class MenuActivity : AppCompatActivity() {
         // Configure action bar
         setSupportActionBar(menu_toolbar)
         actionBar = supportActionBar!!
-        actionBar.title = getString(R.string.title_activity_home)
+        actionBar.title = getString(R.string.title_fragment_home)
         Functions.openFragment(this, R.id.menu_fragment_container, HomeFragment.getInstance())
 
         // Initialize the action bar drawer toggle instance
@@ -51,14 +55,16 @@ class MenuActivity : AppCompatActivity() {
                 super.onDrawerOpened(drawerView)
                 val userObjectValue = Functions.getSharedPreferencesStringValue(this@MenuActivity, "USER_OBJECT")
                 if(userObjectValue != null) {
-                    val userObject = JSONObject(userObjectValue)
+                    userObject = JSONObject(userObjectValue)
                     if(!userObject.isNull("profilePicture")) {
                         Glide.with(this@MenuActivity)
                                 .load(userObject.getJSONObject("profilePicture").getString("url"))
+                                .apply(Functions.glideRequestOptions(this@MenuActivity))
                                 .into(navigation_account_header_current)
                     }
                     if(!userObject.isNull("name")) navigation_account_header_name.text = userObject.getString("name")
                     if(!userObject.isNull("email")) navigation_account_header_email.text = userObject.getString("email")
+                    if(!userObject.isNull("role") && userObject.getBoolean("role")) navigation.menu.findItem(navigation_notifications).isVisible = true
                 }
 
                 navigation_account_header.setOnClickListener {
@@ -76,12 +82,25 @@ class MenuActivity : AppCompatActivity() {
         drawerToggle.syncState()
 
         navigation.setNavigationItemSelectedListener {
-            when (it.itemId){
+            when (it.itemId) {
 //                R.id.navigation_dashboard -> {}
                 R.id.navigation_home -> {
-                    actionBar.title = getString(R.string.title_activity_home)
+                    actionBar.title = getString(R.string.title_fragment_home)
                     val homeFragment = HomeFragment.getInstance()
                     Functions.openFragment(this, R.id.menu_fragment_container, homeFragment)
+                }
+                R.id.navigation_notifications -> {
+                    actionBar.title = getString(R.string.title_fragment_notifications)
+                    val notificationsFragment = NotificationsFragment.getInstance()
+                    Functions.openFragment(this, R.id.menu_fragment_container, notificationsFragment)
+                }
+                R.id.navigation_settings -> {
+                    actionBar.title = getString(R.string.title_fragment_settings)
+                    if(!userObject.isNull("role") && userObject.getBoolean("role")){
+                        Functions.openFragment(this, R.id.menu_fragment_container, CompanySettingsFragment.getInstance())
+                    }else{
+                        Functions.openFragment(this, R.id.menu_fragment_container, UserSettingsFragment.getInstance())
+                    }
                 }
 //                R.id.navigation_users -> {
 //                    openUserFragment()

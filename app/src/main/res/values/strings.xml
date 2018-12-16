@@ -28,8 +28,11 @@
     <string name="permissions_button_cancel">Cancel</string>
 
     <!-- Menu titles -->
-    <string name="title_activity_home">Home</string>
     <string name="title_activity_user">Profile settings</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_fragment_home">Home</string>
+    <string name="title_fragment_notifications">Notifications</string>
+    <string name="title_fragment_settings">Settings</string>
 
     <!-- Activity home -->
     <string name="activity_home_btn_save">Save</string>
@@ -64,10 +67,33 @@
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
 
-    <!-- Home Fragment -->
-    <string name="home_fragment_notification_button">Send notification</string>
-    <string name="home_fragment_notification_title">Title</string>
-    <string name="home_fragment_notification_message">Message</string>
+    <!-- Notifications Fragment -->
+    <string name="notifications_fragment_notification_button">Send notification</string>
+    <string name="notifications_fragment_notification_title">Title</string>
+    <string name="notifications_fragment_notification_message">Message</string>
 
+    <!-- User settings Fragment -->
+    <string name="user_settings_key_distance" translatable="false">key_distance</string>
+    <string name="user_settings_dialog_title_distance">Enter your maximun distance</string>
+    <string name="user_settings_title_distance">Maximun distance</string>
+    <string name="user_settings_summary_distance">Square meters radio</string>
+
+    <!-- Company settings Fragment -->
+    <string name="company_settings_key_labels" translatable="false">key_labels</string>
+    <string name="company_settings_dialog_title_labels">Labels available</string>
+    <string name="company_settings_title_labels">Labels</string>
+    <string name="company_settings_summary_labels">Enter your labels</string>
+
+    <!-- Settings labels -->
+    <string name="settings_label_food">Food</string>
+    <string name="settings_label_coffee">Coffee</string>
+    <string name="settings_label_nightlife">Nightlife</string>
+    <string name="settings_label_fun">Fun</string>
+    <string name="settings_label_shopping">Shopping</string>
+
+    <!-- Filter labels -->
+    <string name="filters_radio_distance">Radio distance</string>
+    <string name="filters_restaurant">Restaurant</string>
+    <string name="filters_bar">Bar</string>
 
 </resources>

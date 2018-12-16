@@ -2,23 +2,23 @@ package com.example.juan.aswitch.fragments
 
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 
 import com.example.juan.aswitch.R
 import com.example.juan.aswitch.helpers.Functions
-import com.example.juan.aswitch.services.UserService
-import kotlinx.android.synthetic.main.fragment_home.*
-import org.json.JSONObject
+import android.view.MenuInflater
+import androidx.appcompat.app.AppCompatActivity
+
 
 class HomeFragment : androidx.fragment.app.Fragment() {
 
-    private lateinit var userService : UserService
-    private var userObject: JSONObject = JSONObject()
-
     companion object {
         fun getInstance(): HomeFragment = HomeFragment()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -29,25 +29,20 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userService = UserService(activity!!)
+    }
 
-        val userObjectValue = Functions.getSharedPreferencesStringValue(activity!!, "USER_OBJECT")
-        if(userObjectValue != null) userObject = JSONObject(userObjectValue)
-
-        if(userObject.getBoolean("userType")) homeEditTextNotificationTitle.visibility = View.VISIBLE
-        if(userObject.getBoolean("userType")) homeEditTextNotificationMessage.visibility = View.VISIBLE
-        if(userObject.getBoolean("userType")) homeButtonSendNotification.visibility = View.VISIBLE
-
-        homeButtonSendNotification.setOnClickListener {
-            if(homeEditTextNotificationMessage.editText!!.text.isNotEmpty() && homeEditTextNotificationTitle.editText!!.text.isNotEmpty()) {
-                val jsonObject = JSONObject()
-                jsonObject.put("title", homeEditTextNotificationTitle.editText!!.text)
-                jsonObject.put("message", homeEditTextNotificationMessage.editText!!.text)
-                userService.sendNotification(jsonObject) {
-                    Functions.showSnackbar(getView()!!, getString(R.string.alert_info_updated))
-                }
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item!!.itemId) {
+            R.id.filter_action -> {
+                Functions.openFragment(activity as AppCompatActivity, R.id.menu_fragment_container, FiltersFragment.getInstance())
+                return true
             }
         }
+        return super.onOptionsItemSelected(item)
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.filter_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 }

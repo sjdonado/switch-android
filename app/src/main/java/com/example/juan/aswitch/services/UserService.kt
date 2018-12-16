@@ -8,15 +8,11 @@ import java.io.File
 
 open class UserService (activity: Activity) : MainService("/users", activity) {
 
-    fun getInfo(callback: (response: JSONObject) -> Unit) {
+    fun get(callback: (response: JSONObject) -> Unit) {
         super.get("/", callback)
     }
 
-    fun sendNotification(jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
-        super.post("/notification", jsonObject.toString(), callback)
-    }
-
-    fun updateUser(jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
+    fun update(jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
         super.put("/", jsonObject.toString(), callback)
     }
 

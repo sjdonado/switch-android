@@ -11,7 +11,6 @@
     <string name="permissions_error">Switch necesita saber tu ubicación</string>
     <string name="permissions_button_allow">Siempre</string>
     <string name="permissions_button_cancel">Cancelar</string>
-    <string name="title_activity_home">Inicio</string>
     <string name="title_activity_user">Configuración de la cuenta</string>
     <string name="activity_home_btn_save">Guardar</string>
     <string name="activity_home_btn_logout">Cerrar sesión</string>
@@ -40,7 +39,25 @@
     <string name="users_fragment_location_error">Ubicación vacía</string>
     <string name="users_fragment_nit_error">NIT vacío</string>
     <string name="users_fragment_signboard_error">Razón social vacío</string>
-    <string name="home_fragment_notification_button">Enviar notificación</string>
-    <string name="home_fragment_notification_message">Mensaje</string>
-    <string name="home_fragment_notification_title">Titulo</string>
+    <string name="title_fragment_home">Inicio</string>
+    <string name="title_fragment_notifications">Notificaciones</string>
+    <string name="notifications_fragment_notification_button">Enviar notificación</string>
+    <string name="notifications_fragment_notification_message">Mensaje</string>
+    <string name="notifications_fragment_notification_title">Titulo</string>
+    <string name="title_fragment_settings">Configuración</string>
+    <string name="title_activity_settings">Configuración</string>
+    <string name="user_settings_dialog_title_distance">Ingresar máxima distancia</string>
+    <string name="user_settings_title_distance">Máxima distancia</string>
+    <string name="user_settings_summary_distance">Metros cuadrados</string>
+    <string name="company_settings_dialog_title_labels">Etiquetas disponibles</string>
+    <string name="company_settings_title_labels">Etiquetas</string>
+    <string name="company_settings_summary_labels">Seleccionar etiquetas</string>
+    <string name="settings_label_food">Comida</string>
+    <string name="settings_label_coffee">Café</string>
+    <string name="settings_label_fun">Divertido</string>
+    <string name="settings_label_shopping">Compras</string>
+    <string name="settings_label_nightlife">Nocturno</string>
+    <string name="filters_radio_distance">Radio de distancia</string>
+    <string name="filters_restaurant">Restaurante</string>
+    <string name="filters_bar">Bar</string>
 </resources>
