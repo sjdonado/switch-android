@@ -150,7 +150,7 @@ open class Functions {
             })
         }
 
-        fun clearUserInfo(activity: Activity){
+        private fun clearUserInfo(activity: Activity){
             val sp = activity.getSharedPreferences("SWITCH_DATA", MODE_PRIVATE)
             sp.edit().clear().apply()
         }

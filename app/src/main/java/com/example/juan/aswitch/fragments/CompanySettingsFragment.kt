@@ -53,7 +53,11 @@ class CompanySettingsFragment : PreferenceFragmentCompat(), SharedPreferences.On
                 val jsonObject = JSONObject()
                 jsonObject.put("labels", JSONArray(selections!!.toTypedArray()))
                 placeService.update(jsonObject) {res ->
-                    Functions.updateSharedPreferencesObjectValue(activity!!, "PLACE_OBJECT", res)
+                    Functions.updateSharedPreferencesObjectValue(
+                            activity!!,
+                            "PLACE_OBJECT",
+                            res.getJSONObject("data")
+                    )
                 }
 //                mTask = CheckUpdateTask.getInstance(false)
 //                if (!mTask.getStatus().equals(AsyncTask.Status.RUNNING)) {

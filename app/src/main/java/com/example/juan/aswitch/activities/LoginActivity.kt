@@ -72,8 +72,15 @@ class LoginActivity : AppCompatActivity() {
                                 startActivity(mainActivity)
                             }else{
                                 Functions.setSharedPreferencesStringValue(
-                                        this, "USER_OBJECT", res.toString())
-                                Functions.setSharedPreferencesBooleanValue(this, "SIGN_UP", true)
+                                        this,
+                                        "USER_OBJECT",
+                                        res.getJSONObject("data").toString()
+                                )
+                                Functions.setSharedPreferencesBooleanValue(
+                                        this,
+                                        "SIGN_UP",
+                                        true
+                                )
                                 openUserFragment()
                             }
                         }

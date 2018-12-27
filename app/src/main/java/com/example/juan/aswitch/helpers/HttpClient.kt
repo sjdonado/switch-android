@@ -62,12 +62,12 @@ open class HttpClient {
         private fun executeRequest(request : Request, activity : Activity, callback : (response : JSONObject) -> Unit) {
             val progressDialog = Dialog(activity)
             val dialog = ProgressBar(activity)
-            dialog.isIndeterminate = true
-            dialog.visibility = View.VISIBLE
-            // has leaked window DecorView@d3d464c[] that was originally added here SERVER DOESN'T SEND DATA OBJECT
-            progressDialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-            progressDialog.setContentView(dialog)
-            progressDialog.show()
+//            dialog.isIndeterminate = true
+//            dialog.visibility = View.VISIBLE
+//             has leaked window DecorView@d3d464c[] that was originally added here SERVER DOESN'T SEND DATA OBJECT
+//            progressDialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+//            progressDialog.setContentView(dialog)
+//            progressDialog.show()
 
             OkHttpClient().newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call?, e: IOException?) {
@@ -82,8 +82,7 @@ open class HttpClient {
                         progressDialog.hide()
                     }
                     if(response!!.code() == 200) {
-                        val body = JSONObject(response.body()!!.string()).getJSONObject("data")
-                        callback(body)
+                        callback(JSONObject(response.body()!!.string()))
                     }else{
                         Log.d(TAG, response.toString())
                         activity.runOnUiThread {

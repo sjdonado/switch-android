@@ -52,7 +52,11 @@ class UserSettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSha
                 val jsonObject = JSONObject()
                 jsonObject.put("distance", sharedPreferences!!.getInt(key, 0).toString())
                 userService.update(jsonObject) {res ->
-                    Functions.updateSharedPreferencesObjectValue(activity!!, "USER_OBJECT", res)
+                    Functions.updateSharedPreferencesObjectValue(
+                            activity!!,
+                            "USER_OBJECT",
+                            res.getJSONObject("data")
+                    )
                 }
 //                mTask = CheckUpdateTask.getInstance(false)
 //                if (!mTask.getStatus().equals(AsyncTask.Status.RUNNING)) {

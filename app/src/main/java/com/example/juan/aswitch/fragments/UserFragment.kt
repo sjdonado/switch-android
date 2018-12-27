@@ -160,19 +160,19 @@ class UserFragment : androidx.fragment.app.Fragment() {
                 && saveButtonValidation(userEditTextLocation, getString(R.string.users_fragment_location_error))
                 && saveButtonValidation(userEditTextNit, getString(R.string.users_fragment_nit_error))
                 && saveButtonValidation(userEditTextSignboard, getString(R.string.users_fragment_signboard_error))) {
-                val jsonObject = JSONObject()
-                jsonObject.put("name", userEditTextName.editText!!.text)
-                jsonObject.put("email", userEditTextEmail.editText!!.text)
-                if(signUp) jsonObject.put("role", role)
-                if(userEditTextNit.visibility == View.VISIBLE)
-                    jsonObject.put("nit", userEditTextNit.editText!!.text)
-                if(userEditTextSignboard.visibility == View.VISIBLE)
-                jsonObject.put("signboard", userEditTextSignboard.editText!!.text)
 
-                userService.update(jsonObject) { res ->
+                userObject.put("name", userEditTextName.editText!!.text)
+                userObject.put("email", userEditTextEmail.editText!!.text)
+                if(signUp) userObject.put("role", role)
+                if(userEditTextNit.visibility == View.VISIBLE)
+                    userObject.put("nit", userEditTextNit.editText!!.text)
+                if(userEditTextSignboard.visibility == View.VISIBLE)
+                    userObject.put("signboard", userEditTextSignboard.editText!!.text)
+
+                userService.update(userObject) { res ->
                     Functions.showSnackbar(getView()!!, getString(R.string.alert_info_updated))
                     Functions.setSharedPreferencesBooleanValue(activity!!, "SIGN_UP", false)
-                    Functions.updateSharedPreferencesObjectValue(activity!!, "USER_OBJECT", res)
+                    Functions.updateSharedPreferencesObjectValue(activity!!, "USER_OBJECT", res.getJSONObject("data"))
                 }
                 if(signUp){
                     val menuActivityIntent = Intent(activity!!, MenuActivity::class.java)
@@ -185,7 +185,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode){
-            PICK_IMAGE ->{
+            PICK_IMAGE -> {
                 if(resultCode == Activity.RESULT_OK && data != null) {
                     Log.i("DATA_URI", data.data!!.path)
                     val image = copyInputStreamToFile(
@@ -194,19 +194,24 @@ class UserFragment : androidx.fragment.app.Fragment() {
                     userService.uploadImage("/upload", "profilePicture", image) { res ->
                         Functions.showSnackbar(view!!, getString(R.string.alert_profile_picture_updated))
                         activity!!.runOnUiThread {
-                            Functions.updateSharedPreferencesObjectValue(activity!!, "USER_OBJECT", res)
+                            Functions.updateSharedPreferencesObjectValue(
+                                    activity!!,
+                                    "USER_OBJECT",
+                                    res.getJSONObject("data")
+                            )
                             Glide.with(activity!!)
-                                    .load(res.getJSONObject("profilePicture").getString("url"))
+                                    .load(res.getJSONObject("data")
+                                            .getJSONObject("profilePicture")
+                                            .getString("url"))
                                     .apply(Functions.glideRequestOptions(activity!!))
                                     .into(userImageViewProfilePicture)
                         }
                     }
                 }
             }
-            PLACE_PICKER_REQUEST ->{
+            PLACE_PICKER_REQUEST -> {
                 if (resultCode == AppCompatActivity.RESULT_OK) {
                     val place = PlacePicker.getPlace(activity!!, data)
-                    val jsonObject = JSONObject()
                     val locationObject = JSONObject()
                     val viewPort = JSONObject()
                     val southwest = JSONObject()
@@ -224,15 +229,8 @@ class UserFragment : androidx.fragment.app.Fragment() {
                     locationObject.put("lng", place.latLng.longitude)
                     locationObject.put("viewport", viewPort)
                     locationObject.put("address", place.address)
-                    jsonObject.put("location", locationObject)
-
-                    userService.update(jsonObject) { res ->
-                        Functions.showSnackbar(view!!, getString(R.string.alert_info_updated))
-                        activity!!.runOnUiThread {
-                            userEditTextLocation.editText!!.setText(res.getJSONObject("location").getString("address"))
-                        }
-                        Functions.updateSharedPreferencesObjectValue(activity!!, "USER_OBJECT", res)
-                    }
+                    userObject.put("location", locationObject)
+                    userEditTextLocation.editText!!.setText(place.address)
                 }
             }
             else -> {
