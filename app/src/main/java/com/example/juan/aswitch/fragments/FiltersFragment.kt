@@ -19,7 +19,7 @@ class FiltersFragment : androidx.fragment.app.Fragment() {
     private var restaurantSelected = false
     private var barSelected = false
     private lateinit var userService: UserService
-    private var filtersObject: JSONObject = JSONObject()
+    private var userObject: JSONObject = JSONObject()
 
     companion object {
         fun getInstance(): FiltersFragment = FiltersFragment()
@@ -46,11 +46,11 @@ class FiltersFragment : androidx.fragment.app.Fragment() {
                 activity!!,
                 "USER_OBJECT"
         )
+
         if(userObjectValue != null) {
-            val userObject = JSONObject(userObjectValue)
+            userObject = JSONObject(userObjectValue)
             radiusFilter.progress = userObject.getInt("radius")
         }
-
 
         filterButtonRestaurant.setOnClickListener {
             restaurantSelected = selectFilter(restaurantSelected, it)
@@ -74,12 +74,12 @@ class FiltersFragment : androidx.fragment.app.Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item!!.itemId) {
             R.id.done_action -> {
-                filtersObject.put("radius", radiusFilter.progress)
-                userService.update(filtersObject) {res ->
+                if(radiusFilter.progress != userObject.getInt("radius")) {
+                    userObject.put("radius", radiusFilter.progress)
                     Utils.updateSharedPreferencesObjectValue(
                             activity!!,
                             "USER_OBJECT",
-                            res.getJSONObject("data")
+                            userObject
                     )
                 }
                 Utils.openFragment(

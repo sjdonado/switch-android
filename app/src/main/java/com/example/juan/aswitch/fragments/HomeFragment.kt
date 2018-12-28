@@ -10,8 +10,7 @@ import com.example.juan.aswitch.R
 import com.example.juan.aswitch.helpers.Utils
 import android.view.MenuInflater
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.juan.aswitch.lib.Card
+import com.example.juan.aswitch.lib.SwipeCard
 import com.example.juan.aswitch.models.Place
 import com.example.juan.aswitch.services.PlaceService
 import com.mindorks.placeholderview.SwipeDecor
@@ -19,12 +18,13 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import org.json.JSONObject
 
 
-class HomeFragment : androidx.fragment.app.Fragment(), Card.Callback {
+class HomeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
 
     private var places: ArrayList<Place> = ArrayList()
     private lateinit var placeService: PlaceService
     private val animationDuration = 300
     private var isToUndo = false
+    private var userObject: JSONObject = JSONObject()
 
     companion object {
         fun getInstance(): HomeFragment = HomeFragment()
@@ -44,6 +44,11 @@ class HomeFragment : androidx.fragment.app.Fragment(), Card.Callback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         placeService = PlaceService(activity!!)
+
+        homeProgressBar.visibility = View.VISIBLE
+
+        val userObjectValue = Utils.getSharedPreferencesStringValue(activity!!, "USER_OBJECT")
+        if(userObjectValue != null) userObject = JSONObject(userObjectValue)
 
         val bottomMargin = Utils.dpToPx(160)
         val windowSize = Utils.getDisplaySize(activity!!.windowManager)
@@ -67,16 +72,17 @@ class HomeFragment : androidx.fragment.app.Fragment(), Card.Callback {
 
         val cardViewHolderSize = Point(windowSize.x, windowSize.y - bottomMargin)
 
-        placeService.search {res ->
+        placeService.search(userObject.getInt("radius")) {res ->
             val placesObjects = res.getJSONArray("data")
             Log.d("PLACES", res.toString())
             for (i in 0..(placesObjects.length() - 1)) {
                 val item = placesObjects.getJSONObject(i)
                 val image = item.getJSONObject("profilePicture")
-                val place = Place(item.getString("uid"), image.getString("url"), item.getInt("radius"), "test")
+                val place = Place(item.getString("uid"), image.getString("url"), item.getInt("distance"), "test")
                 places.add(place)
                 activity!!.runOnUiThread {
-                    swipeView!!.addView(Card(activity!!, place, cardViewHolderSize, this))
+                    homeProgressBar.visibility = View.INVISIBLE
+                    swipeView!!.addView(SwipeCard(activity!!, place, cardViewHolderSize, this))
                 }
             }
         }

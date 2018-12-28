@@ -5,8 +5,8 @@ import org.json.JSONObject
 
 open class PlaceService (activity: Activity) : MainService("/places", activity) {
 
-    fun search(callback: (response: JSONObject) -> Unit) {
-        super.get("/search", callback)
+    fun search(radius: Int, callback: (response: JSONObject) -> Unit) {
+        super.get("/search?radius=$radius", callback)
     }
 
     fun get(callback: (response: JSONObject) -> Unit) {
