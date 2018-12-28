@@ -1,27 +1,30 @@
 package com.example.juan.aswitch.fragments
 
 
+import android.graphics.Point
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 
 import com.example.juan.aswitch.R
-import com.example.juan.aswitch.helpers.Functions
+import com.example.juan.aswitch.helpers.Utils
 import android.view.MenuInflater
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.juan.aswitch.adapters.Place
-import com.example.juan.aswitch.adapters.PlacesAdapter
+import com.example.juan.aswitch.lib.Card
+import com.example.juan.aswitch.models.Place
 import com.example.juan.aswitch.services.PlaceService
+import com.mindorks.placeholderview.SwipeDecor
 import kotlinx.android.synthetic.main.fragment_home.*
+import org.json.JSONObject
 
 
-class HomeFragment : androidx.fragment.app.Fragment() {
+class HomeFragment : androidx.fragment.app.Fragment(), Card.Callback {
 
     private var places: ArrayList<Place> = ArrayList()
     private lateinit var placeService: PlaceService
+    private val animationDuration = 300
+    private var isToUndo = false
 
     companion object {
         fun getInstance(): HomeFragment = HomeFragment()
@@ -42,47 +45,61 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         super.onViewCreated(view, savedInstanceState)
         placeService = PlaceService(activity!!)
 
-        val viewManager = LinearLayoutManager(activity)
-        val viewAdapter = PlacesAdapter(places,
-            object: PlacesAdapter.OnClickListener {
-                override fun onClick(place: Place) {
-                    Log.d("CLICK", place.toString())
-                }
+        val bottomMargin = Utils.dpToPx(160)
+        val windowSize = Utils.getDisplaySize(activity!!.windowManager)
+        swipeView!!.builder
+                .setDisplayViewCount(3)
+                .setIsUndoEnabled(true)
+                .setSwipeVerticalThreshold(Utils.dpToPx(50))
+                .setSwipeHorizontalThreshold(Utils.dpToPx(50))
+                .setHeightSwipeDistFactor(10f)
+                .setWidthSwipeDistFactor(5f)
+                .setSwipeDecor(SwipeDecor()
+                        .setViewWidth(windowSize.x)
+                        .setViewHeight(windowSize.y - bottomMargin)
+                        .setViewGravity(Gravity.TOP)
+                        .setPaddingTop(20)
+                        .setSwipeAnimTime(animationDuration)
+                        .setRelativeScale(0.01f)
+                        .setSwipeInMsgLayoutId(R.layout.swipe_in)
+                        .setSwipeOutMsgLayoutId(R.layout.swipe_out))
 
-            }
-        )
+
+        val cardViewHolderSize = Point(windowSize.x, windowSize.y - bottomMargin)
 
         placeService.search {res ->
             val placesObjects = res.getJSONArray("data")
             Log.d("PLACES", res.toString())
             for (i in 0..(placesObjects.length() - 1)) {
                 val item = placesObjects.getJSONObject(i)
-                places.add(Place(item.getString("uid")))
-            }
-            activity!!.runOnUiThread {
-                viewAdapter.notifyDataSetChanged()
+                val image = item.getJSONObject("profilePicture")
+                val place = Place(item.getString("uid"), image.getString("url"), item.getInt("radius"), "test")
+                places.add(place)
+                activity!!.runOnUiThread {
+                    swipeView!!.addView(Card(activity!!, place, cardViewHolderSize, this))
+                }
             }
         }
 
-        val recyclerView = home_recycler_view.apply {
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
-            setHasFixedSize(true)
+//        rejectBtn.setOnClickListener({ swipeView!!.doSwipe(false) })
+//
+//        acceptBtn.setOnClickListener({ swipeView!!.doSwipe(true) })
+//
+//        undoBtn.setOnClickListener({ swipeView!!.undoLastSwipe() })
 
-            // use a linear layout manager
-            layoutManager = viewManager
-
-            // specify an viewAdapter (see also next example)
-            adapter = viewAdapter
-
+        swipeView!!.addItemRemoveListener {
+            if (isToUndo) {
+                isToUndo = false
+                swipeView!!.undoLastSwipe()
+            }
         }
-        
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item!!.itemId) {
             R.id.filter_action -> {
-                Functions.openFragment(activity as AppCompatActivity, R.id.menu_fragment_container, FiltersFragment.getInstance())
+                Utils.openFragment(activity as AppCompatActivity, R.id.menu_fragment_container, FiltersFragment.getInstance())
                 return true
             }
         }
@@ -92,5 +109,10 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.filter_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onSwipeUp() {
+        Utils.showSnackbar(view!!, "SUPER LIKE! Show any dialog here.")
+        isToUndo = true
     }
 }

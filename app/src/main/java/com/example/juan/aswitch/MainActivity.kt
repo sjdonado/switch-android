@@ -1,6 +1,5 @@
 package com.example.juan.aswitch
 
-import com.example.juan.aswitch.R
 import android.Manifest
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -12,13 +11,12 @@ import androidx.annotation.RequiresApi
 import android.annotation.TargetApi
 import androidx.appcompat.app.AlertDialog
 import com.example.juan.aswitch.activities.MenuActivity
-import com.example.juan.aswitch.helpers.Functions
+import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.services.UserService
 import com.google.firebase.auth.FirebaseAuth
 import android.app.NotificationManager
 import android.app.NotificationChannel
 import android.util.Log
-import android.widget.Toast
 import com.google.firebase.messaging.FirebaseMessaging
 
 
@@ -129,14 +127,14 @@ class MainActivity : AppCompatActivity() {
             val loginIntent = Intent(this, LoginActivity::class.java)
             startActivity(loginIntent)
         } else {
-            Functions.setToken(this, currentUser) {
+            Utils.setToken(this, currentUser) {
                 userService.get { res ->
-                    Functions.setSharedPreferencesStringValue(
+                    Utils.setSharedPreferencesStringValue(
                             this,
                             "USER_OBJECT",
                             res.getJSONObject("data").toString()
                     )
-                    if(Functions.getSharedPreferencesBooleanValue(this, "SIGN_UP")!!){
+                    if(Utils.getSharedPreferencesBooleanValue(this, "SIGN_UP")!!){
                         val loginActivityIntent = Intent(this, LoginActivity::class.java)
                         startActivity(loginActivityIntent)
                     }else{

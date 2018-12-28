@@ -20,7 +20,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import com.example.juan.aswitch.activities.MenuActivity
-import com.example.juan.aswitch.helpers.Functions
+import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.services.UserService
 import com.google.android.gms.location.places.ui.PlacePicker
 import androidx.appcompat.app.AppCompatActivity
@@ -29,8 +29,6 @@ import com.google.android.gms.maps.model.LatLngBounds
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
-import com.bumptech.glide.request.RequestOptions
-import com.example.juan.aswitch.services.PlaceService
 import com.google.android.material.textfield.TextInputLayout
 
 
@@ -60,15 +58,15 @@ class UserFragment : androidx.fragment.app.Fragment() {
 
         userService = UserService(activity!!)
 
-        val userObjectValue = Functions.getSharedPreferencesStringValue(activity!!, "USER_OBJECT")
-        signUp = Functions.getSharedPreferencesBooleanValue(activity!!, "SIGN_UP")!!
+        val userObjectValue = Utils.getSharedPreferencesStringValue(activity!!, "USER_OBJECT")
+        signUp = Utils.getSharedPreferencesBooleanValue(activity!!, "SIGN_UP")!!
 
         if(userObjectValue != null) userObject = JSONObject(userObjectValue)
 
         if(!userObject.isNull("profilePicture")) {
             Glide.with(activity!!)
                     .load(userObject.getJSONObject("profilePicture").getString("url"))
-                    .apply(Functions.glideRequestOptions(activity!!))
+                    .apply(Utils.glideRequestOptions(activity!!))
                     .into(userImageViewProfilePicture)
         }
 
@@ -90,11 +88,11 @@ class UserFragment : androidx.fragment.app.Fragment() {
 //                userEditTextSignboard.visibility = View.VISIBLE
 //                val placeService = PlaceService(activity!!)
 //                placeService.get { place ->
-//                    Functions.updateSharedPreferencesObjectValue(activity!!, "PLACE_OBJECT", place)
+//                    Utils.updateSharedPreferencesObjectValue(activity!!, "PLACE_OBJECT", place)
 //                    activity!!.runOnUiThread {
 //                        if(!place.isNull("labels") && ) {
 //                            val array = resources.getStringArray(R.array.settings_label_default_values)
-//                            Functions.toStringArray(place.getJSONArray("labels"))!!.forEachIndexed { index, s ->
+//                            Utils.toStringArray(place.getJSONArray("labels"))!!.forEachIndexed { index, s ->
 //                                array[index] = s
 //                            }
 //                        }
@@ -170,9 +168,9 @@ class UserFragment : androidx.fragment.app.Fragment() {
                     userObject.put("signboard", userEditTextSignboard.editText!!.text)
 
                 userService.update(userObject) { res ->
-                    Functions.showSnackbar(getView()!!, getString(R.string.alert_info_updated))
-                    Functions.setSharedPreferencesBooleanValue(activity!!, "SIGN_UP", false)
-                    Functions.updateSharedPreferencesObjectValue(activity!!, "USER_OBJECT", res.getJSONObject("data"))
+                    Utils.showSnackbar(getView()!!, getString(R.string.alert_info_updated))
+                    Utils.setSharedPreferencesBooleanValue(activity!!, "SIGN_UP", false)
+                    Utils.updateSharedPreferencesObjectValue(activity!!, "USER_OBJECT", res.getJSONObject("data"))
                 }
                 if(signUp){
                     val menuActivityIntent = Intent(activity!!, MenuActivity::class.java)
@@ -192,9 +190,9 @@ class UserFragment : androidx.fragment.app.Fragment() {
                             activity!!.contentResolver!!.openInputStream(data.data!!)!!,
                             getMimeType(activity!!, data.data!!)!!)
                     userService.uploadImage("/upload", "profilePicture", image) { res ->
-                        Functions.showSnackbar(view!!, getString(R.string.alert_profile_picture_updated))
+                        Utils.showSnackbar(view!!, getString(R.string.alert_profile_picture_updated))
                         activity!!.runOnUiThread {
-                            Functions.updateSharedPreferencesObjectValue(
+                            Utils.updateSharedPreferencesObjectValue(
                                     activity!!,
                                     "USER_OBJECT",
                                     res.getJSONObject("data")
@@ -203,7 +201,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
                                     .load(res.getJSONObject("data")
                                             .getJSONObject("profilePicture")
                                             .getString("url"))
-                                    .apply(Functions.glideRequestOptions(activity!!))
+                                    .apply(Utils.glideRequestOptions(activity!!))
                                     .into(userImageViewProfilePicture)
                         }
                     }

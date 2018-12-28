@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.example.juan.aswitch.R
-import com.example.juan.aswitch.helpers.Functions
+import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.services.PlaceService
 import com.example.juan.aswitch.services.UserService
 import kotlinx.android.synthetic.main.fragment_notifications.*
@@ -36,7 +36,7 @@ class NotificationsFragment : androidx.fragment.app.Fragment() {
         userService = UserService(activity!!)
         placeService = PlaceService(activity!!)
 
-        val userObjectValue = Functions.getSharedPreferencesStringValue(activity!!, "USER_OBJECT")
+        val userObjectValue = Utils.getSharedPreferencesStringValue(activity!!, "USER_OBJECT")
         if(userObjectValue != null) userObject = JSONObject(userObjectValue)
 
         if(userObject.getBoolean("role")) notificationsEditTextNotificationTitle.visibility = View.VISIBLE
@@ -49,7 +49,7 @@ class NotificationsFragment : androidx.fragment.app.Fragment() {
                 jsonObject.put("title", notificationsEditTextNotificationTitle.editText!!.text)
                 jsonObject.put("message", notificationsEditTextNotificationMessage.editText!!.text)
                 placeService.sendNotification(jsonObject) {
-                    Functions.showSnackbar(getView()!!, getString(R.string.alert_info_updated))
+                    Utils.showSnackbar(getView()!!, getString(R.string.alert_info_updated))
                 }
             }
         }

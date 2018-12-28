@@ -3,15 +3,9 @@ package com.example.juan.aswitch.fragments
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.SeekBar
-import android.widget.Toast
 import androidx.preference.PreferenceFragmentCompat
 import com.example.juan.aswitch.R
-import com.example.juan.aswitch.helpers.Functions
+import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.services.UserService
 import org.json.JSONObject
 
@@ -52,7 +46,7 @@ class UserSettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSha
                 val jsonObject = JSONObject()
                 jsonObject.put("distance", sharedPreferences!!.getInt(key, 0).toString())
                 userService.update(jsonObject) {res ->
-                    Functions.updateSharedPreferencesObjectValue(
+                    Utils.updateSharedPreferencesObjectValue(
                             activity!!,
                             "USER_OBJECT",
                             res.getJSONObject("data")

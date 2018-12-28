@@ -4,7 +4,6 @@ import com.example.juan.aswitch.R
 import android.app.Activity
 import android.app.Dialog
 import android.util.Log
-import android.view.View
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
@@ -24,7 +23,7 @@ open class HttpClient {
 
         fun get(path : String, activity : Activity, callback : (response : JSONObject) -> Unit) {
             val request = Request.Builder()
-                    .header("Authorization", Functions.getSharedPreferencesStringValue(activity, "USER_TOKEN")!!)
+                    .header("Authorization", Utils.getSharedPreferencesStringValue(activity, "USER_TOKEN")!!)
                     .url(API_URL + path)
                     .build()
             executeRequest(request, activity, callback)
@@ -33,7 +32,7 @@ open class HttpClient {
         fun post(path : String, activity : Activity, json : String, callback : (response: JSONObject) -> Unit) {
             val jsonBody = RequestBody.create(JSON, json)
             val request = Request.Builder()
-                    .header("Authorization", Functions.getSharedPreferencesStringValue(activity, "USER_TOKEN")!!)
+                    .header("Authorization", Utils.getSharedPreferencesStringValue(activity, "USER_TOKEN")!!)
                     .url(API_URL + path)
                     .post(jsonBody)
                     .build()
@@ -43,7 +42,7 @@ open class HttpClient {
         fun put(path : String, activity : Activity, json : String, callback : (response : JSONObject) -> Unit) {
             val jsonBody = RequestBody.create(JSON, json)
             val request = Request.Builder()
-                    .header("Authorization", Functions.getSharedPreferencesStringValue(activity, "USER_TOKEN")!!)
+                    .header("Authorization", Utils.getSharedPreferencesStringValue(activity, "USER_TOKEN")!!)
                     .url(API_URL + path)
                     .put(jsonBody)
                     .build()
@@ -53,7 +52,7 @@ open class HttpClient {
         fun upload(path : String, activity : Activity, multipartBody : MultipartBody, callback : (response : JSONObject) -> Unit) {
             val request = Request.Builder()
                     .url(API_URL + path)
-                    .header("Authorization", Functions.getSharedPreferencesStringValue(activity, "USER_TOKEN")!!)
+                    .header("Authorization", Utils.getSharedPreferencesStringValue(activity, "USER_TOKEN")!!)
                     .post(multipartBody)
                     .build()
             executeRequest(request, activity, callback)

@@ -71,6 +71,11 @@ dependencies {
 
     implementation 'androidx.recyclerview:recyclerview-selection:1.0.0'
 
+    implementation 'com.mindorks.android:placeholderview:1.0.3'
+    kapt 'com.mindorks.android:placeholderview-compiler:1.0.3'
+
+    implementation 'jp.wasabeef:glide-transformations:2.0.2'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'

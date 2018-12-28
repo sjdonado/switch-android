@@ -4,12 +4,11 @@ package com.example.juan.aswitch.fragments
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.*
-import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.getColor
 
 import com.example.juan.aswitch.R
-import com.example.juan.aswitch.helpers.Functions
+import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.services.UserService
 import kotlinx.android.synthetic.main.fragment_filters.*
 import org.json.JSONObject
@@ -43,7 +42,7 @@ class FiltersFragment : androidx.fragment.app.Fragment() {
 
         userService = UserService(activity!!)
 
-        val userObjectValue = Functions.getSharedPreferencesStringValue(
+        val userObjectValue = Utils.getSharedPreferencesStringValue(
                 activity!!,
                 "USER_OBJECT"
         )
@@ -77,13 +76,13 @@ class FiltersFragment : androidx.fragment.app.Fragment() {
             R.id.done_action -> {
                 filtersObject.put("radius", radiusFilter.progress)
                 userService.update(filtersObject) {res ->
-                    Functions.updateSharedPreferencesObjectValue(
+                    Utils.updateSharedPreferencesObjectValue(
                             activity!!,
                             "USER_OBJECT",
                             res.getJSONObject("data")
                     )
                 }
-                Functions.openFragment(
+                Utils.openFragment(
                         activity as AppCompatActivity,
                         R.id.menu_fragment_container,
                         HomeFragment.getInstance()

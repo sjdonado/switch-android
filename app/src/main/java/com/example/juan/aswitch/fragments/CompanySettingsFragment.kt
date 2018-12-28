@@ -1,20 +1,12 @@
 package com.example.juan.aswitch.fragments
 
 
-import android.content.Context
 import android.os.Bundle
-import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceScreen
-import androidx.preference.R.id.checkbox
 
 import com.example.juan.aswitch.R
 import android.content.SharedPreferences
-import android.util.Log
-import android.view.View
-import android.widget.Toast
-import androidx.preference.PreferenceManager
-import com.example.juan.aswitch.helpers.Functions
+import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.services.PlaceService
 import org.json.JSONArray
 import org.json.JSONObject
@@ -32,11 +24,11 @@ class CompanySettingsFragment : PreferenceFragmentCompat(), SharedPreferences.On
 
 //    override fun onStart() {
 //        super.onStart()
-//        val placeObjectValue = Functions.getSharedPreferencesStringValue(activity!!, "PLACE_OBJECT")
+//        val placeObjectValue = Utils.getSharedPreferencesStringValue(activity!!, "PLACE_OBJECT")
 //        if(placeObjectValue != null) placeObject = JSONObject(placeObjectValue)
 //        if (!placeObject.isNull("labels")) {
 //            val editor = preferenceManager.sharedPreferences.edit()
-//            editor.putStringSet(KEY_LABELS, Functions.toStringArray(placeObject.getJSONArray("labels"))!!.toMutableSet())
+//            editor.putStringSet(KEY_LABELS, Utils.toStringArray(placeObject.getJSONArray("labels"))!!.toMutableSet())
 //            editor.apply()
 //        }
 //    }
@@ -53,7 +45,7 @@ class CompanySettingsFragment : PreferenceFragmentCompat(), SharedPreferences.On
                 val jsonObject = JSONObject()
                 jsonObject.put("labels", JSONArray(selections!!.toTypedArray()))
                 placeService.update(jsonObject) {res ->
-                    Functions.updateSharedPreferencesObjectValue(
+                    Utils.updateSharedPreferencesObjectValue(
                             activity!!,
                             "PLACE_OBJECT",
                             res.getJSONObject("data")

@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.juan.aswitch.MainActivity
 import com.example.juan.aswitch.R
 import com.example.juan.aswitch.fragments.UserFragment
-import com.example.juan.aswitch.helpers.Functions
+import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.services.UserService
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
@@ -35,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
         actionBar.title = getString(R.string.app_name)
 
         userService = UserService(this)
-        if(Functions.getSharedPreferencesBooleanValue(this, "SIGN_UP")!!){
+        if(Utils.getSharedPreferencesBooleanValue(this, "SIGN_UP")!!){
             openUserFragment()
         }else{
             signIn()
@@ -63,20 +63,20 @@ class LoginActivity : AppCompatActivity() {
             when {
                 resultCode == Activity.RESULT_OK -> {
                     // Successfully signed in
-                    Functions.showSnackbar(login_fragment_container, getString(R.string.alert_sign_in_successful))
-                    Functions.setToken(this, FirebaseAuth.getInstance().currentUser) {
+                    Utils.showSnackbar(login_fragment_container, getString(R.string.alert_sign_in_successful))
+                    Utils.setToken(this, FirebaseAuth.getInstance().currentUser) {
                         userService.get { res ->
                             if(res.length() == 0) {
-                                Functions.logout(this)
+                                Utils.logout(this)
                                 val mainActivity = Intent(this, MainActivity::class.java)
                                 startActivity(mainActivity)
                             }else{
-                                Functions.setSharedPreferencesStringValue(
+                                Utils.setSharedPreferencesStringValue(
                                         this,
                                         "USER_OBJECT",
                                         res.getJSONObject("data").toString()
                                 )
-                                Functions.setSharedPreferencesBooleanValue(
+                                Utils.setSharedPreferencesBooleanValue(
                                         this,
                                         "SIGN_UP",
                                         true
@@ -90,23 +90,23 @@ class LoginActivity : AppCompatActivity() {
                 response == null -> {
                     // Sign in failed
                     // User pressed back button
-                    Functions.showSnackbar(login_fragment_container, getString(R.string.alert_sign_in_canceled))
+                    Utils.showSnackbar(login_fragment_container, getString(R.string.alert_sign_in_canceled))
                     return
                 }
                 response.error?.errorCode == ErrorCodes.NO_NETWORK -> {
                     // Sign in failed
                     //No Internet Connection
-                    Functions.showSnackbar(login_fragment_container, getString(R.string.internet_no_internet_connection))
+                    Utils.showSnackbar(login_fragment_container, getString(R.string.internet_no_internet_connection))
                     return
                 }
                 response.error?.errorCode == ErrorCodes.UNKNOWN_ERROR -> {
                     // Sign in failed
                     //Unknown Error
-                    Functions.showSnackbar(login_fragment_container, getString(R.string.internet_unknown_error))
+                    Utils.showSnackbar(login_fragment_container, getString(R.string.internet_unknown_error))
                     return
                 }
                 else -> {
-                    Functions.showSnackbar(login_fragment_container, getString(R.string.internet_unknown_response))
+                    Utils.showSnackbar(login_fragment_container, getString(R.string.internet_unknown_response))
                 }
             }
         }
@@ -114,7 +114,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun openUserFragment(){
         val userFragment = UserFragment()
-        Functions.openFragment(this,
+        Utils.openFragment(this,
                 R.id.login_fragment_container, userFragment)
     }
 
