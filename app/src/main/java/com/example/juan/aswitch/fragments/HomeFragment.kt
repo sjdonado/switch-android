@@ -117,6 +117,17 @@ class HomeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    override fun onSwipeRight(place: Place) {
+        val placeJSONObject = JSONObject()
+        placeJSONObject.put("name", place.name)
+        Utils.updateSharedPreferencesObjectValue(activity!!, "PLACE_OBJECT", placeJSONObject)
+        Utils.openFragment(
+                activity as AppCompatActivity,
+                R.id.menu_fragment_container,
+                PlaceDetailsFragment.getInstance()
+        )
+    }
+
     override fun onSwipeUp() {
         Utils.showSnackbar(view!!, "SUPER LIKE! Show any dialog here.")
         isToUndo = true

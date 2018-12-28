@@ -6,11 +6,7 @@ import android.graphics.Point
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.example.juan.aswitch.fragments.HomeFragment
-import com.example.juan.aswitch.fragments.PlaceDetailsFragment
-import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.models.Place
 import com.mindorks.placeholderview.SwipeDirection
 import com.mindorks.placeholderview.annotations.*
@@ -55,7 +51,7 @@ class SwipeCard(private val context: Context,
 
     @SwipeOutDirectional
     fun onSwipeOutDirectional(direction: SwipeDirection) {
-        Log.d("DEBUG", "SwipeOutDirectional " + direction.name)
+        Log.d("SWIPE_OUT", "SwipeOutDirectional " + direction.name + " " + direction.direction)
         if (direction.direction == SwipeDirection.TOP.direction) {
             callback.onSwipeUp()
         }
@@ -70,17 +66,13 @@ class SwipeCard(private val context: Context,
     @SwipeInDirectional
     fun onSwipeInDirectional(direction: SwipeDirection) {
         Log.d("DEBUG", "SwipeInDirectional " + direction.name)
+        if (direction.direction == SwipeDirection.RIGHT.direction) {
+            callback.onSwipeRight(place)
+        }
     }
 
     @SwipingDirection
     fun onSwipingDirection(direction: SwipeDirection) {
-        if(direction.name == "RIGHT") {
-            Utils.openFragment(
-                context as AppCompatActivity,
-                R.id.menu_fragment_container,
-                PlaceDetailsFragment.getInstance()
-            )
-        }
         Log.d("DEBUG", "SwipingDirection " + direction.name)
     }
 
@@ -110,5 +102,6 @@ class SwipeCard(private val context: Context,
 
     interface Callback {
         fun onSwipeUp()
+        fun onSwipeRight(place: Place)
     }
 }
