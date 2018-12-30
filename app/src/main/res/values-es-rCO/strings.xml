@@ -60,4 +60,7 @@
     <string name="filters_radio_distance">Radio de distancia</string>
     <string name="filters_restaurant">Restaurante</string>
     <string name="filters_bar">Bar</string>
+    <string name="place_card_view_distance">%1$s metros</string>
+    <string name="place_details_go_button">Ir</string>
+    <string name="place_details_call_button">LLamar</string>
 </resources>

@@ -47,7 +47,10 @@ class HomeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
 
         homeProgressBar.visibility = View.VISIBLE
 
-        val userObjectValue = Utils.getSharedPreferencesStringValue(activity!!, "USER_OBJECT")
+        val userObjectValue = Utils.getSharedPreferencesStringValue(
+                activity!!,
+                "USER_OBJECT"
+        )
         if(userObjectValue != null) userObject = JSONObject(userObjectValue)
 
         val bottomMargin = Utils.dpToPx(160)
@@ -78,11 +81,22 @@ class HomeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
             for (i in 0..(placesObjects.length() - 1)) {
                 val item = placesObjects.getJSONObject(i)
                 val image = item.getJSONObject("profilePicture")
-                val place = Place(item.getString("uid"), image.getString("url"), item.getInt("distance"), "test")
+                val location = item.getJSONObject("location")
+                val place = Place(
+                        item.getString("name"),
+                        image.getString("url"),
+                        location.getString("address"),
+                        item.getInt("distance"),
+                        item.getString("phoneNumber"),
+                        location.getDouble("lat"),
+                        location.getDouble("lng")
+                )
                 places.add(place)
                 activity!!.runOnUiThread {
                     homeProgressBar.visibility = View.INVISIBLE
-                    swipeView!!.addView(SwipeCard(activity!!, place, cardViewHolderSize, this))
+                    swipeView!!.addView(
+                            SwipeCard(activity!!, place, cardViewHolderSize, this)
+                    )
                 }
             }
         }
@@ -105,7 +119,11 @@ class HomeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item!!.itemId) {
             R.id.filter_action -> {
-                Utils.openFragment(activity as AppCompatActivity, R.id.menu_fragment_container, FiltersFragment.getInstance())
+                Utils.openFragment(
+                        activity as AppCompatActivity,
+                        R.id.menu_fragment_container,
+                        FiltersFragment.getInstance()
+                )
                 return true
             }
         }
@@ -120,7 +138,17 @@ class HomeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
     override fun onSwipeRight(place: Place) {
         val placeJSONObject = JSONObject()
         placeJSONObject.put("name", place.name)
-        Utils.updateSharedPreferencesObjectValue(activity!!, "PLACE_OBJECT", placeJSONObject)
+        placeJSONObject.put("imgUrl", place.imgUrl)
+        placeJSONObject.put("address", place.address)
+        placeJSONObject.put("distance", place.distance)
+        placeJSONObject.put("phone", place.phone)
+        placeJSONObject.put("lat", place.lat)
+        placeJSONObject.put("lng", place.lng)
+        Utils.updateSharedPreferencesObjectValue(
+                activity!!,
+                "PLACE_OBJECT",
+                placeJSONObject
+        )
         Utils.openFragment(
                 activity as AppCompatActivity,
                 R.id.menu_fragment_container,

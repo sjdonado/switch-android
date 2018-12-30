@@ -28,6 +28,9 @@ class SwipeCard(private val context: Context,
     @View(R.id.locationCardTextView)
     lateinit var locationCardTextView: TextView
 
+    @View(R.id.distanceCardTextView)
+    lateinit var distanceCardTextView: TextView
+
     @SwipeView
     lateinit var swipeView: android.view.View
 
@@ -37,10 +40,11 @@ class SwipeCard(private val context: Context,
 
     @Resolve
     fun onResolved() {
-        Glide.with(context).load(place.url)
+        Glide.with(context).load(place.imgUrl)
                 .into(placeCardImageView)
-        nameCardTextView.text = "${place.name},  ${place.age}"
-        locationCardTextView.text = place.location
+        nameCardTextView.text = place.name
+        locationCardTextView.text = place.address
+        distanceCardTextView.text = context.resources.getString(R.string.place_card_view_distance, place.distance.toString())
         swipeView.alpha = 1f
     }
 
@@ -66,9 +70,7 @@ class SwipeCard(private val context: Context,
     @SwipeInDirectional
     fun onSwipeInDirectional(direction: SwipeDirection) {
         Log.d("DEBUG", "SwipeInDirectional " + direction.name)
-        if (direction.direction == SwipeDirection.RIGHT.direction) {
-            callback.onSwipeRight(place)
-        }
+        callback.onSwipeRight(place)
     }
 
     @SwipingDirection

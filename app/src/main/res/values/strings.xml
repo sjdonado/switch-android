@@ -96,4 +96,17 @@
     <string name="filters_restaurant">Restaurant</string>
     <string name="filters_bar">Bar</string>
 
+    <!-- Place card view -->
+    <string name="place_card_view_distance">%1$s meters</string>
+
+    <!-- Place details fragment -->
+    <string name="place_details_go_button">Go</string>
+    <string name="place_details_call_button">Call</string>
+
+    <!-- Place card dummy data -->
+    <string name="place_card_view_name_dummy" translatable="false">Name lorem name lorem</string>
+    <string name="place_card_view_location_dummy" translatable="false">Location lorem location </string>
+    <string name="place_card_view_distance_dummy" translatable="false">Distance lorem distance</string>
+
+
 </resources>

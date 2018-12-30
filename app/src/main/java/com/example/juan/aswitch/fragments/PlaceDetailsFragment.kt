@@ -6,11 +6,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 
 import com.example.juan.aswitch.R
 import com.example.juan.aswitch.helpers.Utils
 import org.json.JSONObject
 import kotlinx.android.synthetic.main.fragment_place_details.*
+import android.content.Intent
+import android.net.Uri
+
 
 class PlaceDetailsFragment : androidx.fragment.app.Fragment() {
 
@@ -32,8 +36,34 @@ class PlaceDetailsFragment : androidx.fragment.app.Fragment() {
         val userObjectValue = Utils.getSharedPreferencesStringValue(activity!!, "PLACE_OBJECT")
         if(userObjectValue != null) placeObject = JSONObject(userObjectValue)
 
-        nameDetailsTextView.text = placeObject.getString("name")
+        Glide.with(activity!!).load(placeObject.getString("imgUrl"))
+                .into(placePlaceDetailsImageView)
+        namePlaceDetailsTextView.text = placeObject.getString("name")
+        locationPlaceDetailsTextView.text = placeObject.getString("address")
+        phonePlaceDetailsTextView.text = placeObject.getString("phone")
+        distancePlaceDetailsTextView.text = resources.getString(
+                R.string.place_card_view_distance,
+                placeObject.getString("distance")
+        )
 
-        Log.d("PLACE_OBJECT", placeObject.getString("name"))
+        goPlaceDetailsButton.setOnClickListener {
+            val gmmIntentUri = Uri.parse("google.navigation:q=${placeObject.getString("lat")},${placeObject.getString("lng")}")
+            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+            mapIntent.setPackage("com.google.android.apps.maps")
+            if (mapIntent.resolveActivity(activity!!.packageManager) != null) {
+                startActivity(mapIntent)
+            }
+        }
+
+        callPlaceDetailsButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_DIAL).apply {
+                data = Uri.parse("tel:${placeObject.getString("phone")}")
+            }
+            if (intent.resolveActivity(activity!!.packageManager) != null) {
+                startActivity(intent)
+            }
+        }
+
+        Log.d("PLACE_OBJECT", "geo:${placeObject.getString("lat")},${placeObject.getString("lng")}")
     }
 }

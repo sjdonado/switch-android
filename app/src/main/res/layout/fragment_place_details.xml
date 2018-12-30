@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -26,41 +26,97 @@
             android:layout_height="match_parent">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/placeDetailsImageView"
-                android:layout_width="match_parent"
+                android:id="@+id/placePlaceDetailsImageView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:clickable="true"
-                android:elevation="2dp"
-                android:focusable="true"
+                android:adjustViewBounds="true"
+                android:maxWidth="294dp"
+                android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/nameDetailsTextView"
-                android:layout_width="wrap_content"
+                android:id="@+id/namePlaceDetailsTextView"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="8dp"
+                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.501"
+                app:layout_constraintHorizontal_bias="0.04"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/placeDetailsImageView" />
+                app:layout_constraintTop_toBottomOf="@+id/placePlaceDetailsImageView" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/locationDetailsTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/locationPlaceDetailsTextView"
+                android:layout_width="200dp"
+                android:layout_height="19dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/namePlaceDetailsTextView" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/goPlaceDetailsButton"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                android:layout_width="123dp"
+                android:layout_height="36dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
+                android:text="@string/place_details_go_button"
+                app:icon="@drawable/ic_map_white_24dp"
+                app:textAllCaps="false"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.501"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/locationPlaceDetailsTextView"
+                app:layout_constraintTop_toBottomOf="@+id/namePlaceDetailsTextView" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/phonePlaceDetailsTextView"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/nameDetailsTextView" />
+                app:layout_constraintTop_toBottomOf="@+id/locationPlaceDetailsTextView" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/callPlaceDetailsButton"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                android:layout_width="123dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="44dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/place_details_call_button"
+                card_view:icon="@drawable/ic_call_white_24dp"
+                app:textAllCaps="false"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintHorizontal_bias="1.0"
+                card_view:layout_constraintStart_toEndOf="@+id/locationPlaceDetailsTextView"
+                card_view:layout_constraintTop_toBottomOf="@+id/namePlaceDetailsTextView" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/distancePlaceDetailsTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/phonePlaceDetailsTextView" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
