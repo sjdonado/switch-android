@@ -26,7 +26,7 @@
             android:layout_height="match_parent">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/placePlaceDetailsImageView"
+                android:id="@+id/placeDetailsCoverImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
@@ -37,7 +37,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/namePlaceDetailsTextView"
+                android:id="@+id/placeDetailsNameTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -47,10 +47,10 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.04"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/placePlaceDetailsImageView" />
+                app:layout_constraintTop_toBottomOf="@+id/placeDetailsCoverImageView" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/locationPlaceDetailsTextView"
+                android:id="@+id/placeDetailsLocationTextView"
                 android:layout_width="200dp"
                 android:layout_height="19dp"
                 android:layout_marginStart="8dp"
@@ -59,10 +59,10 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/namePlaceDetailsTextView" />
+                app:layout_constraintTop_toBottomOf="@+id/placeDetailsNameTextView" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/goPlaceDetailsButton"
+                android:id="@+id/placeDetailsGoButton"
                 style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="123dp"
                 android:layout_height="36dp"
@@ -74,11 +74,11 @@
                 app:textAllCaps="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/locationPlaceDetailsTextView"
-                app:layout_constraintTop_toBottomOf="@+id/namePlaceDetailsTextView" />
+                app:layout_constraintStart_toEndOf="@+id/placeDetailsLocationTextView"
+                app:layout_constraintTop_toBottomOf="@+id/placeDetailsNameTextView" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/phonePlaceDetailsTextView"
+                android:id="@+id/placeDetailsPhoneTextView"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -87,26 +87,26 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/locationPlaceDetailsTextView" />
+                app:layout_constraintTop_toBottomOf="@+id/placeDetailsLocationTextView" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/callPlaceDetailsButton"
+                android:id="@+id/placeDetailsCallButton"
                 style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="123dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="44dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="@string/place_details_call_button"
-                card_view:icon="@drawable/ic_call_white_24dp"
                 app:textAllCaps="false"
+                card_view:icon="@drawable/ic_call_white_24dp"
                 card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintHorizontal_bias="1.0"
-                card_view:layout_constraintStart_toEndOf="@+id/locationPlaceDetailsTextView"
-                card_view:layout_constraintTop_toBottomOf="@+id/namePlaceDetailsTextView" />
+                card_view:layout_constraintStart_toEndOf="@+id/placeDetailsPhoneTextView"
+                card_view:layout_constraintTop_toBottomOf="@+id/placeDetailsLocationTextView" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/distancePlaceDetailsTextView"
+                android:id="@+id/placeDetailsDistanceTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -115,8 +115,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/phonePlaceDetailsTextView" />
-
+                app:layout_constraintTop_toBottomOf="@+id/placeDetailsCallButton" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

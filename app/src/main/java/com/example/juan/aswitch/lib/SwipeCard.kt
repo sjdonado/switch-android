@@ -19,17 +19,17 @@ class SwipeCard(private val context: Context,
                 private val cardViewHolderSize: Point,
                 private val callback: Callback) {
 
-    @View(R.id.placeCardImageView)
-    lateinit var placeCardImageView: ImageView
+    @View(R.id.placeCardCoverImageView)
+    lateinit var placeCardCoverImageView: ImageView
 
-    @View(R.id.nameCardTextView)
-    lateinit var nameCardTextView: TextView
+    @View(R.id.placeCardNameTextView)
+    lateinit var placeCardNameTextView: TextView
 
-    @View(R.id.locationCardTextView)
-    lateinit var locationCardTextView: TextView
+    @View(R.id.placeCardLocationTextView)
+    lateinit var placeCardLocationTextView: TextView
 
-    @View(R.id.distanceCardTextView)
-    lateinit var distanceCardTextView: TextView
+    @View(R.id.placeCardDistanceTextView)
+    lateinit var placeCardDistanceTextView: TextView
 
     @SwipeView
     lateinit var swipeView: android.view.View
@@ -41,14 +41,14 @@ class SwipeCard(private val context: Context,
     @Resolve
     fun onResolved() {
         Glide.with(context).load(place.imgUrl)
-                .into(placeCardImageView)
-        nameCardTextView.text = place.name
-        locationCardTextView.text = place.address
-        distanceCardTextView.text = context.resources.getString(R.string.place_card_view_distance, place.distance.toString())
+                .into(placeCardCoverImageView)
+        placeCardNameTextView.text = place.name
+        placeCardLocationTextView.text = place.address
+        placeCardDistanceTextView.text = context.resources.getString(R.string.place_card_view_distance, place.distance.toString())
         swipeView.alpha = 1f
     }
 
-    @Click(R.id.placeCardImageView)
+    @Click(R.id.placeCardCoverImageView)
     fun onClick() {
         Log.d("EVENT", "profileImageView click")
     }
@@ -58,6 +58,9 @@ class SwipeCard(private val context: Context,
         Log.d("SWIPE_OUT", "SwipeOutDirectional " + direction.name + " " + direction.direction)
         if (direction.direction == SwipeDirection.TOP.direction) {
             callback.onSwipeUp()
+        }
+        if (direction.direction == SwipeDirection.RIGHT_TOP.direction) {
+            callback.onSwipeRight(place)
         }
     }
 
@@ -69,13 +72,13 @@ class SwipeCard(private val context: Context,
 
     @SwipeInDirectional
     fun onSwipeInDirectional(direction: SwipeDirection) {
-        Log.d("DEBUG", "SwipeInDirectional " + direction.name)
+        Log.d("SwipeInDirectional", "SwipeInDirectional " + direction.name)
         callback.onSwipeRight(place)
     }
 
     @SwipingDirection
     fun onSwipingDirection(direction: SwipeDirection) {
-        Log.d("DEBUG", "SwipingDirection " + direction.name)
+        Log.d("SwipingDirection", "SwipingDirection " + direction.name)
     }
 
     @SwipeTouch

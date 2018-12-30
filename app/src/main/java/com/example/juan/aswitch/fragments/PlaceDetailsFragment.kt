@@ -37,16 +37,16 @@ class PlaceDetailsFragment : androidx.fragment.app.Fragment() {
         if(userObjectValue != null) placeObject = JSONObject(userObjectValue)
 
         Glide.with(activity!!).load(placeObject.getString("imgUrl"))
-                .into(placePlaceDetailsImageView)
-        namePlaceDetailsTextView.text = placeObject.getString("name")
-        locationPlaceDetailsTextView.text = placeObject.getString("address")
-        phonePlaceDetailsTextView.text = placeObject.getString("phone")
-        distancePlaceDetailsTextView.text = resources.getString(
+                .into(placeDetailsCoverImageView)
+        placeDetailsNameTextView.text = placeObject.getString("name")
+        placeDetailsLocationTextView.text = placeObject.getString("address")
+        placeDetailsPhoneTextView.text = placeObject.getString("phone")
+        placeDetailsDistanceTextView.text = resources.getString(
                 R.string.place_card_view_distance,
                 placeObject.getString("distance")
         )
 
-        goPlaceDetailsButton.setOnClickListener {
+        placeDetailsGoButton.setOnClickListener {
             val gmmIntentUri = Uri.parse("google.navigation:q=${placeObject.getString("lat")},${placeObject.getString("lng")}")
             val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
             mapIntent.setPackage("com.google.android.apps.maps")
@@ -55,7 +55,7 @@ class PlaceDetailsFragment : androidx.fragment.app.Fragment() {
             }
         }
 
-        callPlaceDetailsButton.setOnClickListener {
+        placeDetailsCallButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_DIAL).apply {
                 data = Uri.parse("tel:${placeObject.getString("phone")}")
             }

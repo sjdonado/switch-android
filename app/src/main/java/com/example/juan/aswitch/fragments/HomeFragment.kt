@@ -24,6 +24,7 @@ class HomeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
     private lateinit var placeService: PlaceService
     private val animationDuration = 300
     private var isToUndo = false
+    private var accept = false
     private var userObject: JSONObject = JSONObject()
 
     companion object {
@@ -101,9 +102,15 @@ class HomeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
             }
         }
 
-//        rejectBtn.setOnClickListener({ swipeView!!.doSwipe(false) })
-//
-//        acceptBtn.setOnClickListener({ swipeView!!.doSwipe(true) })
+        homeRejectButton.setOnClickListener {
+            accept = false
+            swipeView!!.doSwipe(accept)
+        }
+
+        homeAcceptButton.setOnClickListener{
+            accept = true
+            swipeView!!.doSwipe(accept)
+        }
 //
 //        undoBtn.setOnClickListener({ swipeView!!.undoLastSwipe() })
 
@@ -112,6 +119,11 @@ class HomeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
                 isToUndo = false
                 swipeView!!.undoLastSwipe()
             }
+            if(accept) {
+                openPlaceDetailsFragment(places[it])
+                accept = false
+            }
+            Log.d("ITEM_REMOVE_LISTENER", accept.toString())
         }
 
     }
@@ -136,6 +148,15 @@ class HomeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
     }
 
     override fun onSwipeRight(place: Place) {
+        accept = true
+    }
+
+    override fun onSwipeUp() {
+        Utils.showSnackbar(view!!, "SUPER LIKE! Show any dialog here.")
+        isToUndo = true
+    }
+
+    private fun openPlaceDetailsFragment(place: Place) {
         val placeJSONObject = JSONObject()
         placeJSONObject.put("name", place.name)
         placeJSONObject.put("imgUrl", place.imgUrl)
@@ -154,10 +175,5 @@ class HomeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
                 R.id.menu_fragment_container,
                 PlaceDetailsFragment.getInstance()
         )
-    }
-
-    override fun onSwipeUp() {
-        Utils.showSnackbar(view!!, "SUPER LIKE! Show any dialog here.")
-        isToUndo = true
     }
 }
