@@ -1,7 +1,6 @@
 package com.example.juan.aswitch.services
 
 import android.app.Activity
-import android.view.View
 import okhttp3.*
 import org.json.JSONObject
 import java.io.File

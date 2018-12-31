@@ -1,12 +1,16 @@
 package com.example.juan.aswitch.lib
 
+import android.app.Activity
 import com.example.juan.aswitch.R
-import android.content.Context
 import android.graphics.Point
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
+import com.bumptech.glide.Priority
+import com.bumptech.glide.request.RequestOptions
+import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.models.Place
 import com.mindorks.placeholderview.SwipeDirection
 import com.mindorks.placeholderview.annotations.*
@@ -14,7 +18,7 @@ import com.mindorks.placeholderview.annotations.swipe.*
 import kotlin.math.sqrt
 
 @Layout(R.layout.place_card_view)
-class SwipeCard(private val context: Context,
+class SwipeCard(private val context: Activity,
                 private val place: Place,
                 private val cardViewHolderSize: Point,
                 private val callback: Callback) {
@@ -40,7 +44,12 @@ class SwipeCard(private val context: Context,
 
     @Resolve
     fun onResolved() {
+        val windowY = Utils.getDisplaySize(context.windowManager).y
+        val size = windowY - Utils.dpToPx(windowY / 6)
+        Log.d("CARD_SIZE", size.toString())
         Glide.with(context).load(place.imgUrl)
+                .apply(RequestOptions().placeholder(Utils.getCircularProgressDrawable(context)))
+                .apply(RequestOptions().override(size, size))
                 .into(placeCardCoverImageView)
         placeCardNameTextView.text = place.name
         placeCardLocationTextView.text = place.address

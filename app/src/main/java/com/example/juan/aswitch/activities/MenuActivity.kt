@@ -89,11 +89,7 @@ class MenuActivity : AppCompatActivity() {
                 }
                 R.id.navigation_settings -> {
                     actionBar.title = getString(R.string.title_fragment_settings)
-                    if(!userObject.isNull("role") && userObject.getBoolean("role")){
-                        Utils.openFragment(this, R.id.menu_fragment_container, CompanySettingsFragment.getInstance())
-                    }else{
-                        Utils.openFragment(this, R.id.menu_fragment_container, UserSettingsFragment.getInstance())
-                    }
+                    Utils.openFragment(this, R.id.menu_fragment_container, SettingsFragment.getInstance())
                 }
 //                R.id.navigation_users -> {
 //                    openUserFragment()

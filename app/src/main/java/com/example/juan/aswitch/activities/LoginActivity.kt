@@ -68,8 +68,6 @@ class LoginActivity : AppCompatActivity() {
                         userService.get { res ->
                             if(res.length() == 0) {
                                 Utils.logout(this)
-                                val mainActivity = Intent(this, MainActivity::class.java)
-                                startActivity(mainActivity)
                             }else{
                                 Utils.setSharedPreferencesStringValue(
                                         this,

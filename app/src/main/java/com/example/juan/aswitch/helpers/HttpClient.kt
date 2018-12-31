@@ -4,6 +4,7 @@ import com.example.juan.aswitch.R
 import android.app.Activity
 import android.app.Dialog
 import android.util.Log
+import android.view.View
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
@@ -61,12 +62,12 @@ open class HttpClient {
         private fun executeRequest(request : Request, activity : Activity, callback : (response : JSONObject) -> Unit) {
             val progressDialog = Dialog(activity)
             val dialog = ProgressBar(activity)
-//            dialog.isIndeterminate = true
-//            dialog.visibility = View.VISIBLE
 //             has leaked window DecorView@d3d464c[] that was originally added here SERVER DOESN'T SEND DATA OBJECT
-//            progressDialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-//            progressDialog.setContentView(dialog)
-//            progressDialog.show()
+            dialog.isIndeterminate = true
+            dialog.visibility = View.VISIBLE
+            progressDialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+            progressDialog.setContentView(dialog)
+            progressDialog.show()
 
             OkHttpClient().newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call?, e: IOException?) {
@@ -75,7 +76,6 @@ open class HttpClient {
                         Toast.makeText(activity.applicationContext, activity.getString(R.string.internet_no_internet_connection), Toast.LENGTH_LONG).show()
                     }
                 }
-
                 override fun onResponse(call : Call?, response : Response?) {
                     activity.runOnUiThread {
                         progressDialog.hide()
@@ -83,7 +83,6 @@ open class HttpClient {
                     if(response!!.code() == 200) {
                         callback(JSONObject(response.body()!!.string()))
                     }else{
-                        Log.d(TAG, response.toString())
                         activity.runOnUiThread {
                             Toast.makeText(activity.applicationContext, activity.getString(R.string.internet_server_error), Toast.LENGTH_LONG).show()
                         }

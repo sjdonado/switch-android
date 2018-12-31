@@ -72,24 +72,12 @@
     <string name="notifications_fragment_notification_title">Title</string>
     <string name="notifications_fragment_notification_message">Message</string>
 
-    <!-- User settings Fragment -->
-    <string name="user_settings_key_distance" translatable="false">key_distance</string>
-    <string name="user_settings_dialog_title_distance">Enter your maximun distance</string>
-    <string name="user_settings_title_distance">Maximun distance</string>
-    <string name="user_settings_summary_distance">Square meters radio</string>
+    <!-- Settings Fragment -->
+    <string name="settings_logout_title">Logout</string>
+    <string name="settings_logout_summary">Click to logout of this device.</string>
 
-    <!-- Company settings Fragment -->
-    <string name="company_settings_key_labels" translatable="false">key_labels</string>
-    <string name="company_settings_dialog_title_labels">Labels available</string>
-    <string name="company_settings_title_labels">Labels</string>
-    <string name="company_settings_summary_labels">Enter your labels</string>
-
-    <!-- Settings labels -->
-    <string name="settings_label_food">Food</string>
-    <string name="settings_label_coffee">Coffee</string>
-    <string name="settings_label_nightlife">Nightlife</string>
-    <string name="settings_label_fun">Fun</string>
-    <string name="settings_label_shopping">Shopping</string>
+    <!-- Settings keys -->
+    <string name="settings_key_logout" translatable="false">logout</string>
 
     <!-- Filter labels -->
     <string name="filters_radio_distance">Radio distance</string>

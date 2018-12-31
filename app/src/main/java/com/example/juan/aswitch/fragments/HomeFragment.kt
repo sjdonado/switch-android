@@ -15,6 +15,7 @@ import com.example.juan.aswitch.models.Place
 import com.example.juan.aswitch.services.PlaceService
 import com.mindorks.placeholderview.SwipeDecor
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.place_card_view.*
 import org.json.JSONObject
 
 
@@ -45,8 +46,6 @@ class HomeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         placeService = PlaceService(activity!!)
-
-        homeProgressBar.visibility = View.VISIBLE
 
         val userObjectValue = Utils.getSharedPreferencesStringValue(
                 activity!!,
@@ -79,25 +78,34 @@ class HomeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
         placeService.search(userObject.getInt("radius")) {res ->
             val placesObjects = res.getJSONArray("data")
             Log.d("PLACES", res.toString())
-            for (i in 0..(placesObjects.length() - 1)) {
-                val item = placesObjects.getJSONObject(i)
-                val image = item.getJSONObject("profilePicture")
-                val location = item.getJSONObject("location")
-                val place = Place(
-                        item.getString("name"),
-                        image.getString("url"),
-                        location.getString("address"),
-                        item.getInt("distance"),
-                        item.getString("phoneNumber"),
-                        location.getDouble("lat"),
-                        location.getDouble("lng")
-                )
-                places.add(place)
+            if(placesObjects.length() == 0) {
                 activity!!.runOnUiThread {
-                    homeProgressBar.visibility = View.INVISIBLE
-                    swipeView!!.addView(
-                            SwipeCard(activity!!, place, cardViewHolderSize, this)
+                    homeNotFoundTextView.visibility = View.VISIBLE
+                }
+            } else {
+                activity!!.runOnUiThread {
+                    homeRejectButton.show()
+                    homeAcceptButton.show()
+                }
+                for (i in 0..(placesObjects.length() - 1)) {
+                    val item = placesObjects.getJSONObject(i)
+                    val image = item.getJSONObject("profilePicture")
+                    val location = item.getJSONObject("location")
+                    val place = Place(
+                            item.getString("name"),
+                            image.getString("url"),
+                            location.getString("address"),
+                            item.getInt("distance"),
+                            item.getString("phoneNumber"),
+                            location.getDouble("lat"),
+                            location.getDouble("lng")
                     )
+                    places.add(place)
+                    activity!!.runOnUiThread {
+                        swipeView!!.addView(
+                                SwipeCard(activity!!, place, cardViewHolderSize, this)
+                        )
+                    }
                 }
             }
         }
@@ -109,6 +117,7 @@ class HomeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
 
         homeAcceptButton.setOnClickListener{
             accept = true
+            homeNotFoundTextView.visibility = View.VISIBLE
             swipeView!!.doSwipe(accept)
         }
 //
@@ -123,9 +132,12 @@ class HomeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
                 openPlaceDetailsFragment(places[it])
                 accept = false
             }
+            if(it == 0) {
+                homeRejectButton.hide()
+                homeAcceptButton.hide()
+            }
             Log.d("ITEM_REMOVE_LISTENER", accept.toString())
         }
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

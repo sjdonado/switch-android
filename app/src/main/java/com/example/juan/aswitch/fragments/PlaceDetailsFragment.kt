@@ -14,6 +14,7 @@ import org.json.JSONObject
 import kotlinx.android.synthetic.main.fragment_place_details.*
 import android.content.Intent
 import android.net.Uri
+import com.bumptech.glide.request.RequestOptions
 
 
 class PlaceDetailsFragment : androidx.fragment.app.Fragment() {
@@ -37,6 +38,7 @@ class PlaceDetailsFragment : androidx.fragment.app.Fragment() {
         if(userObjectValue != null) placeObject = JSONObject(userObjectValue)
 
         Glide.with(activity!!).load(placeObject.getString("imgUrl"))
+                .apply(RequestOptions().placeholder(Utils.getCircularProgressDrawable(activity!!)))
                 .into(placeDetailsCoverImageView)
         placeDetailsNameTextView.text = placeObject.getString("name")
         placeDetailsLocationTextView.text = placeObject.getString("address")

@@ -63,4 +63,7 @@
     <string name="place_card_view_distance">%1$s metros</string>
     <string name="place_details_go_button">Ir</string>
     <string name="place_details_call_button">LLamar</string>
+    <string name="settings_logout_button">Cerrar sesión</string>
+    <string name="settings_logout_title">Logout</string>
+    <string name="settings_logout_summary">Haga clic para cerrar sesión en este dispositivo.</string>
 </resources>

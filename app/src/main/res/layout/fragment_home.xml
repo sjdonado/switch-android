@@ -6,13 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".fragments.HomeFragment">
 
-    <androidx.core.widget.ContentLoadingProgressBar
-        android:id="@+id/homeProgressBar"
-        style="?android:attr/progressBarStyle"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/homeNotFoundTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="invisible"/>
+        android:text="Not places found"
+        android:visibility="invisible" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -30,6 +30,7 @@
             android:layout_marginBottom="16dp"
             android:src="@drawable/ic_close_white_24dp"
             app:backgroundTint="@color/reject"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.2"
@@ -42,6 +43,7 @@
             android:layout_marginBottom="16dp"
             android:src="@drawable/ic_star_white_24dp"
             app:backgroundTint="@color/star"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.8"

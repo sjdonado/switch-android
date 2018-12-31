@@ -9,7 +9,9 @@ import android.transition.TransitionInflater
 import android.transition.TransitionSet
 import android.view.View
 import android.app.Activity
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.content.Intent
 import android.util.Log
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
@@ -21,10 +23,12 @@ import android.graphics.Point
 import android.os.Build
 import android.util.DisplayMetrics
 import android.view.WindowManager
+import androidx.core.content.ContextCompat.startActivity
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Priority
 import com.google.firebase.auth.FirebaseAuth
 import com.bumptech.glide.request.RequestOptions
+import com.example.juan.aswitch.MainActivity
 import org.json.JSONArray
 
 object Utils {
@@ -155,18 +159,24 @@ object Utils {
     fun logout(activity: Activity) {
         FirebaseAuth.getInstance().signOut()
         clearUserInfo(activity)
+        val mainActivity = Intent(activity, MainActivity::class.java)
+        activity.startActivity(mainActivity)
     }
 
     fun glideRequestOptions(activity: Activity): RequestOptions {
+        return RequestOptions()
+                .centerCrop()
+                .placeholder(getCircularProgressDrawable(activity))
+                .apply(RequestOptions.circleCropTransform())
+                .priority(Priority.HIGH)
+    }
+
+    fun getCircularProgressDrawable(activity: Activity): CircularProgressDrawable {
         val circularProgressDrawable = CircularProgressDrawable(activity)
         circularProgressDrawable.strokeWidth = 5f
         circularProgressDrawable.centerRadius = 30f
         circularProgressDrawable.start()
-        return RequestOptions()
-                .centerCrop()
-                .placeholder(circularProgressDrawable)
-                .apply(RequestOptions.circleCropTransform())
-                .priority(Priority.HIGH)
+        return circularProgressDrawable
     }
 
     fun toStringArray(array: JSONArray?): Array<String?>? {

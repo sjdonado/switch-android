@@ -62,6 +62,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
         signUp = Utils.getSharedPreferencesBooleanValue(activity!!, "SIGN_UP")!!
 
         if(userObjectValue != null) userObject = JSONObject(userObjectValue)
+        Log.d("USER_OBJECT", userObject.toString())
 
         if(!userObject.isNull("profilePicture")) {
             Glide.with(activity!!)
@@ -83,6 +84,10 @@ class UserFragment : androidx.fragment.app.Fragment() {
             userEditTextSignboard.editText!!.setText(userObject.getString("signboard"))
         if(!userObject.isNull("role")) {
             role = userObject.getBoolean("role")
+            if(role) {
+                userEditTextNit.visibility = View.VISIBLE
+                userEditTextSignboard.visibility = View.VISIBLE
+            }
 //            if(role) {
 //                userEditTextNit.visibility = View.VISIBLE
 //                userEditTextSignboard.visibility = View.VISIBLE
@@ -214,21 +219,23 @@ class UserFragment : androidx.fragment.app.Fragment() {
                     val viewPort = JSONObject()
                     val southwest = JSONObject()
                     val northeast = JSONObject()
-                    southwest.put("lat", place.viewport!!.southwest.latitude)
-                    southwest.put("lng", place.viewport!!.southwest.longitude)
+                    if(place.isDataValid) {
+                        southwest.put("lat", place.viewport!!.southwest.latitude)
+                        southwest.put("lng", place.viewport!!.southwest.longitude)
 
-                    northeast.put("lat", place.viewport!!.northeast.latitude)
-                    northeast.put("lng", place.viewport!!.northeast.longitude)
+                        northeast.put("lat", place.viewport!!.northeast.latitude)
+                        northeast.put("lng", place.viewport!!.northeast.longitude)
 
-                    viewPort.put("southwest", southwest)
-                    viewPort.put("northeast", northeast)
+                        viewPort.put("southwest", southwest)
+                        viewPort.put("northeast", northeast)
 
-                    locationObject.put("lat", place.latLng.latitude)
-                    locationObject.put("lng", place.latLng.longitude)
-                    locationObject.put("viewport", viewPort)
-                    locationObject.put("address", place.address)
-                    userObject.put("location", locationObject)
-                    userEditTextLocation.editText!!.setText(place.address)
+                        locationObject.put("lat", place.latLng.latitude)
+                        locationObject.put("lng", place.latLng.longitude)
+                        locationObject.put("viewport", viewPort)
+                        locationObject.put("address", place.address)
+                        userObject.put("location", locationObject)
+                        userEditTextLocation.editText!!.setText(place.address)
+                    }
                 }
             }
             else -> {
