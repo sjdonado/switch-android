@@ -44,9 +44,7 @@ class SwipeCard(private val context: Activity,
 
     @Resolve
     fun onResolved() {
-        val windowY = Utils.getDisplaySize(context.windowManager).y
-        val size = windowY - Utils.dpToPx(windowY / 6)
-        Log.d("CARD_SIZE", size.toString())
+        val size = Utils.getGlideSize(context)
         Glide.with(context).load(place.imgUrl)
                 .apply(RequestOptions().placeholder(Utils.getCircularProgressDrawable(context)))
                 .apply(RequestOptions().override(size, size))
@@ -60,6 +58,7 @@ class SwipeCard(private val context: Activity,
     @Click(R.id.placeCardCoverImageView)
     fun onClick() {
         Log.d("EVENT", "profileImageView click")
+        callback.onCoverClick(place)
     }
 
     @SwipeOutDirectional
@@ -69,7 +68,7 @@ class SwipeCard(private val context: Activity,
             callback.onSwipeUp()
         }
         if (direction.direction == SwipeDirection.RIGHT_TOP.direction) {
-            callback.onSwipeRight(place)
+            callback.onSwipeAccept(place)
         }
     }
 
@@ -82,7 +81,7 @@ class SwipeCard(private val context: Activity,
     @SwipeInDirectional
     fun onSwipeInDirectional(direction: SwipeDirection) {
         Log.d("SwipeInDirectional", "SwipeInDirectional " + direction.name)
-        callback.onSwipeRight(place)
+        callback.onSwipeAccept(place)
     }
 
     @SwipingDirection
@@ -116,6 +115,7 @@ class SwipeCard(private val context: Activity,
 
     interface Callback {
         fun onSwipeUp()
-        fun onSwipeRight(place: Place)
+        fun onSwipeAccept(place: Place)
+        fun onCoverClick(place: Place)
     }
 }

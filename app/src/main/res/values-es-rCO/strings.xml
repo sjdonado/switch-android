@@ -66,4 +66,5 @@
     <string name="settings_logout_button">Cerrar sesión</string>
     <string name="settings_logout_title">Logout</string>
     <string name="settings_logout_summary">Haga clic para cerrar sesión en este dispositivo.</string>
+    <string name="title_fragment_starred_places">Lugares favoritos</string>
 </resources>

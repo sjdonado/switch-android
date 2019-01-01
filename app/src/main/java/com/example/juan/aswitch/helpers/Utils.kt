@@ -29,6 +29,7 @@ import com.bumptech.glide.Priority
 import com.google.firebase.auth.FirebaseAuth
 import com.bumptech.glide.request.RequestOptions
 import com.example.juan.aswitch.MainActivity
+import com.example.juan.aswitch.models.Place
 import org.json.JSONArray
 
 object Utils {
@@ -208,6 +209,25 @@ object Utils {
 
     fun dpToPx(dp: Int): Int {
         return (dp * Resources.getSystem().displayMetrics.density).toInt()
+    }
+
+    fun getGlideSize(context: Activity): Int {
+        val windowY = Utils.getDisplaySize(context.windowManager).y
+        return windowY - Utils.dpToPx(windowY / 6)
+    }
+
+    fun JSONObjectToPlace(jsonObject: JSONObject): Place {
+        val image = jsonObject.getJSONObject("profilePicture")
+        val location = jsonObject.getJSONObject("location")
+        return Place(
+            jsonObject.getString("name"),
+            image.getString("url"),
+            location.getString("address"),
+            jsonObject.getInt("distance"),
+            jsonObject.getString("phoneNumber"),
+            location.getDouble("lat"),
+            location.getDouble("lng")
+        )
     }
 }
 

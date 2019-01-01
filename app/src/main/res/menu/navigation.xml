@@ -7,18 +7,24 @@
         <!--android:title="@string/title_dashboard" />-->
 
     <item
-    android:id="@+id/navigation_home"
-    android:icon="@drawable/ic_home_black_24dp"
-    android:title="@string/title_fragment_home" />
+        android:id="@+id/navigationHome"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/title_fragment_home" />
 
     <item
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigationStarredPlaces"
+        android:icon="@drawable/ic_star_black_24dp"
+        android:visible="false"
+        android:title="@string/title_fragment_starred_places" />
+
+    <item
+        android:id="@+id/navigationNotifications"
         android:icon="@drawable/ic_notifications_black_24dp"
         android:visible="false"
         android:title="@string/title_fragment_notifications" />
 
     <item
-        android:id="@+id/navigation_settings"
+        android:id="@+id/navigationSettings"
         android:icon="@drawable/ic_settings_black_24dp"
         android:title="@string/title_fragment_settings" />
 

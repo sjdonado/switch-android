@@ -88,18 +88,7 @@ class HomeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
                     homeAcceptButton.show()
                 }
                 for (i in 0..(placesObjects.length() - 1)) {
-                    val item = placesObjects.getJSONObject(i)
-                    val image = item.getJSONObject("profilePicture")
-                    val location = item.getJSONObject("location")
-                    val place = Place(
-                            item.getString("name"),
-                            image.getString("url"),
-                            location.getString("address"),
-                            item.getInt("distance"),
-                            item.getString("phoneNumber"),
-                            location.getDouble("lat"),
-                            location.getDouble("lng")
-                    )
+                    val place = Utils.JSONObjectToPlace(placesObjects.getJSONObject(i))
                     places.add(place)
                     activity!!.runOnUiThread {
                         swipeView!!.addView(
@@ -117,7 +106,6 @@ class HomeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
 
         homeAcceptButton.setOnClickListener{
             accept = true
-            homeNotFoundTextView.visibility = View.VISIBLE
             swipeView!!.doSwipe(accept)
         }
 //
@@ -129,10 +117,11 @@ class HomeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
                 swipeView!!.undoLastSwipe()
             }
             if(accept) {
-                openPlaceDetailsFragment(places[it])
+//                openPlaceDetailsFragment(places[it])
                 accept = false
             }
             if(it == 0) {
+                homeNotFoundTextView.visibility = View.VISIBLE
                 homeRejectButton.hide()
                 homeAcceptButton.hide()
             }
@@ -159,8 +148,12 @@ class HomeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onSwipeRight(place: Place) {
+    override fun onSwipeAccept(place: Place) {
         accept = true
+    }
+
+    override fun onCoverClick(place: Place) {
+        openPlaceDetailsFragment(place)
     }
 
     override fun onSwipeUp() {

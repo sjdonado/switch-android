@@ -63,11 +63,16 @@ open class HttpClient {
             val progressDialog = Dialog(activity)
             val dialog = ProgressBar(activity)
 //             has leaked window DecorView@d3d464c[] that was originally added here SERVER DOESN'T SEND DATA OBJECT
-            dialog.isIndeterminate = true
-            dialog.visibility = View.VISIBLE
-            progressDialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-            progressDialog.setContentView(dialog)
-            progressDialog.show()
+            try {
+                dialog.isIndeterminate = true
+                dialog.visibility = View.VISIBLE
+                progressDialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+                progressDialog.setContentView(dialog)
+                progressDialog.show()
+            } catch (e: Exception) {
+                Log.e(TAG, e.toString())
+                callback(JSONObject())
+            }
 
             OkHttpClient().newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call?, e: IOException?) {

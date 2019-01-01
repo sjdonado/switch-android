@@ -37,8 +37,10 @@ class PlaceDetailsFragment : androidx.fragment.app.Fragment() {
         val userObjectValue = Utils.getSharedPreferencesStringValue(activity!!, "PLACE_OBJECT")
         if(userObjectValue != null) placeObject = JSONObject(userObjectValue)
 
+        val size = Utils.getGlideSize(activity!!)
         Glide.with(activity!!).load(placeObject.getString("imgUrl"))
                 .apply(RequestOptions().placeholder(Utils.getCircularProgressDrawable(activity!!)))
+                .apply(RequestOptions().override(size, size))
                 .into(placeDetailsCoverImageView)
         placeDetailsNameTextView.text = placeObject.getString("name")
         placeDetailsLocationTextView.text = placeObject.getString("address")
