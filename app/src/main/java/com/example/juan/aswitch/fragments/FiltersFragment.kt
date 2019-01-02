@@ -85,7 +85,7 @@ class FiltersFragment : androidx.fragment.app.Fragment() {
                 Utils.openFragment(
                         activity as AppCompatActivity,
                         R.id.menu_fragment_container,
-                        HomeFragment.getInstance()
+                        SwipeFragment.getInstance()
                 )
                 return true
             }

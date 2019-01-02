@@ -66,5 +66,7 @@
     <string name="settings_logout_button">Cerrar sesión</string>
     <string name="settings_logout_title">Logout</string>
     <string name="settings_logout_summary">Haga clic para cerrar sesión en este dispositivo.</string>
-    <string name="title_fragment_starred_places">Lugares favoritos</string>
+    <string name="title_fragment_starred_places">Lugares destacados</string>
+    <string name="starred_not_places_found_message">Aún no tienes lugares destacados.</string>
+    <string name="swipe_not_places_found_message">No se han encontrado lugares.</string>
 </resources>

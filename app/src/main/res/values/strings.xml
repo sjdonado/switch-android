@@ -92,6 +92,14 @@
     <string name="place_details_go_button">Go</string>
     <string name="place_details_call_button">Call</string>
 
+    <!-- Swipe fragment -->
+    <string name="swipe_not_places_found_message">No places found.</string>
+
+    <!-- Starred Places fragment -->
+    <string name="starred_not_places_found_message">Doesn\'t have starred places yet.</string>
+
+    <!-- Place fragment -->
+
     <!-- Place card dummy data -->
     <string name="place_card_view_name_dummy" translatable="false">Name lorem name lorem</string>
     <string name="place_card_view_location_dummy" translatable="false">Location lorem location </string>

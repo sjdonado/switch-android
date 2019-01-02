@@ -30,7 +30,7 @@ class MenuActivity : AppCompatActivity() {
         setSupportActionBar(menu_toolbar)
         actionBar = supportActionBar!!
         actionBar.title = getString(R.string.title_fragment_home)
-        Utils.openFragment(this, R.id.menu_fragment_container, HomeFragment.getInstance())
+        Utils.openFragment(this, R.id.menu_fragment_container, SwipeFragment.getInstance())
 
         // Initialize the action bar drawer toggle instance
         val drawerToggle: ActionBarDrawerToggle = object : ActionBarDrawerToggle(
@@ -86,7 +86,7 @@ class MenuActivity : AppCompatActivity() {
 //                R.id.navigation_dashboard -> {}
                 R.id.navigationHome -> {
                     actionBar.title = getString(R.string.title_fragment_home)
-                    val homeFragment = HomeFragment.getInstance()
+                    val homeFragment = SwipeFragment.getInstance()
                     Utils.openFragment(this, R.id.menu_fragment_container, homeFragment)
                 }
                 R.id.navigationStarredPlaces -> {

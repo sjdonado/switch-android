@@ -88,6 +88,7 @@ open class HttpClient {
                     if(response!!.code() == 200) {
                         callback(JSONObject(response.body()!!.string()))
                     }else{
+                        Log.i(TAG, "${response.code()}")
                         activity.runOnUiThread {
                             Toast.makeText(activity.applicationContext, activity.getString(R.string.internet_server_error), Toast.LENGTH_LONG).show()
                         }

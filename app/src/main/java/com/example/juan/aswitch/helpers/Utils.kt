@@ -29,6 +29,7 @@ import com.bumptech.glide.Priority
 import com.google.firebase.auth.FirebaseAuth
 import com.bumptech.glide.request.RequestOptions
 import com.example.juan.aswitch.MainActivity
+import com.example.juan.aswitch.fragments.PlaceDetailsFragment
 import com.example.juan.aswitch.models.Place
 import org.json.JSONArray
 
@@ -220,6 +221,7 @@ object Utils {
         val image = jsonObject.getJSONObject("profilePicture")
         val location = jsonObject.getJSONObject("location")
         return Place(
+            jsonObject.getString("id"),
             jsonObject.getString("name"),
             image.getString("url"),
             location.getString("address"),
@@ -227,6 +229,27 @@ object Utils {
             jsonObject.getString("phoneNumber"),
             location.getDouble("lat"),
             location.getDouble("lng")
+        )
+    }
+
+    fun openPlaceDetailsFragment(activity: Activity, place: Place) {
+        val placeJSONObject = JSONObject()
+        placeJSONObject.put("name", place.name)
+        placeJSONObject.put("imgUrl", place.imgUrl)
+        placeJSONObject.put("address", place.address)
+        placeJSONObject.put("distance", place.distance)
+        placeJSONObject.put("phone", place.phone)
+        placeJSONObject.put("lat", place.lat)
+        placeJSONObject.put("lng", place.lng)
+        Utils.updateSharedPreferencesObjectValue(
+                activity,
+                "PLACE_OBJECT",
+                placeJSONObject
+        )
+        Utils.openFragment(
+                activity as AppCompatActivity,
+                R.id.menu_fragment_container,
+                PlaceDetailsFragment.getInstance()
         )
     }
 }

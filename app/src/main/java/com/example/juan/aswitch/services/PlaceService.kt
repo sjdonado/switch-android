@@ -9,6 +9,10 @@ open class PlaceService (activity: Activity) : MainService("/places", activity) 
         super.get("/search?radius=$radius", callback)
     }
 
+    fun starredPlaces(callback: (response: JSONObject) -> Unit) {
+        super.get("/starred", callback)
+    }
+
     fun get(callback: (response: JSONObject) -> Unit) {
         super.get("/", callback)
     }

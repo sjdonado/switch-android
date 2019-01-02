@@ -5,6 +5,14 @@
     android:layout_height="match_parent"
     tools:context=".fragments.StarredPlacesFragment">
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/starredNotFoundTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/starred_not_places_found_message"
+        android:visibility="invisible" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/starredPlacesRecyclerView"
         android:layout_width="match_parent"

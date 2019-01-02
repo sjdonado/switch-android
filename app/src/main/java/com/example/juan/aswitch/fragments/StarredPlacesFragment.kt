@@ -40,21 +40,29 @@ class StarredPlacesFragment : androidx.fragment.app.Fragment() {
         val viewAdapter = PlacesAdapter(activity!!, places,
             object: PlacesAdapter.OnClickListener {
                 override fun onClick(place: Place) {
-                    Log.d("CLICK", place.toString())
+                    Utils.openPlaceDetailsFragment(activity!!, place)
                 }
 
             }
         )
 
-        placeService.search(1000) {res ->
-            val placesObjects = res.getJSONArray("data")
-            Log.d("PLACES", res.toString())
-            for (i in 0..(placesObjects.length() - 1)) {
-                val place = Utils.JSONObjectToPlace(placesObjects.getJSONObject(i))
-                places.add(place)
-            }
-            activity!!.runOnUiThread {
-                viewAdapter.notifyDataSetChanged()
+        if(places.size == 0) {
+            placeService.starredPlaces { res ->
+                val placesObjects = res.getJSONArray("data")
+                Log.d("PLACES", res.toString())
+                if(placesObjects.length() == 0 ) {
+                    activity!!.runOnUiThread {
+                        starredNotFoundTextView.visibility = View.VISIBLE
+                    }
+                } else {
+                    for (i in 0..(placesObjects.length() - 1)) {
+                        val place = Utils.JSONObjectToPlace(placesObjects.getJSONObject(i))
+                        places.add(place)
+                    }
+                    activity!!.runOnUiThread {
+                        viewAdapter.notifyDataSetChanged()
+                    }
+                }
             }
         }
 
