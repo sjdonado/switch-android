@@ -71,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
                             }else{
                                 Utils.setSharedPreferencesStringValue(
                                         this,
-                                        "USER_OBJECT",
+                                        Utils.USER_OBJECT,
                                         res.getJSONObject("data").toString()
                                 )
                                 Utils.setSharedPreferencesBooleanValue(

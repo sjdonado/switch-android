@@ -7,10 +7,10 @@ import kotlinx.android.parcel.Parcelize
 data class Place(
         val id: String,
         val name: String,
-        val imgUrl: String,
-        val address: String,
-        val distance: Int,
-        val phone: String,
-        val lat: Double,
-        val lng: Double
+        val distance: Double,
+        val nit: String,
+        val phoneNumber: String,
+        val signboard: String,
+        val profilePicture: ProfilePicture,
+        val location: Location
 ) : Parcelable

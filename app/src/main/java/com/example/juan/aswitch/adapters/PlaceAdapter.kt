@@ -27,12 +27,12 @@ class PlacesAdapter(private val activity: Activity, private val places: ArrayLis
         var distance: TextView = itemView.findViewById(R.id.placeRecyclerCardDistanceTextView)
 
         fun bind(activity: Activity, place: Place, clickListener: OnClickListener) {
-            Glide.with(activity).load(place.imgUrl)
+            Glide.with(activity).load(place.profilePicture.url)
                     .apply(RequestOptions().placeholder(Utils.getCircularProgressDrawable(activity)))
                     .into(itemView.findViewById(R.id.placeRecyclerCardCoverImageView))
             name.text = place.name
-            location.text = place.address
-            distance.text = place.distance.toString()
+            location.text = place.location.address
+            distance.text = Utils.getRoundedDistance(place.distance)
             itemView.setOnClickListener {
                 clickListener.onClick(place)
             }

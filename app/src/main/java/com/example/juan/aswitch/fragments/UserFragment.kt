@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.LatLngBounds
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
+import com.example.juan.aswitch.models.User
 import com.google.android.material.textfield.TextInputLayout
 
 
@@ -38,11 +39,12 @@ class UserFragment : androidx.fragment.app.Fragment() {
     private lateinit var userService: UserService
     private var signUp: Boolean = false
     private var role: Boolean = false
-    private var userObject: JSONObject = JSONObject()
+    private val userJSONObject = JSONObject()
+    lateinit var user: User
 
     companion object {
         fun getInstance(): UserFragment = UserFragment()
-        private val PICK_IMAGE = 0
+        private const val PICK_IMAGE = 0
         var PLACE_PICKER_REQUEST = 1
     }
 
@@ -58,55 +60,28 @@ class UserFragment : androidx.fragment.app.Fragment() {
 
         userService = UserService(activity!!)
 
-        val userObjectValue = Utils.getSharedPreferencesStringValue(activity!!, "USER_OBJECT")
+        user = Utils.getSharedPreferencesUserObject(activity!!)
         signUp = Utils.getSharedPreferencesBooleanValue(activity!!, "SIGN_UP")!!
+        Log.d("USER", user.toString())
 
-        if(userObjectValue != null) userObject = JSONObject(userObjectValue)
-        Log.d("USER_OBJECT", userObject.toString())
+        Glide.with(activity!!)
+                .load(user.profilePicture?.url)
+                .apply(Utils.glideRequestOptions(activity!!))
+                .into(userImageViewProfilePicture)
 
-        if(!userObject.isNull("profilePicture")) {
-            Glide.with(activity!!)
-                    .load(userObject.getJSONObject("profilePicture").getString("url"))
-                    .apply(Utils.glideRequestOptions(activity!!))
-                    .into(userImageViewProfilePicture)
+        userEditTextName.editText!!.setText(user.name)
+        userEditTextEmail.editText!!.setText(user.email)
+
+        userEditTextLocation.editText!!
+                .setText(user.location?.address)
+
+        if(user.role != null) {
+            role = user.role!!
+            userEditTextNit.visibility = View.VISIBLE
+            userEditTextSignboard.visibility = View.VISIBLE
         }
 
-        if(!userObject.isNull("name"))
-            userEditTextName.editText!!.setText(userObject.getString("name"))
-        if(!userObject.isNull("email"))
-            userEditTextEmail.editText!!.setText(userObject.getString("email"))
-        if(!userObject.isNull("nit"))
-            userEditTextNit.editText!!.setText(userObject.getString("nit"))
-        if(!userObject.isNull("location"))
-            userEditTextLocation.editText!!
-                    .setText(userObject.getJSONObject("location").getString("address"))
-        if(!userObject.isNull("signboard"))
-            userEditTextSignboard.editText!!.setText(userObject.getString("signboard"))
-        if(!userObject.isNull("role")) {
-            role = userObject.getBoolean("role")
-            if(role) {
-                userEditTextNit.visibility = View.VISIBLE
-                userEditTextSignboard.visibility = View.VISIBLE
-            }
-//            if(role) {
-//                userEditTextNit.visibility = View.VISIBLE
-//                userEditTextSignboard.visibility = View.VISIBLE
-//                val placeService = PlaceService(activity!!)
-//                placeService.get { place ->
-//                    Utils.updateSharedPreferencesObjectValue(activity!!, "PLACE_OBJECT", place)
-//                    activity!!.runOnUiThread {
-//                        if(!place.isNull("labels") && ) {
-//                            val array = resources.getStringArray(R.array.settings_label_default_values)
-//                            Utils.toStringArray(place.getJSONArray("labels"))!!.forEachIndexed { index, s ->
-//                                array[index] = s
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-        }else {
-            if(signUp) userSwitchAccountType.visibility = View.VISIBLE
-        }
+        if(signUp) userSwitchAccountType.visibility = View.VISIBLE
 
         setEditTextValidation(userEditTextName, getString(R.string.users_fragment_name_user_error))
         setEditTextValidation(userEditTextEmail, getString(R.string.users_fragment_email_error))
@@ -116,16 +91,13 @@ class UserFragment : androidx.fragment.app.Fragment() {
 
         userEditTextLocation.editText!!.setOnClickListener {
             val builder = PlacePicker.IntentBuilder()
-            if(!userObject.isNull("location")) {
-                val southwest = userObject.getJSONObject("location")
-                        .getJSONObject("viewport").getJSONObject("southwest")
-                val northeast = userObject.getJSONObject("location")
-                        .getJSONObject("viewport").getJSONObject("northeast")
+            val southwest = user.location?.viewport?.southwest
+            val northeast = user.location?.viewport?.northeast
+            if(southwest != null && northeast != null) {
                 builder.setLatLngBounds(LatLngBounds(
-                        LatLng(southwest.getString("lat").toDouble(),
-                                southwest.getString("lng").toDouble()),
-                        LatLng(northeast.getString("lat").toDouble(),
-                                northeast.getString("lng").toDouble())))
+                        LatLng(southwest.lat, southwest.lng),
+                        LatLng(northeast.lat, northeast.lng))
+                )
             }
             startActivityForResult(builder.build(activity!!), PLACE_PICKER_REQUEST)
         }
@@ -164,18 +136,18 @@ class UserFragment : androidx.fragment.app.Fragment() {
                 && saveButtonValidation(userEditTextNit, getString(R.string.users_fragment_nit_error))
                 && saveButtonValidation(userEditTextSignboard, getString(R.string.users_fragment_signboard_error))) {
 
-                userObject.put("name", userEditTextName.editText!!.text)
-                userObject.put("email", userEditTextEmail.editText!!.text)
-                if(signUp) userObject.put("role", role)
+                userJSONObject.put("name", userEditTextName.editText!!.text)
+                userJSONObject.put("email", userEditTextEmail.editText!!.text)
+                if(signUp) userJSONObject.put("role", role)
                 if(userEditTextNit.visibility == View.VISIBLE)
-                    userObject.put("nit", userEditTextNit.editText!!.text)
+                    userJSONObject.put("nit", userEditTextNit.editText!!.text)
                 if(userEditTextSignboard.visibility == View.VISIBLE)
-                    userObject.put("signboard", userEditTextSignboard.editText!!.text)
+                    userJSONObject.put("signboard", userEditTextSignboard.editText!!.text)
 
-                userService.update(userObject) { res ->
+                userService.update(userJSONObject) { res ->
                     Utils.showSnackbar(getView()!!, getString(R.string.alert_info_updated))
                     Utils.setSharedPreferencesBooleanValue(activity!!, "SIGN_UP", false)
-                    Utils.updateSharedPreferencesObjectValue(activity!!, "USER_OBJECT", res.getJSONObject("data"))
+                    Utils.updateSharedPreferencesObjectValue(activity!!, Utils.USER_OBJECT, res.getJSONObject("data"))
                 }
                 if(signUp){
                     val menuActivityIntent = Intent(activity!!, MenuActivity::class.java)
@@ -233,7 +205,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
                         locationObject.put("lng", place.latLng.longitude)
                         locationObject.put("viewport", viewPort)
                         locationObject.put("address", place.address)
-                        userObject.put("location", locationObject)
+                        userJSONObject.put("location", locationObject)
                         userEditTextLocation.editText!!.setText(place.address)
                     }
                 }

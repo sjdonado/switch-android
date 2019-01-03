@@ -45,13 +45,16 @@ class SwipeCard(private val context: Activity,
     @Resolve
     fun onResolved() {
         val size = Utils.getGlideSize(context)
-        Glide.with(context).load(place.imgUrl)
+        Glide.with(context).load(place.profilePicture.url)
                 .apply(RequestOptions().placeholder(Utils.getCircularProgressDrawable(context)))
                 .apply(RequestOptions().override(size, size))
                 .into(placeCardCoverImageView)
         placeCardNameTextView.text = place.name
-        placeCardLocationTextView.text = place.address
-        placeCardDistanceTextView.text = context.resources.getString(R.string.place_card_view_distance, place.distance.toString())
+        placeCardLocationTextView.text = place.location.address
+        placeCardDistanceTextView.text = context.resources.getString(
+                R.string.place_card_view_distance,
+                Utils.getRoundedDistance(place.distance)
+        )
         swipeView.alpha = 1f
     }
 

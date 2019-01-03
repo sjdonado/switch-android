@@ -12,6 +12,7 @@ import com.example.juan.aswitch.R.id.navigationNotifications
 import com.example.juan.aswitch.R.id.navigationStarredPlaces
 import com.example.juan.aswitch.fragments.*
 import com.example.juan.aswitch.helpers.Utils
+import com.example.juan.aswitch.models.User
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.navigation_header.*
 import org.json.JSONObject
@@ -20,7 +21,7 @@ import org.json.JSONObject
 class MenuActivity : AppCompatActivity() {
 
     private lateinit var actionBar : ActionBar
-    private var userObject: JSONObject = JSONObject()
+    private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,24 +48,19 @@ class MenuActivity : AppCompatActivity() {
 
             override fun onDrawerOpened(drawerView: View) {
                 super.onDrawerOpened(drawerView)
-                val userObjectValue = Utils.getSharedPreferencesStringValue(this@MenuActivity, "USER_OBJECT")
-                if(userObjectValue != null) {
-                    userObject = JSONObject(userObjectValue)
-                    if(!userObject.isNull("profilePicture")) {
-                        Glide.with(this@MenuActivity)
-                                .load(userObject.getJSONObject("profilePicture").getString("url"))
-                                .apply(Utils.glideRequestOptions(this@MenuActivity))
-                                .into(navigation_account_header_current)
-                    }
-                    if(!userObject.isNull("name")) navigation_account_header_name.text = userObject.getString("name")
-                    if(!userObject.isNull("email")) navigation_account_header_email.text = userObject.getString("email")
-                    if(!userObject.isNull("role")) {
-                        if(userObject.getBoolean("role")) {
-                            navigation.menu.findItem(navigationNotifications).isVisible = true
-                        } else {
-                            navigation.menu.findItem(navigationStarredPlaces).isVisible = true
-                        }
-                    }
+                user = Utils.getSharedPreferencesUserObject(this@MenuActivity)
+
+                Glide.with(this@MenuActivity)
+                        .load(user.profilePicture?.url)
+                        .apply(Utils.glideRequestOptions(this@MenuActivity))
+                        .into(navigation_account_header_current)
+                navigation_account_header_name.text = user.name
+                navigation_account_header_email.text = user.email
+
+                if(user.role!!) {
+                    navigation.menu.findItem(navigationNotifications).isVisible = true
+                } else {
+                    navigation.menu.findItem(navigationStarredPlaces).isVisible = true
                 }
 
                 navigation_account_header.setOnClickListener {

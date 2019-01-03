@@ -87,7 +87,7 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
                     }
                 } else {
                     for (i in 0..(placesObjects.length()-1)) {
-                        val place = Utils.JSONObjectToPlace(
+                        val place = Utils.parseJSONPlace(
                             placesObjects.getJSONObject(i)
                         )
                         places.add(place)
@@ -168,7 +168,11 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
     }
 
     override fun onCoverClick(place: Place) {
-        Utils.openPlaceDetailsFragment(activity!!, place)
+        Utils.openFragment(
+                activity as AppCompatActivity,
+                R.id.menu_fragment_container,
+                PlaceDetailsFragment.getInstance(place)
+        )
     }
 
     override fun onSwipeUp() {

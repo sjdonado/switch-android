@@ -184,6 +184,7 @@
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-maps-16.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-auth-base-15.1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.firebase:firebase-jobdispatcher-0.8.5" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.5@jar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-runtime-2.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.11.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.drawerlayout:drawerlayout-1.0.0" level="project" />

@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.juan.aswitch.R
@@ -40,7 +41,11 @@ class StarredPlacesFragment : androidx.fragment.app.Fragment() {
         val viewAdapter = PlacesAdapter(activity!!, places,
             object: PlacesAdapter.OnClickListener {
                 override fun onClick(place: Place) {
-                    Utils.openPlaceDetailsFragment(activity!!, place)
+                    Utils.openFragment(
+                            activity as AppCompatActivity,
+                            R.id.menu_fragment_container,
+                            PlaceDetailsFragment.getInstance(place)
+                    )
                 }
 
             }
@@ -56,7 +61,7 @@ class StarredPlacesFragment : androidx.fragment.app.Fragment() {
                     }
                 } else {
                     for (i in 0..(placesObjects.length() - 1)) {
-                        val place = Utils.JSONObjectToPlace(placesObjects.getJSONObject(i))
+                        val place = Utils.parseJSONPlace(placesObjects.getJSONObject(i))
                         places.add(place)
                     }
                     activity!!.runOnUiThread {

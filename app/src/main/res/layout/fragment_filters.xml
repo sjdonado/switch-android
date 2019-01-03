@@ -27,7 +27,7 @@
         android:layout_marginTop="30dp"
         app:dsb_indicatorColor="@android:color/white"
         app:dsb_indicatorTextAppearance="@android:color/white"
-        app:dsb_max="1000"
+        app:dsb_max="9000"
         app:dsb_min="100"
         app:dsb_progressColor="@android:color/white"
         app:dsb_trackColor="@android:color/darker_gray"

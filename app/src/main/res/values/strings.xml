@@ -93,7 +93,7 @@
     <string name="place_details_call_button">Call</string>
 
     <!-- Swipe fragment -->
-    <string name="swipe_not_places_found_message">No places found.</string>
+    <string name="swipe_not_places_found_message">No places were found.</string>
 
     <!-- Starred Places fragment -->
     <string name="starred_not_places_found_message">Doesn\'t have starred places yet.</string>

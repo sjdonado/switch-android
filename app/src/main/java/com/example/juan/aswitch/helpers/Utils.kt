@@ -31,13 +31,18 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.juan.aswitch.MainActivity
 import com.example.juan.aswitch.fragments.PlaceDetailsFragment
 import com.example.juan.aswitch.models.Place
+import com.example.juan.aswitch.models.User
+import com.google.gson.Gson
 import org.json.JSONArray
+import java.math.RoundingMode
 
 object Utils {
 
     private const val MOVE_DEFAULT_TIME: Long = 1000
     private const val FADE_DEFAULT_TIME: Long = 150
     private const val TAG = "Utils"
+    private const val PREFERENCES_NAME = "SWITCH_DATA"
+    const val USER_OBJECT = "USER_OBJECT"
 
     fun showSnackbar (rootLayout : View, text : String ) {
         Snackbar.make(
@@ -72,38 +77,38 @@ object Utils {
     }
 
     fun setSharedPreferencesStringValue(activity: Activity, keyName : String, data: String) {
-        val sp = activity.getSharedPreferences("SWITCH_DATA", MODE_PRIVATE)
+        val sp = activity.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
         val editor = sp.edit()
         editor.putString(keyName, data)
         editor.apply()
     }
 
     fun setSharedPreferencesBooleanValue(activity: Activity, keyName : String, data: Boolean) {
-        val sp = activity.getSharedPreferences("SWITCH_DATA", MODE_PRIVATE)
+        val sp = activity.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
         val editor = sp.edit()
         editor.putBoolean(keyName, data)
         editor.apply()
     }
 
     fun getSharedPreferencesStringValue(activity: Activity, keyName: String) : String? {
-        val sp = activity.getSharedPreferences("SWITCH_DATA", MODE_PRIVATE)
+        val sp = activity.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
         return sp.getString(keyName, null)
     }
 
     fun getSharedPreferencesBooleanValue(activity: Activity, keyName: String) : Boolean? {
-        val sp = activity.getSharedPreferences("SWITCH_DATA", MODE_PRIVATE)
+        val sp = activity.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
         return sp.getBoolean(keyName, false)
     }
 
     fun onSharedPreferencesValue(activity: Activity, keyName: String, callback : (response: String) -> Unit) {
-        val sp = activity.getSharedPreferences("SWITCH_DATA", MODE_PRIVATE)
+        val sp = activity.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
         sp.registerOnSharedPreferenceChangeListener { sharedPreferences, key ->
             if(key == keyName) callback(sharedPreferences.getString(key, null)!!)
         }
     }
 
     fun updateSharedPreferencesObjectValue(activity: Activity, keyName: String, jsonObject: JSONObject) {
-        val sp = activity.getSharedPreferences("SWITCH_DATA", MODE_PRIVATE)
+        val sp = activity.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
         val oldJsonObjectValue = sp.getString(keyName, null)
 
         if(oldJsonObjectValue != null) {
@@ -154,7 +159,7 @@ object Utils {
     }
 
     private fun clearUserInfo(activity: Activity){
-        val sp = activity.getSharedPreferences("SWITCH_DATA", MODE_PRIVATE)
+        val sp = activity.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
         sp.edit().clear().apply()
     }
 
@@ -193,14 +198,10 @@ object Utils {
 
     fun getDisplaySize(windowManager: WindowManager): Point {
         try {
-            if (Build.VERSION.SDK_INT > 16) {
-                val display = windowManager.defaultDisplay
-                val displayMetrics = DisplayMetrics()
-                display.getMetrics(displayMetrics)
-                return Point(displayMetrics.widthPixels, displayMetrics.heightPixels)
-            } else {
-                return Point(0, 0)
-            }
+            val display = windowManager.defaultDisplay
+            val displayMetrics = DisplayMetrics()
+            display.getMetrics(displayMetrics)
+            return Point(displayMetrics.widthPixels, displayMetrics.heightPixels)
         } catch (e: Exception) {
             e.printStackTrace()
             return Point(0, 0)
@@ -217,40 +218,17 @@ object Utils {
         return windowY - Utils.dpToPx(windowY / 6)
     }
 
-    fun JSONObjectToPlace(jsonObject: JSONObject): Place {
-        val image = jsonObject.getJSONObject("profilePicture")
-        val location = jsonObject.getJSONObject("location")
-        return Place(
-            jsonObject.getString("id"),
-            jsonObject.getString("name"),
-            image.getString("url"),
-            location.getString("address"),
-            jsonObject.getInt("distance"),
-            jsonObject.getString("phoneNumber"),
-            location.getDouble("lat"),
-            location.getDouble("lng")
-        )
+    fun parseJSONPlace(jsonObject: JSONObject): Place {
+        return Gson().fromJson(jsonObject.toString(), Place::class.java)
     }
 
-    fun openPlaceDetailsFragment(activity: Activity, place: Place) {
-        val placeJSONObject = JSONObject()
-        placeJSONObject.put("name", place.name)
-        placeJSONObject.put("imgUrl", place.imgUrl)
-        placeJSONObject.put("address", place.address)
-        placeJSONObject.put("distance", place.distance)
-        placeJSONObject.put("phone", place.phone)
-        placeJSONObject.put("lat", place.lat)
-        placeJSONObject.put("lng", place.lng)
-        Utils.updateSharedPreferencesObjectValue(
-                activity,
-                "PLACE_OBJECT",
-                placeJSONObject
-        )
-        Utils.openFragment(
-                activity as AppCompatActivity,
-                R.id.menu_fragment_container,
-                PlaceDetailsFragment.getInstance()
-        )
+    fun getSharedPreferencesUserObject(activity: Activity): User {
+        val json = getSharedPreferencesStringValue(activity, USER_OBJECT)
+        return Gson().fromJson(json, User::class.java)
+    }
+
+    fun getRoundedDistance(distance: Double): String {
+        return distance.toBigDecimal().setScale(1, RoundingMode.UP).toDouble().toString()
     }
 }
 
