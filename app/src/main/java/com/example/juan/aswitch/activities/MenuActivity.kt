@@ -31,7 +31,8 @@ class MenuActivity : AppCompatActivity() {
         setSupportActionBar(menu_toolbar)
         actionBar = supportActionBar!!
         actionBar.title = getString(R.string.title_fragment_home)
-        Utils.openFragment(this, R.id.menu_fragment_container, SwipeFragment.getInstance())
+        user = Utils.getSharedPreferencesUserObject(this@MenuActivity)
+        openHomeFragment()
 
         // Initialize the action bar drawer toggle instance
         val drawerToggle: ActionBarDrawerToggle = object : ActionBarDrawerToggle(
@@ -48,8 +49,6 @@ class MenuActivity : AppCompatActivity() {
 
             override fun onDrawerOpened(drawerView: View) {
                 super.onDrawerOpened(drawerView)
-                user = Utils.getSharedPreferencesUserObject(this@MenuActivity)
-
                 Glide.with(this@MenuActivity)
                         .load(user.profilePicture?.url)
                         .apply(Utils.glideRequestOptions(this@MenuActivity))
@@ -81,9 +80,7 @@ class MenuActivity : AppCompatActivity() {
             when (it.itemId) {
 //                R.id.navigation_dashboard -> {}
                 R.id.navigationHome -> {
-                    actionBar.title = getString(R.string.title_fragment_home)
-                    val homeFragment = SwipeFragment.getInstance()
-                    Utils.openFragment(this, R.id.menu_fragment_container, homeFragment)
+                    openHomeFragment()
                 }
                 R.id.navigationStarredPlaces -> {
                     actionBar.title = getString(R.string.title_fragment_starred_places)
@@ -105,6 +102,15 @@ class MenuActivity : AppCompatActivity() {
             // Close the drawer
             drawer_layout.closeDrawer(GravityCompat.START)
             true
+        }
+    }
+
+    private fun openHomeFragment() {
+        actionBar.title = getString(R.string.title_fragment_home)
+        if(user.role!!) {
+            Utils.openFragment(this, R.id.menu_fragment_container, PlaceFragment())
+        } else {
+            Utils.openFragment(this, R.id.menu_fragment_container, SwipeFragment.getInstance())
         }
     }
 

@@ -51,6 +51,7 @@ class PlaceDetailsFragment : androidx.fragment.app.Fragment() {
                 .apply(RequestOptions().placeholder(Utils.getCircularProgressDrawable(activity!!)))
                 .apply(RequestOptions().override(size, size))
                 .into(placeDetailsCoverImageView)
+
         placeDetailsNameTextView.text = place.name
         placeDetailsLocationTextView.text = place.location.address
         placeDetailsPhoneTextView.text = place.phoneNumber

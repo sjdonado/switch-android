@@ -46,17 +46,7 @@
     <string name="notifications_fragment_notification_title">Titulo</string>
     <string name="title_fragment_settings">Configuración</string>
     <string name="title_activity_settings">Configuración</string>
-    <string name="user_settings_dialog_title_distance">Ingresar máxima distancia</string>
-    <string name="user_settings_title_distance">Máxima distancia</string>
-    <string name="user_settings_summary_distance">Metros cuadrados</string>
-    <string name="company_settings_dialog_title_labels">Etiquetas disponibles</string>
-    <string name="company_settings_title_labels">Etiquetas</string>
-    <string name="company_settings_summary_labels">Seleccionar etiquetas</string>
-    <string name="settings_label_food">Comida</string>
-    <string name="settings_label_coffee">Café</string>
-    <string name="settings_label_fun">Divertido</string>
-    <string name="settings_label_shopping">Compras</string>
-    <string name="settings_label_nightlife">Nocturno</string>
+
     <string name="filters_radio_distance">Radio de distancia</string>
     <string name="filters_restaurant">Restaurante</string>
     <string name="filters_bar">Bar</string>
@@ -69,4 +59,5 @@
     <string name="title_fragment_starred_places">Lugares destacados</string>
     <string name="starred_not_places_found_message">Aún no tienes lugares destacados.</string>
     <string name="swipe_not_places_found_message">No se han encontrado lugares.</string>
+    <string name="title_fragment_place">Mi lugar</string>
 </resources>

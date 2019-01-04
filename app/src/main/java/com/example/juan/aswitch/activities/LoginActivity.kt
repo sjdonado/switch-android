@@ -35,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
         actionBar.title = getString(R.string.app_name)
 
         userService = UserService(this)
-        if(Utils.getSharedPreferencesBooleanValue(this, "SIGN_UP")!!){
+        if(Utils.getSharedPreferencesBooleanValue(this, Utils.SIGN_UP)!!){
             openUserFragment()
         }else{
             signIn()

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 
 import com.example.juan.aswitch.R
 import com.example.juan.aswitch.helpers.Utils
+import com.example.juan.aswitch.models.User
 import com.example.juan.aswitch.services.PlaceService
 import com.example.juan.aswitch.services.UserService
 import kotlinx.android.synthetic.main.fragment_notifications.*
@@ -18,7 +19,7 @@ class NotificationsFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var userService: UserService
     private lateinit var placeService: PlaceService
-    private var userObject: JSONObject = JSONObject()
+    private lateinit var user: User
 
     companion object {
         fun getInstance(): NotificationsFragment = NotificationsFragment()
@@ -36,12 +37,13 @@ class NotificationsFragment : androidx.fragment.app.Fragment() {
         userService = UserService(activity!!)
         placeService = PlaceService(activity!!)
 
-        val userObjectValue = Utils.getSharedPreferencesStringValue(activity!!, "USER_OBJECT")
-        if(userObjectValue != null) userObject = JSONObject(userObjectValue)
+        user = Utils.getSharedPreferencesUserObject(activity!!)
 
-        if(userObject.getBoolean("role")) notificationsEditTextNotificationTitle.visibility = View.VISIBLE
-        if(userObject.getBoolean("role")) notificationsEditTextNotificationMessage.visibility = View.VISIBLE
-        if(userObject.getBoolean("role")) notificationsButtonSendNotification.visibility = View.VISIBLE
+        if(user.role!!) {
+            notificationsEditTextNotificationTitle.visibility = View.VISIBLE
+            notificationsEditTextNotificationMessage.visibility = View.VISIBLE
+            notificationsButtonSendNotification.visibility = View.VISIBLE
+        }
 
         notificationsButtonSendNotification.setOnClickListener {
             if(notificationsEditTextNotificationMessage.editText!!.text.isNotEmpty() && notificationsEditTextNotificationTitle.editText!!.text.isNotEmpty()) {

@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
                     channelName, NotificationManager.IMPORTANCE_LOW))
         }
 
-        FirebaseMessaging.getInstance().subscribeToTopic("switch")
+        FirebaseMessaging.getInstance().subscribeToTopic(Utils.NOTIFICATIONS_CHANNEL)
                 .addOnCompleteListener { task ->
                     var msg = getString(R.string.msg_subscribed)
                     if (!task.isSuccessful) {
@@ -131,10 +131,10 @@ class MainActivity : AppCompatActivity() {
                 userService.get { res ->
                     Utils.setSharedPreferencesStringValue(
                             this,
-                            "USER_OBJECT",
+                            Utils.USER_OBJECT,
                             res.getJSONObject("data").toString()
                     )
-                    if(Utils.getSharedPreferencesBooleanValue(this, "SIGN_UP")!!){
+                    if(Utils.getSharedPreferencesBooleanValue(this, Utils.SIGN_UP)!!){
                         val loginActivityIntent = Intent(this, LoginActivity::class.java)
                         startActivity(loginActivityIntent)
                     }else{

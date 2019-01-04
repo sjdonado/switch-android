@@ -9,10 +9,8 @@ import android.transition.TransitionInflater
 import android.transition.TransitionSet
 import android.view.View
 import android.app.Activity
-import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
-import android.util.Log
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseUser
@@ -20,16 +18,13 @@ import com.google.firebase.auth.GetTokenResult
 import org.json.JSONObject
 import android.content.res.Resources
 import android.graphics.Point
-import android.os.Build
 import android.util.DisplayMetrics
 import android.view.WindowManager
-import androidx.core.content.ContextCompat.startActivity
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Priority
 import com.google.firebase.auth.FirebaseAuth
 import com.bumptech.glide.request.RequestOptions
 import com.example.juan.aswitch.MainActivity
-import com.example.juan.aswitch.fragments.PlaceDetailsFragment
 import com.example.juan.aswitch.models.Place
 import com.example.juan.aswitch.models.User
 import com.google.gson.Gson
@@ -42,7 +37,10 @@ object Utils {
     private const val FADE_DEFAULT_TIME: Long = 150
     private const val TAG = "Utils"
     private const val PREFERENCES_NAME = "SWITCH_DATA"
+    const val NOTIFICATIONS_CHANNEL = "switch"
     const val USER_OBJECT = "USER_OBJECT"
+    const val SIGN_UP = "SIGN_UP"
+
 
     fun showSnackbar (rootLayout : View, text : String ) {
         Snackbar.make(
