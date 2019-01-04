@@ -6,9 +6,7 @@ import android.graphics.Point
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
-import com.bumptech.glide.Priority
 import com.bumptech.glide.request.RequestOptions
 import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.models.Place

@@ -22,9 +22,9 @@ class PlacesAdapter(private val activity: Activity, private val places: ArrayLis
     // you provide access to all the views for a data item in a view holder.
     // Each data item is just a string in this case that is shown in a TextView.
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var name: TextView = itemView.findViewById(R.id.placeRecyclerCardNameTextView)
-        var location: TextView = itemView.findViewById(R.id.placeRecyclerCardLocationTextView)
-        var distance: TextView = itemView.findViewById(R.id.placeRecyclerCardDistanceTextView)
+        private var name: TextView = itemView.findViewById(R.id.placeRecyclerCardNameTextView)
+        private var location: TextView = itemView.findViewById(R.id.placeRecyclerCardLocationTextView)
+        private var distance: TextView = itemView.findViewById(R.id.placeRecyclerCardDistanceTextView)
 
         fun bind(activity: Activity, place: Place, clickListener: OnClickListener) {
             Glide.with(activity).load(place.profilePicture.url)

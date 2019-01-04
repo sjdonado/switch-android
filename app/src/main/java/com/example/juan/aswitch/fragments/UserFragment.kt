@@ -82,7 +82,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
             userEditTextSignboard.visibility = View.VISIBLE
         }
 
-        if(signUp) userSwitchAccountType.visibility = View.VISIBLE
+        if(signUp && user.role == null) userSwitchAccountType.visibility = View.VISIBLE
 
         setEditTextValidation(userEditTextName, getString(R.string.users_fragment_name_user_error))
         setEditTextValidation(userEditTextEmail, getString(R.string.users_fragment_email_error))

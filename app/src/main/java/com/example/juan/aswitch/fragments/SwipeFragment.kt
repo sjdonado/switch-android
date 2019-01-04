@@ -93,6 +93,7 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
                         places.add(place)
                     }
                     activity!!.runOnUiThread {
+                        places.reverse()
                         updatePlaceViews(cardViewHolderSize)
                     }
                 }
