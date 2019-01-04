@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="white">#FFF</color>
+    <color name="white_grey">#A6AAAF</color>
     <color name="black">#000</color>
     <color name="star">#4caf50</color>
     <color name="reject">#e91e63</color>

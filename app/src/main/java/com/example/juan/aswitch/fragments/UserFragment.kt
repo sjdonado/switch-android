@@ -75,8 +75,9 @@ class UserFragment : androidx.fragment.app.Fragment() {
         userEditTextLocation.editText!!
                 .setText(user.location?.address)
 
-        if(user.role != null) {
-            role = user.role!!
+        if(user.role != null) role = user.role!!
+
+        if(role) {
             userEditTextNit.visibility = View.VISIBLE
             userEditTextSignboard.visibility = View.VISIBLE
         }
@@ -121,12 +122,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
         }
 
         userImageViewProfilePicture.setOnClickListener {
-            val intent = Intent()
-            intent.type = "image/*"
-            intent.action = Intent.ACTION_GET_CONTENT
-            intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            startActivityForResult(Intent.createChooser(intent,
-                    getString(R.string.user_fragment_select_picture)), PICK_IMAGE)
+            Utils.openImagePickerIntent(this, PICK_IMAGE)
         }
 
         userButtonAction.setOnClickListener {
@@ -148,10 +144,12 @@ class UserFragment : androidx.fragment.app.Fragment() {
                     Utils.showSnackbar(getView()!!, getString(R.string.alert_info_updated))
                     Utils.setSharedPreferencesBooleanValue(activity!!, "SIGN_UP", false)
                     Utils.updateSharedPreferencesObjectValue(activity!!, Utils.USER_OBJECT, res.getJSONObject("data"))
-                }
-                if(signUp){
-                    val menuActivityIntent = Intent(activity!!, MenuActivity::class.java)
-                    requireActivity().startActivity(menuActivityIntent)
+                    activity!!.runOnUiThread {
+                        if(signUp){
+                            val menuActivityIntent = Intent(activity!!, MenuActivity::class.java)
+                            requireActivity().startActivity(menuActivityIntent)
+                        }
+                    }
                 }
             }
         }
@@ -163,10 +161,12 @@ class UserFragment : androidx.fragment.app.Fragment() {
             PICK_IMAGE -> {
                 if(resultCode == Activity.RESULT_OK && data != null) {
                     Log.i("DATA_URI", data.data!!.path)
-                    val image = copyInputStreamToFile(
+                    val image = Utils.copyInputStreamToFile(
+                            activity!!,
                             activity!!.contentResolver!!.openInputStream(data.data!!)!!,
-                            getMimeType(activity!!, data.data!!)!!)
-                    userService.uploadImage("/upload", "profilePicture", image) { res ->
+                            Utils.getMimeType(activity!!, data.data!!)!!
+                    )
+                    userService.uploadImage("profilePicture", image) { res ->
                         Utils.showSnackbar(view!!, getString(R.string.alert_profile_picture_updated))
                         activity!!.runOnUiThread {
                             Utils.updateSharedPreferencesObjectValue(
@@ -214,43 +214,6 @@ class UserFragment : androidx.fragment.app.Fragment() {
                 Log.e("INTENT", "Unrecognized request code")
             }
         }
-    }
-
-    private fun copyInputStreamToFile(input: InputStream, mimeType : String) : File {
-        val file = File(activity!!.cacheDir, "${System.currentTimeMillis()/1000}.$mimeType")
-        try {
-            val output = FileOutputStream(file)
-            try {
-                val buffer = ByteArray(4 * 1024) // or other buffer size
-                var read: Int
-                read = input.read(buffer)
-                while (read != -1) {
-                    output.write(buffer, 0, read)
-                    read = input.read(buffer)
-                }
-                output.flush()
-            } finally {
-                output.close()
-            }
-        } finally {
-            input.close()
-        }
-        return file
-    }
-
-    fun getMimeType(context: Context, uri: Uri): String? {
-        val extension: String?
-        //Check uri format to avoid null
-        if (uri.scheme!! == ContentResolver.SCHEME_CONTENT) {
-            //If scheme is a content
-            val mime = MimeTypeMap.getSingleton()
-            extension = mime.getExtensionFromMimeType(context.contentResolver.getType(uri))
-        } else {
-            //If scheme is a File
-            //This will replace white spaces with %20 and also other special characters. This will avoid returning null values on file name with spaces and special characters.
-            extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(File(uri.path)).toString())
-        }
-        return extension
     }
 
     private fun saveButtonValidation(editTextLayout: TextInputLayout, errorValue: String): Boolean {

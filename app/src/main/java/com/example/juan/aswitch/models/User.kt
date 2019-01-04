@@ -10,15 +10,15 @@ data class User(
         val location: Location?,
         val name: String?,
         val phoneNumber: String?,
-        val profilePicture: ProfilePicture?,
+        val profilePicture: ImageObject?,
         val radius: Int?,
         val role: Boolean?
 ) : Parcelable
 
 @Parcelize
-data class ProfilePicture(
+data class ImageObject(
         val ref: String?,
-        val url: String
+        val url: String?
 ) : Parcelable
 
 @Parcelize

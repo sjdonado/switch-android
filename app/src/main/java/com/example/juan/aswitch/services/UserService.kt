@@ -15,7 +15,7 @@ open class UserService (activity: Activity) : MainService("/users", activity) {
         super.put("/", jsonObject.toString(), callback)
     }
 
-    fun uploadImage(path : String, field : String, image : File, callback: (response : JSONObject) -> Unit) {
+    fun uploadImage(field : String, image : File, callback: (response : JSONObject) -> Unit) {
         val mediaType = if (image.endsWith("png"))
             MediaType.parse("image/png")
         else
@@ -25,6 +25,6 @@ open class UserService (activity: Activity) : MainService("/users", activity) {
                 .setType(MultipartBody.FORM)
                 .addFormDataPart(field, image.name, RequestBody.create(mediaType, image))
                 .build()
-        super.upload(path, multipartBody, callback)
+        super.upload("/upload", multipartBody, callback)
     }
 }

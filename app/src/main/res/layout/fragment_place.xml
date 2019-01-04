@@ -29,43 +29,113 @@
                 android:id="@+id/placeImagesLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:alignmentMode="alignBounds"
                 android:columnCount="2"
                 android:rowCount="2"
-                android:useDefaultMargins="true"
-                android:alignmentMode="alignBounds" >
+                android:useDefaultMargins="true">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/placeCoverImageView"
                     android:layout_width="@dimen/grid_layout_images"
                     android:layout_height="@dimen/grid_layout_images"
+                    android:layout_columnWeight="1"
                     android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    android:layout_columnWeight="1" />
+                    android:scaleType="centerCrop" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/placeFirstImageView"
                     android:layout_width="@dimen/grid_layout_images"
                     android:layout_height="@dimen/grid_layout_images"
+                    android:layout_columnWeight="1"
                     android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    android:layout_columnWeight="1" />
+                    android:scaleType="centerCrop" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/placeSecondImageView"
                     android:layout_width="@dimen/grid_layout_images"
                     android:layout_height="@dimen/grid_layout_images"
+                    android:layout_columnWeight="1"
                     android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    android:layout_columnWeight="1" />
+                    android:scaleType="centerCrop" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/placeThirdImageView"
                     android:layout_width="@dimen/grid_layout_images"
                     android:layout_height="@dimen/grid_layout_images"
+                    android:layout_columnWeight="1"
                     android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    android:layout_columnWeight="1" />
+                    android:scaleType="centerCrop" />
             </GridLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/placeRemoveCoverButton"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton.Icon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:visibility="invisible"
+                app:backgroundTint="@color/white"
+                app:cornerRadius="24dp"
+                app:iconTint="@color/white_grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.404"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                card_view:icon="@drawable/ic_close_white_24dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/placeRemoveFirstButton"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton.Icon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:visibility="invisible"
+                app:backgroundTint="@color/white"
+                app:cornerRadius="24dp"
+                app:iconTint="@color/white_grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                card_view:icon="@drawable/ic_close_white_24dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/placeRemoveSecondButton"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton.Icon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="160dp"
+                android:layout_marginEnd="8dp"
+                android:visibility="invisible"
+                app:backgroundTint="@color/white"
+                app:cornerRadius="24dp"
+                app:iconTint="@color/white_grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.404"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                card_view:icon="@drawable/ic_close_white_24dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/placeRemoveThirdButton"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton.Icon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="160dp"
+                android:layout_marginEnd="8dp"
+                android:visibility="invisible"
+                app:backgroundTint="@color/white"
+                app:cornerRadius="24dp"
+                app:iconTint="@color/white_grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                card_view:icon="@drawable/ic_close_white_24dp" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/placeNameTextView"

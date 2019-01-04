@@ -28,6 +28,10 @@ open class MainService (path : String, activity: Activity){
         HttpClient.put(this.path + path, this.activity, json, callback)
     }
 
+    fun delete(path: String, json: String, callback: (response: JSONObject) -> Unit) {
+        HttpClient.delete(this.path + path, this.activity, json, callback)
+    }
+
     fun upload(path : String, multipartBody : MultipartBody, callback : (response : JSONObject) -> Unit) {
         HttpClient.upload(this.path + path, this.activity, multipartBody, callback)
     }

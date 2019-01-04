@@ -9,6 +9,8 @@ import android.transition.TransitionInflater
 import android.transition.TransitionSet
 import android.view.View
 import android.app.Activity
+import android.content.ContentResolver
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import com.google.android.gms.tasks.OnCompleteListener
@@ -18,17 +20,23 @@ import com.google.firebase.auth.GetTokenResult
 import org.json.JSONObject
 import android.content.res.Resources
 import android.graphics.Point
+import android.net.Uri
 import android.util.DisplayMetrics
 import android.view.WindowManager
+import android.webkit.MimeTypeMap
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Priority
 import com.google.firebase.auth.FirebaseAuth
 import com.bumptech.glide.request.RequestOptions
 import com.example.juan.aswitch.MainActivity
+import com.example.juan.aswitch.fragments.UserFragment
 import com.example.juan.aswitch.models.Place
 import com.example.juan.aswitch.models.User
 import com.google.gson.Gson
 import org.json.JSONArray
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
 import java.math.RoundingMode
 
 object Utils {
@@ -40,7 +48,6 @@ object Utils {
     const val NOTIFICATIONS_CHANNEL = "switch"
     const val USER_OBJECT = "USER_OBJECT"
     const val SIGN_UP = "SIGN_UP"
-
 
     fun showSnackbar (rootLayout : View, text : String ) {
         Snackbar.make(
@@ -227,6 +234,54 @@ object Utils {
 
     fun getRoundedDistance(distance: Double): String {
         return distance.toBigDecimal().setScale(1, RoundingMode.UP).toDouble().toString()
+    }
+
+    fun copyInputStreamToFile(activity: Activity, input: InputStream, mimeType : String) : File {
+        val file = File(activity.cacheDir, "${System.currentTimeMillis()/1000}.$mimeType")
+        try {
+            val output = FileOutputStream(file)
+            try {
+                val buffer = ByteArray(4 * 1024) // or other buffer size
+                var read: Int
+                read = input.read(buffer)
+                while (read != -1) {
+                    output.write(buffer, 0, read)
+                    read = input.read(buffer)
+                }
+                output.flush()
+            } finally {
+                output.close()
+            }
+        } finally {
+            input.close()
+        }
+        return file
+    }
+
+    fun getMimeType(context: Context, uri: Uri): String? {
+        val extension: String?
+        //Check uri format to avoid null
+        if (uri.scheme!! == ContentResolver.SCHEME_CONTENT) {
+            //If scheme is a content
+            val mime = MimeTypeMap.getSingleton()
+            extension = mime.getExtensionFromMimeType(context.contentResolver.getType(uri))
+        } else {
+            //If scheme is a File
+            //This will replace white spaces with %20 and also other special characters. This will avoid returning null values on file name with spaces and special characters.
+            extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(File(uri.path)).toString())
+        }
+        return extension
+    }
+
+    fun openImagePickerIntent(fragment: Fragment, PICK_IMAGE: Int) {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        fragment.startActivityForResult(
+                Intent.createChooser(intent,
+                    fragment.getString(R.string.user_fragment_select_picture)), PICK_IMAGE
+        )
     }
 }
 

@@ -50,6 +50,17 @@ open class HttpClient {
             executeRequest(request, activity, callback)
         }
 
+        fun delete(path : String, activity : Activity, json : String, callback : (response: JSONObject) -> Unit) {
+            val jsonBody = RequestBody.create(JSON, json)
+            val request = Request.Builder()
+                    .header("Authorization", Utils.getSharedPreferencesStringValue(activity, "USER_TOKEN")!!)
+                    .url(API_URL + path)
+                    .delete(jsonBody)
+                    .build()
+            executeRequest(request, activity, callback)
+        }
+
+
         fun upload(path : String, activity : Activity, multipartBody : MultipartBody, callback : (response : JSONObject) -> Unit) {
             val request = Request.Builder()
                     .url(API_URL + path)
