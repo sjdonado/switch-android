@@ -27,15 +27,16 @@ import com.glide.slider.library.Tricks.ViewPagerEx
 class PlaceDetailsFragment : androidx.fragment.app.Fragment(),
         BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener  {
 
-    lateinit var place: Place
-    lateinit var user: User
+    private var qualify: Boolean = false
     private val images: ArrayList<ImageObject> = ArrayList()
+    lateinit var place: Place
     lateinit var placeDetailsImageSlider: SliderLayout
 
     companion object {
-        fun getInstance(place: Place) = PlaceDetailsFragment().apply {
+        fun getInstance(place: Place, qualify: Boolean) = PlaceDetailsFragment().apply {
             arguments = Bundle().apply {
                 putParcelable("PLACE", place)
+                putBoolean("QUALIFY", qualify)
             }
         }
     }
@@ -44,6 +45,9 @@ class PlaceDetailsFragment : androidx.fragment.app.Fragment(),
         super.onAttach(context)
         arguments?.getParcelable<Place>("PLACE")?.let {
             place = it
+        }
+        arguments?.getBoolean("QUALIFY")?.let {
+            qualify = it
         }
     }
 
@@ -56,14 +60,7 @@ class PlaceDetailsFragment : androidx.fragment.app.Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        user = Utils.getSharedPreferencesUserObject(activity!!)
-
-        if(user.role!!) {
-            placeDetailsGoButton.isEnabled = false
-            placeDetailsCallButton.isEnabled = false
-        }
-
-        val size = Utils.getGlideSize(activity!!)
+        val size = Utils.getGlideSize(activity!!) - 100
         placeDetailsImageSlider = activity!!.findViewById(R.id.placeDetailsImageSlider)
 
         val params = placeDetailsImageSlider.layoutParams
@@ -98,6 +95,14 @@ class PlaceDetailsFragment : androidx.fragment.app.Fragment(),
                 R.string.place_card_view_distance,
                 Utils.getRoundedDistance(place.distance)
         )
+        placeDetailsDescriptionTextView.text = place.description
+
+        if (qualify) {
+            placeDetailsQualifyButton.show()
+            placeDetailsQualifyButton.setOnClickListener {
+
+            }
+        }
 
         placeDetailsGoButton.setOnClickListener {
             val gmmIntentUri = Uri.parse(
