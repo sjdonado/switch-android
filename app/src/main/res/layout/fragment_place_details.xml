@@ -53,8 +53,8 @@
                     app:layout_constraintTop_toBottomOf="@+id/placeDetailsImageSlider" />
 
                 <androidx.appcompat.widget.AppCompatRatingBar
-                    style="?android:attr/ratingBarStyleSmall"
                     android:id="@+id/placeDetailsRatingBar"
+                    style="?android:attr/ratingBarStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="19dp"
                     android:layout_marginStart="8dp"

@@ -54,7 +54,7 @@ class StarredPlacesFragment : androidx.fragment.app.Fragment() {
         if(places.size == 0) {
             placeService.starredPlaces { res ->
                 val placesObjects = res.getJSONArray("data")
-                Log.d("PLACES", res.toString())
+                Log.d("STARRED_PLACES", res.toString())
                 if(placesObjects.length() == 0 ) {
                     activity!!.runOnUiThread {
                         starredNotFoundTextView.visibility = View.VISIBLE

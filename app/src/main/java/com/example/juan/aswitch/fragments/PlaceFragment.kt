@@ -17,11 +17,11 @@ import kotlinx.android.synthetic.main.fragment_place.*
 class PlaceFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var placeService: PlaceService
+    private lateinit var place: Place
     private var editMode: Boolean = false
 
     companion object {
         fun getInstance(): PlaceFragment = PlaceFragment()
-        lateinit var place: Place
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +46,7 @@ class PlaceFragment : androidx.fragment.app.Fragment() {
             editMode = !editMode
             if(editMode) {
                 placeEditOrSaveButton.setImageResource(R.drawable.ic_save_white_24dp)
-                Utils.openFragment(activity as AppCompatActivity, R.id.place_fragment_container, EditPlaceFragment.getInstance())
+                Utils.openFragment(activity as AppCompatActivity, R.id.place_fragment_container, EditPlaceFragment.getInstance(place))
             } else {
                 placeEditOrSaveButton.setImageResource(R.drawable.ic_edit_white_24dp)
                 Utils.openFragment(activity as AppCompatActivity, R.id.place_fragment_container, PlaceDetailsFragment.getInstance(place, false))

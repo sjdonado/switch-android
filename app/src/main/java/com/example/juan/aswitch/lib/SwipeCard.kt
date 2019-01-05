@@ -5,6 +5,7 @@ import com.example.juan.aswitch.R
 import android.graphics.Point
 import android.util.Log
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -23,6 +24,9 @@ class SwipeCard(private val context: Activity,
 
     @View(R.id.placeCardCoverImageView)
     lateinit var placeCardCoverImageView: ImageView
+
+    @View(R.id.placeCardRatingBar)
+    lateinit var placeCardRatingBar: RatingBar
 
     @View(R.id.placeCardNameTextView)
     lateinit var placeCardNameTextView: TextView
@@ -53,6 +57,7 @@ class SwipeCard(private val context: Activity,
                 R.string.place_card_view_distance,
                 Utils.getRoundedDistance(place.distance)
         )
+        placeCardRatingBar.rating = place.rate!!.toFloat()
         swipeView.alpha = 1f
     }
 

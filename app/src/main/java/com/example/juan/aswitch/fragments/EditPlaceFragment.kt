@@ -2,6 +2,7 @@ package com.example.juan.aswitch.fragments
 
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -33,8 +34,19 @@ class EditPlaceFragment : androidx.fragment.app.Fragment() {
     private val emptyImageObject = ImageObject(null, null)
 
     companion object {
-        fun getInstance(): EditPlaceFragment = EditPlaceFragment()
+        fun getInstance(place: Place) = EditPlaceFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable("PLACE", place)
+            }
+        }
         private const val PICK_IMAGE = 0
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        arguments?.getParcelable<Place>("PLACE")?.let {
+            place = it
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -45,8 +57,6 @@ class EditPlaceFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        place = PlaceFragment.place
 
         placeService = PlaceService(activity!!)
         userService = UserService(activity!!)

@@ -96,6 +96,7 @@ class PlaceDetailsFragment : androidx.fragment.app.Fragment(),
                 Utils.getRoundedDistance(place.distance)
         )
         placeDetailsDescriptionTextView.text = place.description
+        placeDetailsRatingBar.rating = place.rate!!.toFloat()
 
         if (qualify) {
             placeDetailsQualifyButton.show()
@@ -106,7 +107,7 @@ class PlaceDetailsFragment : androidx.fragment.app.Fragment(),
                     ft.remove(prev)
                 }
                 ft.addToBackStack(null)
-                val dialogFragment = QualifyFragment()
+                val dialogFragment = QualifyFragment.getInstance(place)
                 dialogFragment.show(ft, "dialog")
             }
         }
