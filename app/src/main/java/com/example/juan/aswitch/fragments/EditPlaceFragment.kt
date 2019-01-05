@@ -72,11 +72,6 @@ class EditPlaceFragment : androidx.fragment.app.Fragment() {
         if(!place.images[1].url.isNullOrBlank()) editPlaceRemoveSecondButton.visibility = View.VISIBLE
         if(!place.images[2].url.isNullOrBlank()) editPlaceRemoveThirdButton.visibility = View.VISIBLE
 
-        editPlaceNameTextView.text = place.name
-        editPlaceSignboardTextView.text = place.signboard
-        editPlaceNitTextView.text = place.nit
-        editPlaceDescriptionTextView.text = place.description
-
         editPlaceCoverImageView.setOnClickListener {
             editCoverImage = true
             Utils.openImagePickerIntent(this, PICK_IMAGE)

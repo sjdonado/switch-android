@@ -114,6 +114,9 @@
     <string name="qualify_dialog_fragment_send_button">Send</string>
     <string name="qualify_dialog_fragment_cancel_button">Cancel</string>
 
+    <!-- Edit place fragment -->
+    <string name="edit_place_fragment_images_title">Edit images</string>
+
     <!-- Place card dummy data -->
     <string name="place_card_view_name_dummy" translatable="false">Name lorem name lorem</string>
     <string name="place_card_view_location_dummy" translatable="false">Location lorem location </string>

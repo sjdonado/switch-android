@@ -71,4 +71,5 @@
     <string name="qualify_dialog_fragment_title">Calificación</string>
     <string name="qualify_dialog_fragment_send_button">Enviar</string>
     <string name="qualify_dialog_fragment_cancel_button">Cancelar</string>
+    <string name="edit_place_fragment_images_title">Editar imágenes</string>
 </resources>
