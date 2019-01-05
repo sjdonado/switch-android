@@ -23,6 +23,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         userService = UserService(activity!!)
         findPreference(KEY_LOGOUT).setOnPreferenceClickListener {
             Utils.logout(activity!!)
+            activity!!.finish()
             false
         }
     }

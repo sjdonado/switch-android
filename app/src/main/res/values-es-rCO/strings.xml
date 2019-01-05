@@ -60,4 +60,12 @@
     <string name="starred_not_places_found_message">Aún no tienes lugares destacados.</string>
     <string name="swipe_not_places_found_message">No se han encontrado lugares.</string>
     <string name="title_fragment_place">Mi lugar</string>
+    <string name="place_spinner_value_food">Comida</string>
+    <string name="place_spinner_value_coffee">Café</string>
+    <string name="place_spinner_value_nightlife">Nocturno</string>
+    <string name="place_spinner_value_fun">Divertido</string>
+    <string name="place_spinner_value_shopping">Compras</string>
+    <string name="users_fragment_description">Descripción</string>
+    <string name="users_fragment_category">Categoría</string>
+    <string name="users_fragment_description_error">Descripción vacía</string>
 </resources>

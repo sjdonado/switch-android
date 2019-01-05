@@ -28,10 +28,11 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:paddingBottom="72dp" >
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/userImageViewProfilePicture"
+                    android:id="@+id/userProfilePictureImageView"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:layout_marginStart="8dp"
@@ -53,12 +54,12 @@
                     android:layout_marginBottom="8dp"
                     android:visibility="invisible"
                     android:text="@string/users_fragment_account_type_user"
-                    app:layout_constraintBottom_toTopOf="@+id/userImageViewProfilePicture"
+                    app:layout_constraintBottom_toTopOf="@+id/userProfilePictureImageView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/userEditTextName"
+                    android:id="@+id/userNameEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -66,7 +67,7 @@
                     android:layout_marginEnd="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/userImageViewProfilePicture">
+                    app:layout_constraintTop_toBottomOf="@+id/userProfilePictureImageView">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -76,7 +77,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/userEditTextEmail"
+                    android:id="@+id/userEmailEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -85,7 +86,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.555"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/userEditTextName">
+                    app:layout_constraintTop_toBottomOf="@+id/userNameEditText">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -95,7 +96,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/userEditTextLocation"
+                    android:id="@+id/userLocationEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -104,7 +105,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.555"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/userEditTextEmail">
+                    app:layout_constraintTop_toBottomOf="@+id/userEmailEditText">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -117,7 +118,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/userEditTextNit"
+                    android:id="@+id/userNitEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -127,7 +128,7 @@
                     tools:layout_editor_absoluteX="8dp"
                     tools:layout_editor_absoluteY="353dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/userEditTextLocation">
+                    app:layout_constraintTop_toBottomOf="@+id/userLocationEditText">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -138,7 +139,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/userEditTextSignboard"
+                    android:id="@+id/userSignboardEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -148,7 +149,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.555"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/userEditTextNit">
+                    app:layout_constraintTop_toBottomOf="@+id/userNitEditText">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -156,6 +157,54 @@
                         android:hint="@string/users_fragment_signboard"
                         android:inputType="textLongMessage" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/userDescriptionEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.555"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/userSignboardEditText">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:gravity="top"
+                        android:hint="@string/users_fragment_description"
+                        android:inputType="textMultiLine" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/InputLabel"
+                    android:id="@+id/userCategoryInputLabel"
+                    android:text="@string/users_fragment_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.555"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/userDescriptionEditText"/>
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/userCategorySpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:visibility="invisible"
+                    android:entries="@array/place_spinner_values"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.555"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/userCategoryInputLabel"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -15,7 +15,6 @@ import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.models.User
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.navigation_header.*
-import org.json.JSONObject
 
 
 class MenuActivity : AppCompatActivity() {
@@ -108,7 +107,7 @@ class MenuActivity : AppCompatActivity() {
     private fun openHomeFragment() {
         actionBar.title = getString(R.string.title_fragment_home)
         if(user.role!!) {
-            Utils.openFragment(this, R.id.menu_fragment_container, PlaceFragment())
+            Utils.openFragment(this, R.id.menu_fragment_container, PlaceFragment.getInstance())
         } else {
             Utils.openFragment(this, R.id.menu_fragment_container, SwipeFragment.getInstance())
         }

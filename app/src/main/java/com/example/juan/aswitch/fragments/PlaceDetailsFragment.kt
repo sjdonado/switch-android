@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
 
 import com.example.juan.aswitch.R
 import com.example.juan.aswitch.helpers.Utils
@@ -18,6 +17,7 @@ import android.net.Uri
 import com.bumptech.glide.request.RequestOptions
 import com.example.juan.aswitch.models.ImageObject
 import com.example.juan.aswitch.models.Place
+import com.example.juan.aswitch.models.User
 import com.glide.slider.library.SliderLayout
 import com.glide.slider.library.SliderTypes.BaseSliderView
 import com.glide.slider.library.SliderTypes.TextSliderView
@@ -28,6 +28,8 @@ class PlaceDetailsFragment : androidx.fragment.app.Fragment(),
         BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener  {
 
     lateinit var place: Place
+    lateinit var user: User
+    private val images: ArrayList<ImageObject> = ArrayList()
     lateinit var placeDetailsImageSlider: SliderLayout
 
     companion object {
@@ -54,28 +56,36 @@ class PlaceDetailsFragment : androidx.fragment.app.Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val size = Utils.getGlideSize(activity!!)
+        user = Utils.getSharedPreferencesUserObject(activity!!)
 
+        if(user.role!!) {
+            placeDetailsGoButton.isEnabled = false
+            placeDetailsCallButton.isEnabled = false
+        }
+
+        val size = Utils.getGlideSize(activity!!)
         placeDetailsImageSlider = activity!!.findViewById(R.id.placeDetailsImageSlider)
-        placeDetailsImageSlider.removeAllSliders()
 
         val params = placeDetailsImageSlider.layoutParams
         params.height = size
         placeDetailsImageSlider.requestLayout()
 
-        place.images.add(0, ImageObject(null, place.profilePicture.url))
-
-        place.images.forEach {
-            if(it.url != null) {
-                val sliderView = TextSliderView(context)
-                sliderView
-                        .image(it.url)
-                        .setRequestOption(RequestOptions().centerCrop())
-                        .setBackgroundColor(Color.WHITE)
-                        .setProgressBarVisible(true)
-                        .setOnSliderClickListener(this)
-                placeDetailsImageSlider.addSlider(sliderView)
+        if (images.size == 0) {
+            images.add(0, ImageObject(null, place.profilePicture.url))
+            place.images.forEach {
+                if(it.url != null) images.add(it)
             }
+        }
+
+        images.forEach {
+            val sliderView = TextSliderView(context)
+            sliderView
+                    .image(it.url)
+                    .setRequestOption(RequestOptions().centerCrop())
+                    .setBackgroundColor(Color.WHITE)
+                    .setProgressBarVisible(true)
+                    .setOnSliderClickListener(this)
+            placeDetailsImageSlider.addSlider(sliderView)
         }
 
         placeDetailsImageSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom)

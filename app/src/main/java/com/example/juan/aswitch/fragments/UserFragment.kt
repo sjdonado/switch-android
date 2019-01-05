@@ -14,11 +14,6 @@ import kotlinx.android.synthetic.main.fragment_users.*
 import android.util.Log
 import com.bumptech.glide.Glide
 import org.json.JSONObject
-import java.io.*
-import android.webkit.MimeTypeMap
-import android.content.ContentResolver
-import android.content.Context
-import android.net.Uri
 import com.example.juan.aswitch.activities.MenuActivity
 import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.services.UserService
@@ -28,19 +23,27 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.ArrayAdapter
 import android.widget.EditText
+import com.example.juan.aswitch.models.Place
 import com.example.juan.aswitch.models.User
+import com.example.juan.aswitch.services.PlaceService
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.android.synthetic.main.render_type_text.view.*
 
 
 class UserFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var mAuth: FirebaseAuth
     private lateinit var userService: UserService
+    private lateinit var placeService: PlaceService
+    private lateinit var user: User
+    private lateinit var place: Place
     private var signUp: Boolean = false
     private var role: Boolean = false
     private val userJSONObject = JSONObject()
-    lateinit var user: User
+    private lateinit var categoryAdapter: ArrayAdapter<CharSequence>
+
 
     companion object {
         fun getInstance(): UserFragment = UserFragment()
@@ -62,35 +65,56 @@ class UserFragment : androidx.fragment.app.Fragment() {
 
         user = Utils.getSharedPreferencesUserObject(activity!!)
         signUp = Utils.getSharedPreferencesBooleanValue(activity!!, "SIGN_UP")!!
+
         Log.d("USER", user.toString())
 
         Glide.with(activity!!)
                 .load(user.profilePicture?.url)
                 .apply(Utils.glideRequestOptions(activity!!))
-                .into(userImageViewProfilePicture)
+                .into(userProfilePictureImageView)
 
-        userEditTextName.editText!!.setText(user.name)
-        userEditTextEmail.editText!!.setText(user.email)
+        userNameEditText.editText!!.setText(user.name)
+        userEmailEditText.editText!!.setText(user.email)
 
-        userEditTextLocation.editText!!
+        userLocationEditText.editText!!
                 .setText(user.location?.address)
+
+        categoryAdapter = ArrayAdapter.createFromResource(
+                activity!!,
+                R.array.place_spinner_values,
+                android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            userCategorySpinner.adapter = adapter
+        }
 
         if(user.role != null) role = user.role!!
 
-        if(role) {
-            userEditTextNit.visibility = View.VISIBLE
-            userEditTextSignboard.visibility = View.VISIBLE
+        if (role) toggleCompanyFieldsVisibility(true)
+
+        if(user.role != null && role) {
+            placeService = PlaceService(activity!!)
+            placeService.get {
+                activity!!.runOnUiThread {
+                    place = Utils.parseJSONPlace(it.getJSONObject("data"))
+                    userNitEditText.editText!!.setText(place.nit)
+                    userSignboardEditText.editText!!.setText(place.signboard)
+                    userDescriptionEditText.editText!!.setText(place.description)
+                    userCategorySpinner.setSelection(categoryAdapter.getPosition(place.category))
+                }
+            }
         }
 
         if(signUp && user.role == null) userSwitchAccountType.visibility = View.VISIBLE
 
-        setEditTextValidation(userEditTextName, getString(R.string.users_fragment_name_user_error))
-        setEditTextValidation(userEditTextEmail, getString(R.string.users_fragment_email_error))
-        setEditTextValidation(userEditTextLocation, getString(R.string.users_fragment_location_error))
-        setEditTextValidation(userEditTextNit, getString(R.string.users_fragment_nit_error))
-        setEditTextValidation(userEditTextSignboard, getString(R.string.users_fragment_signboard_error))
+        setEditTextValidation(userNameEditText, getString(R.string.users_fragment_name_user_error))
+        setEditTextValidation(userEmailEditText, getString(R.string.users_fragment_email_error))
+        setEditTextValidation(userLocationEditText, getString(R.string.users_fragment_location_error))
+        setEditTextValidation(userNitEditText, getString(R.string.users_fragment_nit_error))
+        setEditTextValidation(userSignboardEditText, getString(R.string.users_fragment_signboard_error))
+        setEditTextValidation(userDescriptionEditText, getString(R.string.users_fragment_description_error))
 
-        userEditTextLocation.editText!!.setOnClickListener {
+        userLocationEditText.editText!!.setOnClickListener {
             val builder = PlacePicker.IntentBuilder()
             val southwest = user.location?.viewport?.southwest
             val northeast = user.location?.viewport?.northeast
@@ -112,34 +136,35 @@ class UserFragment : androidx.fragment.app.Fragment() {
             role = bChecked
             if (bChecked) {
                 userSwitchAccountType.setText(R.string.users_fragment_account_type_company)
-                userEditTextNit.visibility = View.VISIBLE
-                userEditTextSignboard.visibility = View.VISIBLE
+                toggleCompanyFieldsVisibility(true)
             } else {
                 userSwitchAccountType.setText(R.string.users_fragment_account_type_user)
-                userEditTextNit.visibility = View.INVISIBLE
-                userEditTextSignboard.visibility = View.INVISIBLE
+                toggleCompanyFieldsVisibility(false)
             }
         }
 
-        userImageViewProfilePicture.setOnClickListener {
+        userProfilePictureImageView.setOnClickListener {
             Utils.openImagePickerIntent(this, PICK_IMAGE)
         }
 
         userButtonAction.setOnClickListener {
-            if(saveButtonValidation(userEditTextName, getString(R.string.users_fragment_name_user_error))
-                && saveButtonValidation(userEditTextEmail, getString(R.string.users_fragment_email_error))
-                && saveButtonValidation(userEditTextLocation, getString(R.string.users_fragment_location_error))
-                && saveButtonValidation(userEditTextNit, getString(R.string.users_fragment_nit_error))
-                && saveButtonValidation(userEditTextSignboard, getString(R.string.users_fragment_signboard_error))) {
+            if(saveButtonValidation(userNameEditText, getString(R.string.users_fragment_name_user_error))
+                && saveButtonValidation(userEmailEditText, getString(R.string.users_fragment_email_error))
+                && saveButtonValidation(userLocationEditText, getString(R.string.users_fragment_location_error))
+                && saveButtonValidation(userNitEditText, getString(R.string.users_fragment_nit_error))
+                && saveButtonValidation(userSignboardEditText, getString(R.string.users_fragment_signboard_error))
+                && saveButtonValidation(userDescriptionEditText, getString(R.string.users_fragment_description_error))) {
 
-                userJSONObject.put("name", userEditTextName.editText!!.text)
-                userJSONObject.put("email", userEditTextEmail.editText!!.text)
+                userJSONObject.put("name", userNameEditText.editText!!.text)
+                userJSONObject.put("email", userEmailEditText.editText!!.text)
                 if(signUp) userJSONObject.put("role", role)
-                if(userEditTextNit.visibility == View.VISIBLE)
-                    userJSONObject.put("nit", userEditTextNit.editText!!.text)
-                if(userEditTextSignboard.visibility == View.VISIBLE)
-                    userJSONObject.put("signboard", userEditTextSignboard.editText!!.text)
-
+                if(role) {
+                    userJSONObject.put("nit", userNitEditText.editText!!.text)
+                    userJSONObject.put("signboard", userSignboardEditText.editText!!.text)
+                    userJSONObject.put("description", userDescriptionEditText.editText!!.text)
+                    userJSONObject.put("category", userCategorySpinner.selectedItem.toString())
+                }
+                Log.d("INFO_TO_UPDATE", userJSONObject.toString())
                 userService.update(userJSONObject) { res ->
                     Utils.showSnackbar(getView()!!, getString(R.string.alert_info_updated))
                     Utils.setSharedPreferencesBooleanValue(activity!!, "SIGN_UP", false)
@@ -167,7 +192,6 @@ class UserFragment : androidx.fragment.app.Fragment() {
                             Utils.getMimeType(activity!!, data.data!!)!!
                     )
                     userService.uploadImage("profilePicture", image) { res ->
-                        Utils.showSnackbar(view!!, getString(R.string.alert_profile_picture_updated))
                         activity!!.runOnUiThread {
                             Utils.updateSharedPreferencesObjectValue(
                                     activity!!,
@@ -179,7 +203,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
                                             .getJSONObject("profilePicture")
                                             .getString("url"))
                                     .apply(Utils.glideRequestOptions(activity!!))
-                                    .into(userImageViewProfilePicture)
+                                    .into(userProfilePictureImageView)
                         }
                     }
                 }
@@ -206,7 +230,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
                         locationObject.put("viewport", viewPort)
                         locationObject.put("address", place.address)
                         userJSONObject.put("location", locationObject)
-                        userEditTextLocation.editText!!.setText(place.address)
+                        userLocationEditText.editText!!.setText(place.address)
                     }
                 }
             }
@@ -250,6 +274,20 @@ class UserFragment : androidx.fragment.app.Fragment() {
                 afterTextChanged.invoke(editable.toString())
             }
         })
+    }
+
+    private fun toggleCompanyFieldsVisibility(visible: Boolean) {
+        if (visible) {
+            userNitEditText.visibility = View.VISIBLE
+            userSignboardEditText.visibility = View.VISIBLE
+            userDescriptionEditText.visibility = View.VISIBLE
+            userCategorySpinner.visibility = View.VISIBLE
+        } else {
+            userNitEditText.visibility = View.INVISIBLE
+            userSignboardEditText.visibility = View.INVISIBLE
+            userDescriptionEditText.visibility = View.INVISIBLE
+            userCategorySpinner.visibility = View.INVISIBLE
+        }
     }
 
 }

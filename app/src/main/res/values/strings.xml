@@ -51,6 +51,8 @@
     <string name="users_fragment_location">Location</string>
     <string name="users_fragment_nit">NIT</string>
     <string name="users_fragment_signboard">Signboard</string>
+    <string name="users_fragment_category">Category</string>
+    <string name="users_fragment_description">Description</string>
 
     <string name="users_fragment_name_user_error">Empty name</string>
     <string name="users_fragment_name_company_error">Empty company name</string>
@@ -58,12 +60,20 @@
     <string name="users_fragment_location_error">Empty location</string>
     <string name="users_fragment_nit_error">Empty NIT</string>
     <string name="users_fragment_signboard_error">Empty Signboard</string>
+    <string name="users_fragment_description_error">Empty Description</string>
 
     <string name="users_fragment_account_type_user">User account</string>
     <string name="users_fragment_account_type_company">Company account</string>
     <string name="user_fragment_next_button">Next</string>
     <string name="user_fragment_save_button">Save</string>
     <string name="user_fragment_select_picture">Select Picture</string>
+
+
+    <string name="place_spinner_value_food">Food</string>
+    <string name="place_spinner_value_coffee">Coffee</string>
+    <string name="place_spinner_value_nightlife">Nightlife</string>
+    <string name="place_spinner_value_fun">Fun</string>
+    <string name="place_spinner_value_shopping">Shopping</string>
 
     <string name="title_activity_maps">Map</string>
 

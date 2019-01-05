@@ -11,7 +11,9 @@ data class Place(
         val nit: String,
         val phoneNumber: String,
         val signboard: String,
-        val profilePicture: ImageObject,
+        var profilePicture: ImageObject,
         val images: ArrayList<ImageObject>,
-        val location: Location
+        val location: Location,
+        val description: String,
+        val category: String
 ) : Parcelable
