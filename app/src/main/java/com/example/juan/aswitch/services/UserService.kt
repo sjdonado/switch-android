@@ -8,11 +8,11 @@ import java.io.File
 open class UserService (activity: Activity) : MainService("/users", activity) {
 
     fun get(callback: (response: JSONObject) -> Unit) {
-        super.get("/", callback)
+        super.get("/", callback, true)
     }
 
     fun update(jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
-        super.put("/", jsonObject.toString(), callback)
+        super.put("/", jsonObject.toString(), callback, true)
     }
 
     fun uploadImage(field : String, image : File, callback: (response : JSONObject) -> Unit) {
@@ -25,6 +25,6 @@ open class UserService (activity: Activity) : MainService("/users", activity) {
                 .setType(MultipartBody.FORM)
                 .addFormDataPart(field, image.name, RequestBody.create(mediaType, image))
                 .build()
-        super.upload("/upload", multipartBody, callback)
+        super.upload("/upload", multipartBody, callback, true)
     }
 }

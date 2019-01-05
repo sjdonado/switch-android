@@ -48,7 +48,7 @@ class EditPlaceFragment : androidx.fragment.app.Fragment() {
             place = it
         }
     }
-
+    
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -57,81 +57,78 @@ class EditPlaceFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        
         placeService = PlaceService(activity!!)
         userService = UserService(activity!!)
 
-        loadImageInView(place.profilePicture.url, placeCoverImageView)
+        loadImageInView(place.profilePicture.url, editPlaceCoverImageView)
 
-        loadImageInView(place.images[0].url, placeFirstImageView)
-        loadImageInView(place.images[1].url, placeSecondImageView)
-        loadImageInView(place.images[2].url, placeThirdImageView)
+        loadImageInView(place.images[0].url, editPlaceFirstImageView)
+        loadImageInView(place.images[1].url, editPlaceSecondImageView)
+        loadImageInView(place.images[2].url, editPlaceThirdImageView)
 
-        if(!place.images[0].url.isNullOrBlank()) placeRemoveFirstButton.visibility = View.VISIBLE
-        if(!place.images[0].url.isNullOrBlank()) placeRemoveFirstButton.visibility = View.VISIBLE
-        if(!place.images[1].url.isNullOrBlank()) placeRemoveSecondButton.visibility = View.VISIBLE
-        if(!place.images[2].url.isNullOrBlank()) placeRemoveThirdButton.visibility = View.VISIBLE
+        if(!place.images[0].url.isNullOrBlank()) editPlaceRemoveFirstButton.visibility = View.VISIBLE
+        if(!place.images[0].url.isNullOrBlank()) editPlaceRemoveFirstButton.visibility = View.VISIBLE
+        if(!place.images[1].url.isNullOrBlank()) editPlaceRemoveSecondButton.visibility = View.VISIBLE
+        if(!place.images[2].url.isNullOrBlank()) editPlaceRemoveThirdButton.visibility = View.VISIBLE
 
-        placeNameTextView.text = place.name
-        placeLocationTextView.text = place.location.address
-        placePhoneTextView.text = place.phoneNumber
-        placeDistanceTextView.text = resources.getString(
-                R.string.place_card_view_distance,
-                Utils.getRoundedDistance(place.distance)
-        )
+        editPlaceNameTextView.text = place.name
+        editPlaceSignboardTextView.text = place.signboard
+        editPlaceNitTextView.text = place.nit
+        editPlaceDescriptionTextView.text = place.description
 
-        placeCoverImageView.setOnClickListener {
+        editPlaceCoverImageView.setOnClickListener {
             editCoverImage = true
             Utils.openImagePickerIntent(this, PICK_IMAGE)
         }
 
-        placeFirstImageView.setOnClickListener {
+        editPlaceFirstImageView.setOnClickListener {
             position = 0
             Utils.openImagePickerIntent(this, PICK_IMAGE)
         }
 
-        placeSecondImageView.setOnClickListener {
+        editPlaceSecondImageView.setOnClickListener {
             position = 1
             Utils.openImagePickerIntent(this, PICK_IMAGE)
         }
 
-        placeThirdImageView.setOnClickListener {
+        editPlaceThirdImageView.setOnClickListener {
             position = 2
             Utils.openImagePickerIntent(this, PICK_IMAGE)
         }
 
-        placeRemoveFirstButton.setOnClickListener {
+        editPlaceRemoveFirstButton.setOnClickListener {
             val jsonObject = JSONObject()
             jsonObject.put("position", 0)
             placeService.removeImage(jsonObject) {
                 activity!!.runOnUiThread {
                     place.images[0] = emptyImageObject
-                    loadImageInView(null, placeFirstImageView)
-                    placeRemoveFirstButton.visibility = View.INVISIBLE
+                    loadImageInView(null, editPlaceFirstImageView)
+                    editPlaceRemoveFirstButton.visibility = View.INVISIBLE
                 }
             }
         }
 
-        placeRemoveSecondButton.setOnClickListener {
+        editPlaceRemoveSecondButton.setOnClickListener {
             val jsonObject = JSONObject()
             jsonObject.put("position", 1)
             placeService.removeImage(jsonObject) {
                 activity!!.runOnUiThread {
                     place.images[1] = emptyImageObject
-                    loadImageInView(null, placeSecondImageView)
-                    placeRemoveSecondButton.visibility = View.INVISIBLE
+                    loadImageInView(null, editPlaceSecondImageView)
+                    editPlaceRemoveSecondButton.visibility = View.INVISIBLE
                 }
             }
         }
 
-        placeRemoveThirdButton.setOnClickListener {
+        editPlaceRemoveThirdButton.setOnClickListener {
             val jsonObject = JSONObject()
             jsonObject.put("position", 2)
             placeService.removeImage(jsonObject) {
                 activity!!.runOnUiThread {
                     place.images[2] = emptyImageObject
-                    loadImageInView(null, placeThirdImageView)
-                    placeRemoveThirdButton.visibility = View.INVISIBLE
+                    loadImageInView(null, editPlaceThirdImageView)
+                    editPlaceRemoveThirdButton.visibility = View.INVISIBLE
                 }
             }
         }
@@ -162,7 +159,7 @@ class EditPlaceFragment : androidx.fragment.app.Fragment() {
                                         profilePicture.getString("ref"),
                                         profilePicture.getString("url")
                                 )
-                                loadImageInView(place.profilePicture.url, placeCoverImageView)
+                                loadImageInView(place.profilePicture.url, editPlaceCoverImageView)
                             }
                         }
                     } else {
@@ -172,19 +169,19 @@ class EditPlaceFragment : androidx.fragment.app.Fragment() {
                                 when(position) {
                                     0 -> {
                                         place.images[0] = newPlace.images[0]
-                                        loadImageInView(place.images[0].url, placeFirstImageView)
-                                        placeRemoveFirstButton.visibility = View.VISIBLE
+                                        loadImageInView(place.images[0].url, editPlaceFirstImageView)
+                                        editPlaceRemoveFirstButton.visibility = View.VISIBLE
                                     }
                                     1 -> {
                                         place.images[1] = newPlace.images[1]
-                                        loadImageInView(place.images[1].url, placeSecondImageView)
-                                        placeRemoveSecondButton.visibility = View.VISIBLE
+                                        loadImageInView(place.images[1].url, editPlaceSecondImageView)
+                                        editPlaceRemoveSecondButton.visibility = View.VISIBLE
 
                                     }
                                     2 -> {
                                         place.images[2] = newPlace.images[2]
-                                        loadImageInView(place.images[2].url, placeThirdImageView)
-                                        placeRemoveThirdButton.visibility = View.VISIBLE
+                                        loadImageInView(place.images[2].url, editPlaceThirdImageView)
+                                        editPlaceRemoveThirdButton.visibility = View.VISIBLE
                                     }
                                 }
                             }

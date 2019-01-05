@@ -62,8 +62,6 @@ class LoginActivity : AppCompatActivity() {
             val response = IdpResponse.fromResultIntent(data)
             when {
                 resultCode == Activity.RESULT_OK -> {
-                    // Successfully signed in
-                    Utils.showSnackbar(login_fragment_container, getString(R.string.alert_sign_in_successful))
                     Utils.setToken(this, FirebaseAuth.getInstance().currentUser) {
                         userService.get { res ->
                             if(res.length() == 0) {

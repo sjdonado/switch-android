@@ -22,67 +22,69 @@ open class HttpClient {
         private const val API_URL = "$DEV_URL/switchDev/api/v1"
         private val JSON = MediaType.parse("application/json; charset=utf-8")
 
-        fun get(path : String, activity : Activity, callback : (response : JSONObject) -> Unit) {
+        fun get(path : String, activity : Activity, callback : (response : JSONObject) -> Unit, loading: Boolean) {
             val request = Request.Builder()
                     .header("Authorization", Utils.getSharedPreferencesStringValue(activity, "USER_TOKEN")!!)
                     .url(API_URL + path)
                     .build()
-            executeRequest(request, activity, callback)
+            executeRequest(request, activity, callback, loading)
         }
 
-        fun post(path : String, activity : Activity, json : String, callback : (response: JSONObject) -> Unit) {
+        fun post(path : String, activity : Activity, json : String, callback : (response: JSONObject) -> Unit, loading: Boolean) {
             val jsonBody = RequestBody.create(JSON, json)
             val request = Request.Builder()
                     .header("Authorization", Utils.getSharedPreferencesStringValue(activity, "USER_TOKEN")!!)
                     .url(API_URL + path)
                     .post(jsonBody)
                     .build()
-            executeRequest(request, activity, callback)
+            executeRequest(request, activity, callback, loading)
         }
 
-        fun put(path : String, activity : Activity, json : String, callback : (response : JSONObject) -> Unit) {
+        fun put(path : String, activity : Activity, json : String, callback : (response : JSONObject) -> Unit, loading: Boolean) {
             val jsonBody = RequestBody.create(JSON, json)
             val request = Request.Builder()
                     .header("Authorization", Utils.getSharedPreferencesStringValue(activity, "USER_TOKEN")!!)
                     .url(API_URL + path)
                     .put(jsonBody)
                     .build()
-            executeRequest(request, activity, callback)
+            executeRequest(request, activity, callback, loading)
         }
 
-        fun delete(path : String, activity : Activity, json : String, callback : (response: JSONObject) -> Unit) {
+        fun delete(path : String, activity : Activity, json : String, callback : (response: JSONObject) -> Unit, loading: Boolean) {
             val jsonBody = RequestBody.create(JSON, json)
             val request = Request.Builder()
                     .header("Authorization", Utils.getSharedPreferencesStringValue(activity, "USER_TOKEN")!!)
                     .url(API_URL + path)
                     .delete(jsonBody)
                     .build()
-            executeRequest(request, activity, callback)
+            executeRequest(request, activity, callback, loading)
         }
 
 
-        fun upload(path : String, activity : Activity, multipartBody : MultipartBody, callback : (response : JSONObject) -> Unit) {
+        fun upload(path : String, activity : Activity, multipartBody : MultipartBody, callback : (response : JSONObject) -> Unit, loading: Boolean) {
             val request = Request.Builder()
                     .url(API_URL + path)
                     .header("Authorization", Utils.getSharedPreferencesStringValue(activity, "USER_TOKEN")!!)
                     .post(multipartBody)
                     .build()
-            executeRequest(request, activity, callback)
+            executeRequest(request, activity, callback, loading)
         }
 
-        private fun executeRequest(request : Request, activity : Activity, callback : (response : JSONObject) -> Unit) {
+        private fun executeRequest(request: Request, activity: Activity, callback : (response : JSONObject) -> Unit, loading: Boolean) {
             val progressDialog = Dialog(activity)
             val dialog = ProgressBar(activity)
-//             has leaked window DecorView@d3d464c[] that was originally added here SERVER DOESN'T SEND DATA OBJECT
-            try {
-                dialog.isIndeterminate = true
-                dialog.visibility = View.VISIBLE
-                progressDialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-                progressDialog.setContentView(dialog)
-                progressDialog.show()
-            } catch (e: Exception) {
-                Log.e(TAG, e.toString())
-                callback(JSONObject())
+//             has leaked window DecorView@d3d464c[] that was originally added here -> SERVER DOESN'T SEND DATA OBJECT
+            if (loading) {
+                try {
+                    dialog.isIndeterminate = true
+                    dialog.visibility = View.VISIBLE
+                    progressDialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+                    progressDialog.setContentView(dialog)
+                    progressDialog.show()
+                } catch (e: Exception) {
+                    Log.e(TAG, e.toString())
+                    callback(JSONObject())
+                }
             }
 
             OkHttpClient().newCall(request).enqueue(object : Callback {
@@ -93,8 +95,10 @@ open class HttpClient {
                     }
                 }
                 override fun onResponse(call : Call?, response : Response?) {
-                    activity.runOnUiThread {
-                        progressDialog.hide()
+                    if (loading) {
+                        activity.runOnUiThread {
+                            progressDialog.hide()
+                        }
                     }
                     if(response!!.code() == 200) {
                         callback(JSONObject(response.body()!!.string()))

@@ -9,20 +9,20 @@ open class UsersPlaceService (activity: Activity) : MainService("/users-places",
         val jsonObject = JSONObject()
         jsonObject.put("userId", userId)
         jsonObject.put("placeId", placeId)
-        super.post("/accept", jsonObject.toString(), callback)
+        super.post("/accept", jsonObject.toString(), callback, false)
     }
 
     fun reject(userId: String, placeId: String, callback: (response: JSONObject) -> Unit) {
         val jsonObject = JSONObject()
         jsonObject.put("userId", userId)
         jsonObject.put("placeId", placeId)
-        super.post("/reject", jsonObject.toString(), callback)
+        super.post("/reject", jsonObject.toString(), callback, false)
     }
 
     fun qualify(id: String, qualify: Float, callback: (response: JSONObject) -> Unit) {
         val jsonObject = JSONObject()
         jsonObject.put("qualify", qualify)
-        super.post("/qualify/$id", jsonObject.toString(), callback)
+        super.post("/qualify/$id", jsonObject.toString(), callback, true)
     }
 
 

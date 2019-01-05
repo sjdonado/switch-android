@@ -112,6 +112,7 @@
     <!-- Qualify dialog fragment -->
     <string name="qualify_dialog_fragment_title">Qualify</string>
     <string name="qualify_dialog_fragment_send_button">Send</string>
+    <string name="qualify_dialog_fragment_cancel_button">Cancel</string>
 
     <!-- Place card dummy data -->
     <string name="place_card_view_name_dummy" translatable="false">Name lorem name lorem</string>

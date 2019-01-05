@@ -10,23 +10,23 @@ import java.io.File
 open class PlaceService (activity: Activity) : MainService("/places", activity) {
 
     fun search(radius: Int, callback: (response: JSONObject) -> Unit) {
-        super.get("/search?radius=$radius", callback)
+        super.get("/search?radius=$radius", callback, true)
     }
 
     fun starredPlaces(callback: (response: JSONObject) -> Unit) {
-        super.get("/starred", callback)
+        super.get("/starred", callback, true)
     }
 
     fun get(callback: (response: JSONObject) -> Unit) {
-        super.get("/", callback)
+        super.get("/", callback, true)
     }
 
     fun update(jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
-        super.put("/", jsonObject.toString(), callback)
+        super.put("/", jsonObject.toString(), callback, true)
     }
 
     fun sendNotification(jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
-        super.post("/notification", jsonObject.toString(), callback)
+        super.post("/notification", jsonObject.toString(), callback, true)
     }
 
     fun uploadImage(position : String, image : File, callback: (response: JSONObject) -> Unit) {
@@ -39,10 +39,10 @@ open class PlaceService (activity: Activity) : MainService("/places", activity) 
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("image", image.name, RequestBody.create(mediaType, image))
                 .build()
-        super.upload("/image/$position", multipartBody, callback)
+        super.upload("/image/$position", multipartBody, callback, true)
     }
 
     fun removeImage(jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
-        super.delete("/image", jsonObject.toString(), callback)
+        super.delete("/image", jsonObject.toString(), callback, true)
     }
 }
