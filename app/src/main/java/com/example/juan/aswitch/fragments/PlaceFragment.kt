@@ -38,7 +38,7 @@ class PlaceFragment : androidx.fragment.app.Fragment() {
         placeService.get {
             place = Utils.parseJSONPlace(it.getJSONObject("data"))
             activity!!.runOnUiThread {
-                Utils.openFragment(activity as AppCompatActivity, R.id.place_fragment_container, PlaceDetailsFragment.getInstance(place))
+                Utils.openFragment(activity as AppCompatActivity, R.id.place_fragment_container, PlaceDetailsFragment.getInstance(place, false))
             }
         }
 
@@ -49,7 +49,7 @@ class PlaceFragment : androidx.fragment.app.Fragment() {
                 Utils.openFragment(activity as AppCompatActivity, R.id.place_fragment_container, EditPlaceFragment.getInstance())
             } else {
                 placeEditOrSaveButton.setImageResource(R.drawable.ic_edit_white_24dp)
-                Utils.openFragment(activity as AppCompatActivity, R.id.place_fragment_container, PlaceDetailsFragment.getInstance(place))
+                Utils.openFragment(activity as AppCompatActivity, R.id.place_fragment_container, PlaceDetailsFragment.getInstance(place, false))
             }
         }
     }

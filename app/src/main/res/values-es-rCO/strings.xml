@@ -68,4 +68,6 @@
     <string name="users_fragment_description">Descripción</string>
     <string name="users_fragment_category">Categoría</string>
     <string name="users_fragment_description_error">Descripción vacía</string>
+    <string name="qualify_dialog_fragment_title">Calificación</string>
+    <string name="qualify_dialog_fragment_send_button">Enviar</string>
 </resources>

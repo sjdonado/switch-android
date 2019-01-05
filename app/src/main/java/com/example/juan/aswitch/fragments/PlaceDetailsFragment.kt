@@ -100,7 +100,14 @@ class PlaceDetailsFragment : androidx.fragment.app.Fragment(),
         if (qualify) {
             placeDetailsQualifyButton.show()
             placeDetailsQualifyButton.setOnClickListener {
-
+                val ft = fragmentManager!!.beginTransaction()
+                val prev = fragmentManager!!.findFragmentByTag("dialog")
+                if (prev != null) {
+                    ft.remove(prev)
+                }
+                ft.addToBackStack(null)
+                val dialogFragment = QualifyFragment()
+                dialogFragment.show(ft, "dialog")
             }
         }
 

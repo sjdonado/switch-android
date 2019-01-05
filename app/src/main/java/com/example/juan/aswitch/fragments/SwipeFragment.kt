@@ -172,7 +172,7 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
         Utils.openFragment(
                 activity as AppCompatActivity,
                 R.id.menu_fragment_container,
-                PlaceDetailsFragment.getInstance(place)
+                PlaceDetailsFragment.getInstance(place, false)
         )
     }
 
