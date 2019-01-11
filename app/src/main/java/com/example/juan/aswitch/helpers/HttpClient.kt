@@ -71,16 +71,11 @@ open class HttpClient {
         }
 
         private fun executeRequest(request: Request, activity: Activity, callback : (response : JSONObject) -> Unit, loading: Boolean) {
-            val progressDialog = Dialog(activity)
-            val dialog = ProgressBar(activity)
+            var progressDialog = Dialog(activity)
 //             has leaked window DecorView@d3d464c[] that was originally added here -> SERVER DOESN'T SEND DATA OBJECT
             if (loading) {
                 try {
-                    dialog.isIndeterminate = true
-                    dialog.visibility = View.VISIBLE
-                    progressDialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-                    progressDialog.setContentView(dialog)
-                    progressDialog.show()
+                    progressDialog = Utils.showLoading(activity)
                 } catch (e: Exception) {
                     Log.e(TAG, e.toString())
                     callback(JSONObject())

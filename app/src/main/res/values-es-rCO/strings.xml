@@ -72,4 +72,8 @@
     <string name="qualify_dialog_fragment_send_button">Enviar</string>
     <string name="qualify_dialog_fragment_cancel_button">Cancelar</string>
     <string name="edit_place_fragment_images_title">Editar imágenes</string>
+    <string name="users_fragment_opening_time">Hora de apertura</string>
+    <string name="users_fragment_closing_time">Hora de cierre</string>
+    <string name="users_fragment_opening_time_error">Hora de apertura vacía</string>
+    <string name="users_fragment_closing_time_error">Hora de cierre vacía</string>
 </resources>

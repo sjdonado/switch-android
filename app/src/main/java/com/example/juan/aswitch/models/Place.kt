@@ -2,6 +2,7 @@ package com.example.juan.aswitch.models
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+import java.util.*
 
 @Parcelize
 data class Place(
@@ -12,6 +13,8 @@ data class Place(
         val nit: String,
         val phoneNumber: String,
         val signboard: String,
+        val openingTime: Time?,
+        val closingTime: Time?,
         val images: ArrayList<ImageObject>,
         val location: Location,
         val description: String,
@@ -19,4 +22,10 @@ data class Place(
         var qualify: Double?,
         var rate: Double?,
         var profilePicture: ImageObject
+) : Parcelable
+
+@Parcelize
+data class Time(
+        val hourOfDay: Int?,
+        val minute: Int?
 ) : Parcelable

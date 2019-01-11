@@ -9,6 +9,7 @@ import android.transition.TransitionInflater
 import android.transition.TransitionSet
 import android.view.View
 import android.app.Activity
+import android.app.Dialog
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
@@ -22,8 +23,10 @@ import android.content.res.Resources
 import android.graphics.Point
 import android.net.Uri
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.WindowManager
 import android.webkit.MimeTypeMap
+import android.widget.ProgressBar
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Priority
 import com.google.firebase.auth.FirebaseAuth
@@ -282,6 +285,17 @@ object Utils {
                 Intent.createChooser(intent,
                     fragment.getString(R.string.user_fragment_select_picture)), PICK_IMAGE
         )
+    }
+
+    fun showLoading(activity: Activity): Dialog {
+        val progressDialog = Dialog(activity)
+        val dialog = ProgressBar(activity)
+        dialog.isIndeterminate = true
+        dialog.visibility = View.VISIBLE
+        progressDialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        progressDialog.setContentView(dialog)
+        progressDialog.show()
+        return progressDialog
     }
 }
 

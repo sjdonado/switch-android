@@ -2,6 +2,9 @@ package com.example.juan.aswitch.fragments
 
 
 import android.app.Activity
+import android.app.DatePickerDialog
+import android.app.Dialog
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,13 +26,18 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.format.DateFormat
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.TextView
 import com.example.juan.aswitch.models.Place
+import com.example.juan.aswitch.models.Time
 import com.example.juan.aswitch.models.User
 import com.example.juan.aswitch.services.PlaceService
 import com.google.android.material.textfield.TextInputLayout
-import kotlinx.android.synthetic.main.render_type_text.view.*
+import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class UserFragment : androidx.fragment.app.Fragment() {
@@ -42,8 +50,9 @@ class UserFragment : androidx.fragment.app.Fragment() {
     private var signUp: Boolean = false
     private var role: Boolean = false
     private val userJSONObject = JSONObject()
-    private lateinit var categoryAdapter: ArrayAdapter<CharSequence>
-
+    private lateinit var openingTime: Time
+    private lateinit var closingTime: Time
+    private lateinit var progressDialog: Dialog
 
     companion object {
         fun getInstance(): UserFragment = UserFragment()
@@ -76,17 +85,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
         userNameEditText.editText!!.setText(user.name)
         userEmailEditText.editText!!.setText(user.email)
 
-        userLocationEditText.editText!!
-                .setText(user.location?.address)
-
-        categoryAdapter = ArrayAdapter.createFromResource(
-                activity!!,
-                R.array.place_spinner_values,
-                android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            userCategorySpinner.adapter = adapter
-        }
+        userLocationEditText.editText!!.setText(user.location?.address)
 
         if(user.role != null) role = user.role!!
 
@@ -100,7 +99,13 @@ class UserFragment : androidx.fragment.app.Fragment() {
                     userNitEditText.editText!!.setText(place.nit)
                     userSignboardEditText.editText!!.setText(place.signboard)
                     userDescriptionEditText.editText!!.setText(place.description)
-                    userCategorySpinner.setSelection(categoryAdapter.getPosition(place.category))
+                    setTimePicker(activity!!, userOpeningTimeEditText.editText!!, 0, place.openingTime)
+                    setTimePicker(activity!!, userClosingTimeEditText.editText!!, 1, place.closingTime)
+                    val spinnerArrayAdapter = ArrayAdapter<String>(activity!!, android.R.layout.simple_spinner_item,
+                            Utils.toStringArray(it.getJSONObject("data").getJSONArray("categories"))!!)
+                    spinnerArrayAdapter.setDropDownViewResource(android.R.layout
+                            .simple_spinner_dropdown_item)
+                    userCategorySpinner.adapter = spinnerArrayAdapter
                 }
             }
         }
@@ -114,18 +119,6 @@ class UserFragment : androidx.fragment.app.Fragment() {
         setEditTextValidation(userSignboardEditText, getString(R.string.users_fragment_signboard_error))
         setEditTextValidation(userDescriptionEditText, getString(R.string.users_fragment_description_error))
 
-        userLocationEditText.editText!!.setOnClickListener {
-            val builder = PlacePicker.IntentBuilder()
-            val southwest = user.location?.viewport?.southwest
-            val northeast = user.location?.viewport?.northeast
-            if(southwest != null && northeast != null) {
-                builder.setLatLngBounds(LatLngBounds(
-                        LatLng(southwest.lat, southwest.lng),
-                        LatLng(northeast.lat, northeast.lng))
-                )
-            }
-            startActivityForResult(builder.build(activity!!), PLACE_PICKER_REQUEST)
-        }
 
         if (signUp)
             userButtonAction.setImageResource(R.drawable.ic_arrow_forward_white_24dp)
@@ -147,13 +140,29 @@ class UserFragment : androidx.fragment.app.Fragment() {
             Utils.openImagePickerIntent(this, PICK_IMAGE)
         }
 
+        userLocationEditText.editText!!.setOnClickListener {
+            progressDialog = Utils.showLoading(activity!!)
+            val builder = PlacePicker.IntentBuilder()
+            val southwest = user.location?.viewport?.southwest
+            val northeast = user.location?.viewport?.northeast
+            if(southwest != null && northeast != null) {
+                builder.setLatLngBounds(LatLngBounds(
+                        LatLng(southwest.lat, southwest.lng),
+                        LatLng(northeast.lat, northeast.lng))
+                )
+            }
+            progressDialog.hide()
+            startActivityForResult(builder.build(activity!!), PLACE_PICKER_REQUEST)
+        }
+
         userButtonAction.setOnClickListener {
             if(saveButtonValidation(userNameEditText, getString(R.string.users_fragment_name_user_error))
                 && saveButtonValidation(userEmailEditText, getString(R.string.users_fragment_email_error))
                 && saveButtonValidation(userLocationEditText, getString(R.string.users_fragment_location_error))
                 && saveButtonValidation(userNitEditText, getString(R.string.users_fragment_nit_error))
                 && saveButtonValidation(userSignboardEditText, getString(R.string.users_fragment_signboard_error))
-                && saveButtonValidation(userDescriptionEditText, getString(R.string.users_fragment_description_error))) {
+                && saveButtonValidation(userOpeningTimeEditText, getString(R.string.users_fragment_opening_time_error))
+                && saveButtonValidation(userClosingTimeEditText, getString(R.string.users_fragment_closing_time_error))) {
 
                 userJSONObject.put("name", userNameEditText.editText!!.text)
                 userJSONObject.put("email", userEmailEditText.editText!!.text)
@@ -163,6 +172,14 @@ class UserFragment : androidx.fragment.app.Fragment() {
                     userJSONObject.put("signboard", userSignboardEditText.editText!!.text)
                     userJSONObject.put("description", userDescriptionEditText.editText!!.text)
                     userJSONObject.put("category", userCategorySpinner.selectedItem.toString())
+                    val openingTimeJsonObject = JSONObject()
+                    openingTimeJsonObject.put("hourOfDay", openingTime.hourOfDay)
+                    openingTimeJsonObject.put("minute", openingTime.minute)
+                    userJSONObject.put("openingTime", openingTimeJsonObject)
+                    val closingTimeJsonObject = JSONObject()
+                    closingTimeJsonObject.put("hourOfDay", closingTime.hourOfDay)
+                    closingTimeJsonObject.put("minute", openingTime.minute)
+                    userJSONObject.put("closingTime", closingTimeJsonObject)
                 }
                 Log.d("INFO_TO_UPDATE", userJSONObject.toString())
                 userService.update(userJSONObject) { res ->
@@ -282,11 +299,72 @@ class UserFragment : androidx.fragment.app.Fragment() {
             userSignboardEditText.visibility = View.VISIBLE
             userDescriptionEditText.visibility = View.VISIBLE
             userCategorySpinner.visibility = View.VISIBLE
+            userOpeningTimeEditText.visibility = View.VISIBLE
+            userClosingTimeEditText.visibility = View.VISIBLE
         } else {
             userNitEditText.visibility = View.INVISIBLE
             userSignboardEditText.visibility = View.INVISIBLE
             userDescriptionEditText.visibility = View.INVISIBLE
             userCategorySpinner.visibility = View.INVISIBLE
+            userOpeningTimeEditText.visibility = View.INVISIBLE
+            userClosingTimeEditText.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun setDatePicker(editText: EditText, activity: Activity) {
+        editText.setText(SimpleDateFormat("dd/MM/yyyy", Locale.US).format(System.currentTimeMillis()))
+        var cal = Calendar.getInstance()
+
+        val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+            cal.set(Calendar.YEAR, year)
+            cal.set(Calendar.MONTH, monthOfYear)
+            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+            val myFormat = "dd/MM/yyyy" // mention the format you need
+            val sdf = SimpleDateFormat(myFormat, Locale.US)
+            editText.setText(sdf.format(cal.time))
+        }
+
+        editText.setOnClickListener {
+            DatePickerDialog(activity, dateSetListener,
+                    cal.get(Calendar.YEAR),
+                    cal.get(Calendar.MONTH),
+                    cal.get(Calendar.DAY_OF_MONTH)).show()
+        }
+    }
+
+    private fun setTimePicker(activity: Activity, editText: EditText, ref: Int, default: Time?) {
+//        val is24HoursFormat = DateFormat.is24HourFormat(activity)
+        val simpleDateFormat = SimpleDateFormat("HH:mm", Locale.US)
+
+        val cal = Calendar.getInstance()
+
+        if(default !== null) {
+            cal.set(Calendar.HOUR_OF_DAY, default.hourOfDay!!)
+            cal.set(Calendar.MINUTE, default.minute!!)
+            editText.setText(simpleDateFormat.format(cal.time))
+            setStringDate(Time(default.hourOfDay, default.minute), ref)
+        }
+
+        val timePickerDialog = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+            cal.set(Calendar.HOUR_OF_DAY, hourOfDay)
+            cal.set(Calendar.MINUTE, minute)
+            setStringDate(Time(hourOfDay, minute), ref)
+            editText.setText(simpleDateFormat.format(cal.time))
+        }
+
+        editText.setOnClickListener {
+            TimePickerDialog(activity, timePickerDialog,
+                    cal.get(Calendar.HOUR_OF_DAY),
+                    cal.get(Calendar.MINUTE),
+                    true).show()
+        }
+    }
+
+    private fun setStringDate(date: Time, ref: Int) {
+        when(ref) {
+            0 -> openingTime = date
+            1 -> closingTime = date
         }
     }
 

@@ -16,7 +16,8 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/SplashTheme"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:launchMode = "singleInstance" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,10 +26,12 @@
         </activity>
         <activity
             android:name=".activities.LoginActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode = "singleInstance"/>
         <activity
             android:name=".activities.MenuActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode = "singleInstance"/>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

@@ -49,6 +49,9 @@
     <string name="users_fragment_name_company">Company name</string>
     <string name="users_fragment_email">Email</string>
     <string name="users_fragment_location">Location</string>
+    <string name="users_fragment_opening_time">Opening time</string>
+    <string name="users_fragment_closing_time">Closing time</string>
+
     <string name="users_fragment_nit">NIT</string>
     <string name="users_fragment_signboard">Signboard</string>
     <string name="users_fragment_category">Category</string>
@@ -61,6 +64,8 @@
     <string name="users_fragment_nit_error">Empty NIT</string>
     <string name="users_fragment_signboard_error">Empty Signboard</string>
     <string name="users_fragment_description_error">Empty Description</string>
+    <string name="users_fragment_opening_time_error">Empty Opening time</string>
+    <string name="users_fragment_closing_time_error">Empty Closing time</string>
 
     <string name="users_fragment_account_type_user">User account</string>
     <string name="users_fragment_account_type_company">Company account</string>
