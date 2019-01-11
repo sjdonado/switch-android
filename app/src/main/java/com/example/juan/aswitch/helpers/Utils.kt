@@ -34,6 +34,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.juan.aswitch.MainActivity
 import com.example.juan.aswitch.fragments.UserFragment
 import com.example.juan.aswitch.models.Place
+import com.example.juan.aswitch.models.Time
 import com.example.juan.aswitch.models.User
 import com.google.gson.Gson
 import org.json.JSONArray
@@ -41,6 +42,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.math.RoundingMode
+import java.util.*
 
 object Utils {
 
@@ -296,6 +298,25 @@ object Utils {
         progressDialog.setContentView(dialog)
         progressDialog.show()
         return progressDialog
+    }
+
+    fun setChipTime(activity: Activity, openingTime: Time, closingTime: Time): String {
+        val cal = Calendar.getInstance()
+
+        val openingCal = setCalByTime(openingTime)
+        val closingCal = setCalByTime(closingTime)
+
+        when (cal.time > openingCal.time && cal.time < closingCal.time) {
+            true -> return activity.resources.getString(R.string.place_details_open_chip)
+            false -> return activity.resources.getString(R.string.place_details_closed_chip)
+        }
+    }
+
+    private fun setCalByTime(time: Time): Calendar{
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.HOUR_OF_DAY, time.hourOfDay!!)
+        cal.set(Calendar.MINUTE, time.minute!!)
+        return cal
     }
 }
 

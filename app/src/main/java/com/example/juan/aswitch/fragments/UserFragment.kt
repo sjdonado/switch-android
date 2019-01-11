@@ -313,7 +313,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
 
     private fun setDatePicker(editText: EditText, activity: Activity) {
         editText.setText(SimpleDateFormat("dd/MM/yyyy", Locale.US).format(System.currentTimeMillis()))
-        var cal = Calendar.getInstance()
+        val cal = Calendar.getInstance()
 
         val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
             cal.set(Calendar.YEAR, year)

@@ -33,8 +33,6 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/placeCardNameTextView"
             style="@style/CardTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
@@ -42,6 +40,21 @@
             app:layout_constraintHorizontal_bias="0.04"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/placeCardCoverImageView" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/placeTimeChip"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            app:chipIconSize="14dp"
+            app:chipStartPadding="8dp"
+            app:chipCornerRadius="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/placeCardDistanceTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintVertical_bias="0.466" />
 
         <androidx.appcompat.widget.AppCompatRatingBar
             android:id="@+id/placeCardRatingBar"

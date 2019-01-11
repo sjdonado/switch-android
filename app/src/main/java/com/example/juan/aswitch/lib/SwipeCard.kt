@@ -11,9 +11,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.models.Place
+import com.google.android.material.chip.Chip
 import com.mindorks.placeholderview.SwipeDirection
 import com.mindorks.placeholderview.annotations.*
 import com.mindorks.placeholderview.annotations.swipe.*
+import kotlinx.android.synthetic.main.fragment_place_details.*
 import kotlin.math.sqrt
 
 @Layout(R.layout.place_card_view)
@@ -37,6 +39,9 @@ class SwipeCard(private val context: Activity,
     @View(R.id.placeCardDistanceTextView)
     lateinit var placeCardDistanceTextView: TextView
 
+    @View(R.id.placeTimeChip)
+    lateinit var placeTimeChip: Chip
+
     @SwipeView
     lateinit var swipeView: android.view.View
 
@@ -54,10 +59,12 @@ class SwipeCard(private val context: Activity,
         placeCardNameTextView.text = place.name
         placeCardLocationTextView.text = place.location.address
         placeCardDistanceTextView.text = context.resources.getString(
-                R.string.place_card_view_distance,
+                R.string.place_details_distance,
                 Utils.getRoundedDistance(place.distance)
         )
         placeCardRatingBar.rating = place.rate!!.toFloat()
+        placeTimeChip.text = Utils.setChipTime(context, place.openingTime!!, place.closingTime!!)
+
         swipeView.alpha = 1f
     }
 

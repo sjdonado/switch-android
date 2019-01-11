@@ -92,11 +92,19 @@ class PlaceDetailsFragment : androidx.fragment.app.Fragment(),
         placeDetailsLocationTextView.text = place.location.address
         placeDetailsPhoneTextView.text = place.phoneNumber
         placeDetailsDistanceTextView.text = resources.getString(
-                R.string.place_card_view_distance,
+                R.string.place_details_distance,
                 Utils.getRoundedDistance(place.distance)
         )
         placeDetailsDescriptionTextView.text = place.description
         placeDetailsRatingBar.rating = place.rate!!.toFloat()
+        placeDetailsTimeTextView.text = resources.getString(
+                R.string.place_details_time,
+                place.openingTime!!.hourOfDay.toString(),
+                place.openingTime!!.minute.toString(),
+                place.closingTime!!.hourOfDay.toString(),
+                place.closingTime!!.minute.toString()
+        )
+        placeDetailsTimeChip.text = Utils.setChipTime(activity!!, place.openingTime!!, place.closingTime!!)
 
         if (qualify) {
             placeDetailsQualifyButton.show()

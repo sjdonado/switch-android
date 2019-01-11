@@ -101,12 +101,14 @@
     <string name="filters_restaurant">Restaurant</string>
     <string name="filters_bar">Bar</string>
 
-    <!-- Place card view -->
-    <string name="place_card_view_distance">%1$s meters</string>
-
     <!-- Place details fragment -->
     <string name="place_details_go_button">Go</string>
     <string name="place_details_call_button">Call</string>
+    <string name="place_details_open_chip">Open</string>
+    <string name="place_details_closed_chip">Closed</string>
+    <string name="place_details_distance">%1$s meters</string>
+    <string name="place_details_time" translatable="false">%1$s:%2$s - %3$s:%4$s</string>
+
 
     <!-- Swipe fragment -->
     <string name="swipe_not_places_found_message">No places were found.</string>

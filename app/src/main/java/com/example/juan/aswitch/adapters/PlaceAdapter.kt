@@ -29,7 +29,7 @@ class PlacesAdapter(private val activity: Activity, private val places: ArrayLis
             name.text = place.name
             location.text = place.location.address
             distance.text = activity.resources.getString(
-                    R.string.place_card_view_distance,
+                    R.string.place_details_distance,
                     Utils.getRoundedDistance(place.distance)
             )
             ratingBar.rating = place.rate!!.toFloat()
