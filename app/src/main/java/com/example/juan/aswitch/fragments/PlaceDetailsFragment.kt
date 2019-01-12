@@ -96,7 +96,12 @@ class PlaceDetailsFragment : androidx.fragment.app.Fragment(),
                 Utils.getRoundedDistance(place.distance)
         )
         placeDetailsDescriptionTextView.text = place.description
-        placeDetailsRatingBar.rating = place.rate!!.toFloat()
+        placeDetailsRatingBar.rating = place.rate!!.qualify!!.toFloat()
+        placeDetailsRatingTextView.text = place.rate!!.qualify!!.toString()
+        placeDetailsRatingSizeTextView.text = resources.getString(
+                R.string.place_details_rate_size,
+                place.rate!!.size!!.toString()
+        )
         placeDetailsTimeTextView.text = resources.getString(
                 R.string.place_details_time,
                 place.openingTime!!.hourOfDay.toString(),

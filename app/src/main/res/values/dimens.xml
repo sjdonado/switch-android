@@ -22,5 +22,7 @@
 
     <dimen name="input_label_vertical_spacing">8dp</dimen>
     <dimen name="input_label_horizontal_spacing">4dp</dimen>
+    <dimen name="place_card_recycler_view_width">220dp</dimen>
+
 
 </resources>

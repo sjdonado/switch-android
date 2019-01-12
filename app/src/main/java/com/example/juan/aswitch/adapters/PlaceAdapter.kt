@@ -21,6 +21,8 @@ class PlacesAdapter(private val activity: Activity, private val places: ArrayLis
         private var location: TextView = itemView.findViewById(R.id.placeRecyclerCardLocationTextView)
         private var distance: TextView = itemView.findViewById(R.id.placeRecyclerCardDistanceTextView)
         private var ratingBar: RatingBar = itemView.findViewById(R.id.placeRecyclerCardDetailsRatingBar)
+        private var ratingText: TextView = itemView.findViewById(R.id.placeRecyclerCardRatingTextView)
+        private var ratingSizeText: TextView = itemView.findViewById(R.id.placeRecyclerCardRatingSizeTextView)
 
         fun bind(activity: Activity, place: Place, clickListener: OnClickListener) {
             Glide.with(activity).load(place.profilePicture.url)
@@ -32,8 +34,12 @@ class PlacesAdapter(private val activity: Activity, private val places: ArrayLis
                     R.string.place_details_distance,
                     Utils.getRoundedDistance(place.distance)
             )
-            ratingBar.rating = place.rate!!.toFloat()
-
+            ratingBar.rating = place.rate!!.qualify!!.toFloat()
+            ratingText.text = place.rate!!.qualify!!.toString()
+            ratingSizeText.text = activity.resources.getString(
+                    R.string.place_details_rate_size,
+                    place.rate!!.size!!.toString()
+            )
             itemView.setOnClickListener {
                 clickListener.onClick(place)
             }

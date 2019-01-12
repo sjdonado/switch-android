@@ -29,12 +29,14 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="16dp" >
+                android:paddingBottom="16dp"
+                android:animateLayoutChanges="true">
 
                 <com.glide.slider.library.SliderLayout
                     android:id="@+id/placeDetailsImageSlider"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toTopOf="@id/placeDetailsNameTextView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -42,11 +44,10 @@
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/placeDetailsNameTextView"
                     style="@style/CardTitle"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="8dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.04"
+                    app:layout_constraintEnd_toStartOf="@+id/placeDetailsTimeChip"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/placeDetailsImageSlider" />
 
@@ -54,24 +55,21 @@
                     android:id="@+id/placeDetailsTimeChip"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
-                    android:layout_marginStart="8dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="8dp"
+                    app:chipCornerRadius="10dp"
                     app:chipIconSize="14dp"
                     app:chipStartPadding="8dp"
-                    app:chipCornerRadius="10dp"
                     app:layout_constraintBottom_toTopOf="@+id/placeDetailsDistanceTextView"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintVertical_bias="0.466" />
+                    app:layout_constraintEnd_toEndOf="parent" />
 
                 <androidx.appcompat.widget.AppCompatRatingBar
                     android:id="@+id/placeDetailsRatingBar"
                     style="?android:attr/ratingBarStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="19dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="8dp"
                     app:layout_constraintEnd_toStartOf="@+id/placeDetailsDistanceTextView"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -79,35 +77,53 @@
                     app:layout_constraintTop_toBottomOf="@+id/placeDetailsNameTextView" />
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/placeDetailsRatingTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintStart_toEndOf="@+id/placeDetailsRatingBar"
+                    app:layout_constraintTop_toBottomOf="@+id/placeDetailsNameTextView" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/placeDetailsRatingSizeTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toStartOf="@+id/placeDetailsDistanceTextView"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/placeDetailsRatingTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/placeDetailsNameTextView" />
+
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/placeDetailsDistanceTextView"
                     android:layout_width="wrap_content"
-                    android:layout_marginTop="6dp"
                     android:layout_height="19dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/placeDetailsNameTextView" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/placeDetailsTimeTextView"
-                    android:layout_width="200dp"
+                    android:layout_width="0dp"
                     android:layout_height="19dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="8dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginEnd="16dp"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/placeDetailsGoButton"
                     app:layout_constraintTop_toBottomOf="@+id/placeDetailsRatingBar" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/placeDetailsLocationTextView"
-                    android:layout_width="200dp"
+                    android:layout_width="0dp"
                     android:layout_height="19dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="16dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintEnd_toStartOf="@id/placeDetailsGoButton"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/placeDetailsTimeTextView" />
 
@@ -117,26 +133,25 @@
                     android:layout_width="123dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="28dp"
                     android:layout_marginEnd="8dp"
                     android:text="@string/place_details_go_button"
                     app:icon="@drawable/ic_map_white_24dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toEndOf="@+id/placeDetailsTimeTextView"
-                    app:layout_constraintTop_toBottomOf="@+id/placeDetailsDistanceTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/placeDetailsNameTextView"
                     app:textAllCaps="false" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/placeDetailsPhoneTextView"
-                    android:layout_width="200dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
+                    android:layout_marginEnd="16dp"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/placeDetailsCallButton"
                     app:layout_constraintTop_toBottomOf="@+id/placeDetailsLocationTextView" />
 
                 <com.google.android.material.button.MaterialButton
@@ -145,25 +160,23 @@
                     android:layout_width="123dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
                     android:text="@string/place_details_call_button"
+                    app:layout_constraintTop_toBottomOf="@+id/placeDetailsGoButton"
                     app:textAllCaps="false"
                     card_view:icon="@drawable/ic_call_white_24dp"
                     card_view:layout_constraintEnd_toEndOf="parent"
                     card_view:layout_constraintHorizontal_bias="1.0"
-                    card_view:layout_constraintStart_toEndOf="@+id/placeDetailsPhoneTextView"
-                    card_view:layout_constraintTop_toBottomOf="@+id/placeDetailsTimeTextView" />
+                    card_view:layout_constraintStart_toEndOf="@+id/placeDetailsPhoneTextView" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/placeDetailsDescriptionTextView"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/placeDetailsCallButton" />
 

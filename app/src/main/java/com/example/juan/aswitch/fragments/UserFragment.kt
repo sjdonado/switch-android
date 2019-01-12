@@ -301,37 +301,39 @@ class UserFragment : androidx.fragment.app.Fragment() {
             userCategorySpinner.visibility = View.VISIBLE
             userOpeningTimeEditText.visibility = View.VISIBLE
             userClosingTimeEditText.visibility = View.VISIBLE
+            userCategoryInputLabel.visibility = View.VISIBLE
         } else {
-            userNitEditText.visibility = View.INVISIBLE
-            userSignboardEditText.visibility = View.INVISIBLE
-            userDescriptionEditText.visibility = View.INVISIBLE
-            userCategorySpinner.visibility = View.INVISIBLE
-            userOpeningTimeEditText.visibility = View.INVISIBLE
-            userClosingTimeEditText.visibility = View.INVISIBLE
+            userCategoryInputLabel.visibility = View.GONE
+            userNitEditText.visibility = View.GONE
+            userSignboardEditText.visibility = View.GONE
+            userDescriptionEditText.visibility = View.GONE
+            userCategorySpinner.visibility = View.GONE
+            userOpeningTimeEditText.visibility = View.GONE
+            userClosingTimeEditText.visibility = View.GONE
         }
     }
 
-    private fun setDatePicker(editText: EditText, activity: Activity) {
-        editText.setText(SimpleDateFormat("dd/MM/yyyy", Locale.US).format(System.currentTimeMillis()))
-        val cal = Calendar.getInstance()
-
-        val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-            cal.set(Calendar.YEAR, year)
-            cal.set(Calendar.MONTH, monthOfYear)
-            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-
-            val myFormat = "dd/MM/yyyy" // mention the format you need
-            val sdf = SimpleDateFormat(myFormat, Locale.US)
-            editText.setText(sdf.format(cal.time))
-        }
-
-        editText.setOnClickListener {
-            DatePickerDialog(activity, dateSetListener,
-                    cal.get(Calendar.YEAR),
-                    cal.get(Calendar.MONTH),
-                    cal.get(Calendar.DAY_OF_MONTH)).show()
-        }
-    }
+//    private fun setDatePicker(editText: EditText, activity: Activity) {
+//        editText.setText(SimpleDateFormat("dd/MM/yyyy", Locale.US).format(System.currentTimeMillis()))
+//        val cal = Calendar.getInstance()
+//
+//        val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+//            cal.set(Calendar.YEAR, year)
+//            cal.set(Calendar.MONTH, monthOfYear)
+//            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+//
+//            val myFormat = "dd/MM/yyyy" // mention the format you need
+//            val sdf = SimpleDateFormat(myFormat, Locale.US)
+//            editText.setText(sdf.format(cal.time))
+//        }
+//
+//        editText.setOnClickListener {
+//            DatePickerDialog(activity, dateSetListener,
+//                    cal.get(Calendar.YEAR),
+//                    cal.get(Calendar.MONTH),
+//                    cal.get(Calendar.DAY_OF_MONTH)).show()
+//        }
+//    }
 
     private fun setTimePicker(activity: Activity, editText: EditText, ref: Int, default: Time?) {
 //        val is24HoursFormat = DateFormat.is24HourFormat(activity)

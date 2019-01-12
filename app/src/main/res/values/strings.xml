@@ -108,7 +108,7 @@
     <string name="place_details_closed_chip">Closed</string>
     <string name="place_details_distance">%1$s meters</string>
     <string name="place_details_time" translatable="false">%1$s:%2$s - %3$s:%4$s</string>
-
+    <string name="place_details_rate_size" translatable="false">(%1$s)</string>
 
     <!-- Swipe fragment -->
     <string name="swipe_not_places_found_message">No places were found.</string>

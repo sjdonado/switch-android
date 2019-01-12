@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.fragment_qualify.*
 
 import com.example.juan.aswitch.R
 import com.example.juan.aswitch.models.Place
+import com.example.juan.aswitch.models.Rate
 import com.example.juan.aswitch.services.UsersPlaceService
 
 
@@ -54,7 +55,8 @@ class QualifyFragment : DialogFragment() {
                 activity!!.runOnUiThread {
                     Log.d("QUALIFY_RESPONSE", res.getJSONObject("data").toString())
                     place.qualify = res.getJSONObject("data").getDouble("qualify")
-                    place.rate = res.getJSONObject("data").getDouble("rate")
+                    val rate = res.getJSONObject("data").getJSONObject("rate")
+                    place.rate = Rate(rate.getDouble("qualify"), rate.getInt("size"))
                     dismiss()
                 }
             }

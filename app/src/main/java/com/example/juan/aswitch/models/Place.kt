@@ -20,7 +20,7 @@ data class Place(
         val description: String,
         val category: String,
         var qualify: Double?,
-        var rate: Double?,
+        var rate: Rate?,
         var profilePicture: ImageObject
 ) : Parcelable
 
@@ -28,4 +28,10 @@ data class Place(
 data class Time(
         val hourOfDay: Int?,
         val minute: Int?
+) : Parcelable
+
+@Parcelize
+data class Rate(
+        val qualify: Double?,
+        val size: Int?
 ) : Parcelable
