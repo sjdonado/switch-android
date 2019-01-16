@@ -8,18 +8,24 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.getColor
 
 import com.example.juan.aswitch.R
+import com.example.juan.aswitch.helpers.FragmentHandler
 import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.services.UserService
 import kotlinx.android.synthetic.main.fragment_filters.*
 import org.json.JSONObject
 
 
-class FiltersFragment : androidx.fragment.app.Fragment() {
+class FiltersFragment : BaseFragment() {
+    override fun getTitle(): String {
+        return "Filters"
+    }
 
     private var restaurantSelected = false
     private var barSelected = false
     private lateinit var userService: UserService
     private var userObject: JSONObject = JSONObject()
+    private lateinit var fragmentHandler: FragmentHandler
+
 
     companion object {
         fun getInstance(): FiltersFragment = FiltersFragment()
@@ -39,6 +45,8 @@ class FiltersFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        fragmentHandler = FragmentHandler(activity!! as AppCompatActivity, R.id.menu_fragment_container)
 
         userService = UserService(activity!!)
 
@@ -82,11 +90,7 @@ class FiltersFragment : androidx.fragment.app.Fragment() {
                             userObject
                     )
                 }
-                Utils.openFragment(
-                        activity as AppCompatActivity,
-                        R.id.menu_fragment_container,
-                        SwipeFragment.getInstance()
-                )
+                fragmentHandler.add(SwipeFragment.getInstance())
                 return true
             }
         }

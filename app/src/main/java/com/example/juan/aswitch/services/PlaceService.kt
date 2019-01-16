@@ -21,6 +21,10 @@ open class PlaceService (activity: Activity) : MainService("/places", activity) 
         super.get("/", callback, true)
     }
 
+    fun getCategories(callback: (response: JSONObject) -> Unit) {
+        super.get("/categories", callback, true)
+    }
+
     fun update(jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
         super.put("/", jsonObject.toString(), callback, true)
     }

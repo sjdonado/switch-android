@@ -10,6 +10,7 @@ import com.example.juan.aswitch.R
 import com.example.juan.aswitch.helpers.Utils
 import android.view.MenuInflater
 import androidx.appcompat.app.AppCompatActivity
+import com.example.juan.aswitch.helpers.FragmentHandler
 import com.example.juan.aswitch.lib.SwipeCard
 import com.example.juan.aswitch.models.Place
 import com.example.juan.aswitch.services.PlaceService
@@ -28,6 +29,7 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
     private var isToUndo = false
     private var accept = false
     private var userObject: JSONObject = JSONObject()
+    private lateinit var fragmentHandler: FragmentHandler
 
     companion object {
         fun getInstance(): SwipeFragment = SwipeFragment()
@@ -46,6 +48,9 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        fragmentHandler = FragmentHandler(activity as AppCompatActivity, R.id.menu_fragment_container)
+
         placeService = PlaceService(activity!!)
         usersPlaceService = UsersPlaceService(activity!!)
 
@@ -148,11 +153,7 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item!!.itemId) {
             R.id.filter_action -> {
-                Utils.openFragment(
-                        activity as AppCompatActivity,
-                        R.id.menu_fragment_container,
-                        FiltersFragment.getInstance()
-                )
+                fragmentHandler.add(FiltersFragment.getInstance())
                 return true
             }
         }
@@ -169,11 +170,7 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
     }
 
     override fun onCoverClick(place: Place) {
-        Utils.openFragment(
-                activity as AppCompatActivity,
-                R.id.menu_fragment_container,
-                PlaceDetailsFragment.getInstance(place, false)
-        )
+        fragmentHandler.add(PlaceDetailsFragment.getInstance(place, false))
     }
 
     override fun onSwipeUp() {

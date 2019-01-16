@@ -71,6 +71,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
         mAuth = FirebaseAuth.getInstance()
 
         userService = UserService(activity!!)
+        placeService = PlaceService(activity!!)
 
         user = Utils.getSharedPreferencesUserObject(activity!!)
         signUp = Utils.getSharedPreferencesBooleanValue(activity!!, "SIGN_UP")!!
@@ -91,8 +92,21 @@ class UserFragment : androidx.fragment.app.Fragment() {
 
         if (role) toggleCompanyFieldsVisibility(true)
 
+        if(signUp || (user.role != null && role)) {
+            placeService.getCategories {
+                activity!!.runOnUiThread {
+                    Log.d("getCategories", it.toString())
+                    val categories = it.getJSONArray("data")
+                    val spinnerArrayAdapter = ArrayAdapter<String>(activity!!, android.R.layout.simple_spinner_item,
+                            Utils.toStringArray(categories)!!)
+                    spinnerArrayAdapter.setDropDownViewResource(android.R.layout
+                            .simple_spinner_dropdown_item)
+                    userCategorySpinner.adapter = spinnerArrayAdapter
+                }
+            }
+        }
+
         if(user.role != null && role) {
-            placeService = PlaceService(activity!!)
             placeService.get {
                 activity!!.runOnUiThread {
                     place = Utils.parseJSONPlace(it.getJSONObject("data"))
@@ -101,16 +115,15 @@ class UserFragment : androidx.fragment.app.Fragment() {
                     userDescriptionEditText.editText!!.setText(place.description)
                     setTimePicker(activity!!, userOpeningTimeEditText.editText!!, 0, place.openingTime)
                     setTimePicker(activity!!, userClosingTimeEditText.editText!!, 1, place.closingTime)
-                    val spinnerArrayAdapter = ArrayAdapter<String>(activity!!, android.R.layout.simple_spinner_item,
-                            Utils.toStringArray(it.getJSONObject("data").getJSONArray("categories"))!!)
-                    spinnerArrayAdapter.setDropDownViewResource(android.R.layout
-                            .simple_spinner_dropdown_item)
-                    userCategorySpinner.adapter = spinnerArrayAdapter
                 }
             }
         }
 
-        if(signUp && user.role == null) userSwitchAccountType.visibility = View.VISIBLE
+        if(signUp && user.role == null) {
+            userSwitchAccountType.visibility = View.VISIBLE
+            setTimePicker(activity!!, userOpeningTimeEditText.editText!!, 0, null)
+            setTimePicker(activity!!, userClosingTimeEditText.editText!!, 1, null)
+        }
 
         setEditTextValidation(userNameEditText, getString(R.string.users_fragment_name_user_error))
         setEditTextValidation(userEmailEditText, getString(R.string.users_fragment_email_error))
@@ -118,7 +131,8 @@ class UserFragment : androidx.fragment.app.Fragment() {
         setEditTextValidation(userNitEditText, getString(R.string.users_fragment_nit_error))
         setEditTextValidation(userSignboardEditText, getString(R.string.users_fragment_signboard_error))
         setEditTextValidation(userDescriptionEditText, getString(R.string.users_fragment_description_error))
-
+        setEditTextValidation(userOpeningTimeEditText, getString(R.string.users_fragment_opening_time_error))
+        setEditTextValidation(userClosingTimeEditText, getString(R.string.users_fragment_closing_time_error))
 
         if (signUp)
             userButtonAction.setImageResource(R.drawable.ic_arrow_forward_white_24dp)
@@ -278,6 +292,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
     private fun validateEditText(layout: TextInputLayout, editText: EditText, errorValue: String) {
         if (editText.text.isEmpty()) layout.error = errorValue else layout.error = null
     }
+
 
     private fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
         this.addTextChangedListener(object : TextWatcher {

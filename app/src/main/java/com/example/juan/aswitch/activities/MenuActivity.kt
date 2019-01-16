@@ -3,10 +3,11 @@ package com.example.juan.aswitch.activities
 import com.example.juan.aswitch.R
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.fragment.app.FragmentManager
 import com.bumptech.glide.Glide
 import com.example.juan.aswitch.R.id.navigationNotifications
 import com.example.juan.aswitch.R.id.navigationStarredPlaces
@@ -15,39 +16,47 @@ import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.models.User
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.navigation_header.*
+import androidx.drawerlayout.widget.DrawerLayout
+import com.example.juan.aswitch.helpers.FragmentHandler
 
 
-class MenuActivity : AppCompatActivity() {
+class MenuActivity : BaseActivity() {
 
     private lateinit var actionBar : ActionBar
     private lateinit var user: User
+    private lateinit var drawerToggle: ActionBarDrawerToggle
+    private lateinit var fragmentManager: FragmentManager
+    private lateinit var fragmentHandler: FragmentHandler
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
 
+        fragmentManager = supportFragmentManager
+        fragmentHandler = FragmentHandler(this@MenuActivity, R.id.menu_fragment_container)
+
         // Configure action bar
         setSupportActionBar(menu_toolbar)
         actionBar = supportActionBar!!
+
+        actionBar.setDisplayHomeAsUpEnabled(true)
+
         actionBar.title = getString(R.string.title_fragment_home)
         user = Utils.getSharedPreferencesUserObject(this@MenuActivity)
         openHomeFragment()
 
         // Initialize the action bar drawer toggle instance
-        val drawerToggle: ActionBarDrawerToggle = object : ActionBarDrawerToggle(
+        drawerToggle = object : ActionBarDrawerToggle(
                 this,
                 drawer_layout,
                 menu_toolbar,
                 R.string.drawer_open,
                 R.string.drawer_close
         ){
-            override fun onDrawerClosed(view: View){
-                super.onDrawerClosed(view)
-                //toast("Drawer closed")
-            }
-
             override fun onDrawerOpened(drawerView: View) {
                 super.onDrawerOpened(drawerView)
+
                 Glide.with(this@MenuActivity)
                         .load(user.profilePicture?.url)
                         .apply(Utils.glideRequestOptions(this@MenuActivity))
@@ -64,7 +73,7 @@ class MenuActivity : AppCompatActivity() {
                 navigation_account_header.setOnClickListener {
                     val userFragment = UserFragment.getInstance()
                     actionBar.title = getString(R.string.title_activity_user)
-                    Utils.openFragment(this@MenuActivity, R.id.menu_fragment_container, userFragment)
+                    fragmentHandler.add(userFragment)
                     drawer_layout.closeDrawer(GravityCompat.START)
                 }
             }
@@ -74,6 +83,7 @@ class MenuActivity : AppCompatActivity() {
         drawerToggle.isDrawerIndicatorEnabled = true
         drawer_layout.addDrawerListener(drawerToggle)
         drawerToggle.syncState()
+        syncDrawerToggleState()
 
         navigation.setNavigationItemSelectedListener {
             when (it.itemId) {
@@ -83,16 +93,16 @@ class MenuActivity : AppCompatActivity() {
                 }
                 R.id.navigationStarredPlaces -> {
                     actionBar.title = getString(R.string.title_fragment_starred_places)
-                    Utils.openFragment(this, R.id.menu_fragment_container, StarredPlacesFragment.getInstance())
+                    fragmentHandler.add(StarredPlacesFragment.getInstance())
                 }
                 R.id.navigationNotifications -> {
                     actionBar.title = getString(R.string.title_fragment_notifications)
                     val notificationsFragment = NotificationsFragment.getInstance()
-                    Utils.openFragment(this, R.id.menu_fragment_container, notificationsFragment)
+                    fragmentHandler.add(notificationsFragment)
                 }
                 R.id.navigationSettings -> {
                     actionBar.title = getString(R.string.title_fragment_settings)
-                    Utils.openFragment(this, R.id.menu_fragment_container, SettingsFragment.getInstance())
+                    fragmentHandler.add(SettingsFragment.getInstance())
                 }
 //                R.id.navigation_users -> {
 //                    openUserFragment()
@@ -107,10 +117,35 @@ class MenuActivity : AppCompatActivity() {
     private fun openHomeFragment() {
         actionBar.title = getString(R.string.title_fragment_home)
         if(user.role!!) {
-            Utils.openFragment(this, R.id.menu_fragment_container, PlaceFragment.getInstance())
+            fragmentHandler.add(PlaceFragment.getInstance())
         } else {
-            Utils.openFragment(this, R.id.menu_fragment_container, SwipeFragment.getInstance())
+            fragmentHandler.add(SwipeFragment.getInstance())
         }
+    }
+
+
+    private val navigationBackPressListener = View.OnClickListener { fragmentManager.popBackStack() }
+
+    private fun syncDrawerToggleState() {
+        if (fragmentManager.backStackEntryCount > 1) {
+            drawerToggle.isDrawerIndicatorEnabled = false
+            drawerToggle.toolbarNavigationClickListener = navigationBackPressListener
+        } else {
+            drawerToggle.isDrawerIndicatorEnabled = true
+            drawerToggle.toolbarNavigationClickListener = drawerToggle.toolbarNavigationClickListener
+        }
+    }
+
+    override fun getDrawerToggle(): ActionBarDrawerToggle {
+        return drawerToggle
+    }
+
+    override fun getDrawer(): DrawerLayout {
+        return drawer_layout
+    }
+
+    override fun getFragmentContainerId(): Int {
+        return R.id.menu_fragment_container
     }
 
 }

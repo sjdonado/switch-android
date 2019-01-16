@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.juan.aswitch.R
 import com.example.juan.aswitch.adapters.PlacesAdapter
+import com.example.juan.aswitch.helpers.FragmentHandler
 import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.models.Place
 import com.example.juan.aswitch.services.PlaceService
@@ -21,6 +22,7 @@ class StarredPlacesFragment : androidx.fragment.app.Fragment() {
 
     private var places: ArrayList<Place> = ArrayList()
     private lateinit var placeService: PlaceService
+    private lateinit var fragmentHandler: FragmentHandler
 
     companion object {
         fun getInstance(): StarredPlacesFragment = StarredPlacesFragment()
@@ -37,17 +39,14 @@ class StarredPlacesFragment : androidx.fragment.app.Fragment() {
 
         placeService = PlaceService(activity!!)
 
+        fragmentHandler = FragmentHandler(activity!! as AppCompatActivity, R.id.menu_fragment_container)
+
         val viewManager = LinearLayoutManager(activity)
         val viewAdapter = PlacesAdapter(activity!!, places,
             object: PlacesAdapter.OnClickListener {
                 override fun onClick(place: Place) {
-                    Utils.openFragment(
-                            activity as AppCompatActivity,
-                            R.id.menu_fragment_container,
-                            PlaceDetailsFragment.getInstance(place, true)
-                    )
+                    fragmentHandler.add(PlaceDetailsFragment.getInstance(place, true))
                 }
-
             }
         )
 

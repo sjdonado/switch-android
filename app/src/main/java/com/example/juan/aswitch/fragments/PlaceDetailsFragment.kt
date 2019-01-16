@@ -22,10 +22,15 @@ import com.glide.slider.library.SliderLayout
 import com.glide.slider.library.SliderTypes.BaseSliderView
 import com.glide.slider.library.SliderTypes.TextSliderView
 import com.glide.slider.library.Tricks.ViewPagerEx
+import kotlinx.android.synthetic.main.preference.*
 
 
-class PlaceDetailsFragment : androidx.fragment.app.Fragment(),
+class PlaceDetailsFragment : BaseFragment(),
         BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener  {
+
+    override fun getTitle(): String {
+        return "Place details"
+    }
 
     private var qualify: Boolean = false
     private val images: ArrayList<ImageObject> = ArrayList()
@@ -148,15 +153,12 @@ class PlaceDetailsFragment : androidx.fragment.app.Fragment(),
         Log.d("PLACE_OBJECT", "geo:${place.location.lat},${place.location.lng}")
     }
 
-    override fun onSliderClick(p0: BaseSliderView?) {
-    }
+    override fun onSliderClick(p0: BaseSliderView?) {}
 
-    override fun onPageScrollStateChanged(p0: Int) {
-    }
+    override fun onPageScrollStateChanged(p0: Int) {}
 
-    override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
-    }
+    override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {}
 
-    override fun onPageSelected(p0: Int) {
-    }
+    override fun onPageSelected(p0: Int) {}
+
 }

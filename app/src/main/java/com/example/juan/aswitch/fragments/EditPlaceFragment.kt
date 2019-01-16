@@ -24,7 +24,11 @@ import kotlinx.android.synthetic.main.fragment_users.*
 import org.json.JSONObject
 
 
-class EditPlaceFragment : androidx.fragment.app.Fragment() {
+class EditPlaceFragment : BaseFragment() {
+
+    override fun getTitle(): String {
+        return "Edit Place"
+    }
 
     private lateinit var placeService: PlaceService
     private lateinit var userService: UserService

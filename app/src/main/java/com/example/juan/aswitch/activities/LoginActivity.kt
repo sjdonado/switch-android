@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.juan.aswitch.MainActivity
 import com.example.juan.aswitch.R
 import com.example.juan.aswitch.fragments.UserFragment
+import com.example.juan.aswitch.helpers.FragmentHandler
 import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.services.UserService
 import com.firebase.ui.auth.AuthUI
@@ -20,6 +21,7 @@ import com.firebase.ui.auth.IdpResponse
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var userService : UserService
+    private lateinit var fragmentHandler: FragmentHandler
 
     companion object {
         const val RC_SIGN_IN = 123
@@ -33,6 +35,8 @@ class LoginActivity : AppCompatActivity() {
 
         val actionBar = supportActionBar!!
         actionBar.title = getString(R.string.app_name)
+
+        fragmentHandler = FragmentHandler(this, R.id.login_fragment_container)
 
         userService = UserService(this)
         if(Utils.getSharedPreferencesBooleanValue(this, Utils.SIGN_UP)!!){
@@ -110,8 +114,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun openUserFragment(){
         val userFragment = UserFragment()
-        Utils.openFragment(this,
-                R.id.login_fragment_container, userFragment)
+        fragmentHandler.add(userFragment)
     }
 
 }

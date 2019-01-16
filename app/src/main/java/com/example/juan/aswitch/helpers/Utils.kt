@@ -62,30 +62,6 @@ object Utils {
         ).show()
     }
 
-    fun openFragment(activity: AppCompatActivity, fragment_container: Int, fragment: androidx.fragment.app.Fragment) {
-
-        val exitFade = Fade()
-        exitFade.duration = FADE_DEFAULT_TIME
-        val previousFragment = activity.supportFragmentManager.findFragmentById(fragment_container)
-        if(previousFragment is Fragment) previousFragment.exitTransition = exitFade
-
-        val enterTransitionSet = TransitionSet()
-        enterTransitionSet.addTransition(TransitionInflater.from(activity).inflateTransition(android.R.transition.move))
-        enterTransitionSet.duration = MOVE_DEFAULT_TIME
-        enterTransitionSet.startDelay = FADE_DEFAULT_TIME
-        fragment.sharedElementEnterTransition = enterTransitionSet
-
-        val enterFade = Fade()
-        enterFade.startDelay = FADE_DEFAULT_TIME
-        enterFade.duration = FADE_DEFAULT_TIME
-        fragment.enterTransition = enterFade
-
-        val transaction = activity.supportFragmentManager.beginTransaction()
-        transaction.replace(fragment_container, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
-
     fun setSharedPreferencesStringValue(activity: Activity, keyName : String, data: String) {
         val sp = activity.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
         val editor = sp.edit()

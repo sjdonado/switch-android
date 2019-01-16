@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 
 import com.example.juan.aswitch.R
+import com.example.juan.aswitch.helpers.FragmentHandler
 import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.models.Place
 import com.example.juan.aswitch.services.PlaceService
@@ -19,6 +20,8 @@ class PlaceFragment : androidx.fragment.app.Fragment() {
     private lateinit var placeService: PlaceService
     private lateinit var place: Place
     private var editMode: Boolean = false
+    private lateinit var fragmentHandler: FragmentHandler
+
 
     companion object {
         fun getInstance(): PlaceFragment = PlaceFragment()
@@ -35,10 +38,12 @@ class PlaceFragment : androidx.fragment.app.Fragment() {
 
         placeService = PlaceService(activity!!)
 
+        fragmentHandler = FragmentHandler(activity!! as AppCompatActivity, R.id.place_fragment_container)
+
         placeService.get {
             place = Utils.parseJSONPlace(it.getJSONObject("data"))
             activity!!.runOnUiThread {
-                Utils.openFragment(activity as AppCompatActivity, R.id.place_fragment_container, PlaceDetailsFragment.getInstance(place, false))
+                fragmentHandler.add(PlaceDetailsFragment.getInstance(place, false))
             }
         }
 
@@ -46,10 +51,10 @@ class PlaceFragment : androidx.fragment.app.Fragment() {
             editMode = !editMode
             if(editMode) {
                 placeEditOrSaveButton.setImageResource(R.drawable.ic_save_white_24dp)
-                Utils.openFragment(activity as AppCompatActivity, R.id.place_fragment_container, EditPlaceFragment.getInstance(place))
+                fragmentHandler.add(EditPlaceFragment.getInstance(place))
             } else {
                 placeEditOrSaveButton.setImageResource(R.drawable.ic_edit_white_24dp)
-                Utils.openFragment(activity as AppCompatActivity, R.id.place_fragment_container, PlaceDetailsFragment.getInstance(place, false))
+                fragmentHandler.add(PlaceDetailsFragment.getInstance(place, false))
             }
         }
     }
