@@ -20,25 +20,18 @@ abstract class BaseActivity : AppCompatActivity() {
     private val navigationBackPressListener = View.OnClickListener { fragmentManager.popBackStack() }
     private val backStackListener = FragmentManager.OnBackStackChangedListener { onBackStackChangedEvent() }
 
-    companion object {
-        var BACK_STACK_MIN_ENTRY_COUNT = 1
-    }
-
     private fun onBackStackChangedEvent() {
         syncDrawerToggleState()
     }
 
-    private fun syncDrawerToggleState() {
-        Log.d("SYNC_DRAWER_START", getDrawerToggle().isDrawerIndicatorEnabled.toString())
-        if (fragmentManager.backStackEntryCount > BACK_STACK_MIN_ENTRY_COUNT && fragmentHandler.currentFragment != null) {
-            Log.d("SYNC_DRAWER_FRAGMENT", fragmentHandler.currentFragment.toString())
+    protected fun syncDrawerToggleState() {
+        if (fragmentManager.backStackEntryCount > 1 && fragmentHandler.currentFragment != null) {
             getDrawerToggle().isDrawerIndicatorEnabled = false
             getDrawerToggle().toolbarNavigationClickListener = navigationBackPressListener //pop backstack
         } else {
             getDrawerToggle().isDrawerIndicatorEnabled = true
             getDrawerToggle().toolbarNavigationClickListener = getDrawerToggle().toolbarNavigationClickListener //open nav menu drawer
         }
-        Log.d("SYNC_DRAWER_END", getDrawerToggle().isDrawerIndicatorEnabled.toString())
     }
 
     public override fun onCreate(savedInstanceState: Bundle?) {

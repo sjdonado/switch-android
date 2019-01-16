@@ -33,7 +33,6 @@ class MenuActivity : BaseActivity() {
         setContentView(R.layout.activity_menu)
 
         fragmentManager = supportFragmentManager
-        BaseActivity.BACK_STACK_MIN_ENTRY_COUNT = 1
         fragmentHandler = FragmentHandler(this@MenuActivity, R.id.menu_fragment_container)
 
         // Configure action bar
@@ -125,16 +124,6 @@ class MenuActivity : BaseActivity() {
 
 
     private val navigationBackPressListener = View.OnClickListener { fragmentManager.popBackStack() }
-
-    private fun syncDrawerToggleState() {
-        if (fragmentManager.backStackEntryCount > 1) {
-            drawerToggle.isDrawerIndicatorEnabled = false
-            drawerToggle.toolbarNavigationClickListener = navigationBackPressListener
-        } else {
-            drawerToggle.isDrawerIndicatorEnabled = true
-            drawerToggle.toolbarNavigationClickListener = drawerToggle.toolbarNavigationClickListener
-        }
-    }
 
     override fun getDrawerToggle(): ActionBarDrawerToggle {
         return drawerToggle

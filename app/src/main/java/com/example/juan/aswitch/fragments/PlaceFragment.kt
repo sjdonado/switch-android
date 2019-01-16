@@ -40,7 +40,6 @@ class PlaceFragment : androidx.fragment.app.Fragment() {
         placeService = PlaceService(activity!!)
 
         fragmentHandler = FragmentHandler(activity!! as AppCompatActivity, R.id.place_fragment_container)
-        BaseActivity.BACK_STACK_MIN_ENTRY_COUNT = 2
 
         placeService.get {
             place = Utils.parseJSONPlace(it.getJSONObject("data"))

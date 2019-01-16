@@ -114,8 +114,8 @@ class MainActivity : AppCompatActivity() {
                     if (shouldShowRequestPermissionRationale(permissions[i])) {
                         AlertDialog.Builder(this)
                                 .setMessage(getString(R.string.permissions_error))
-                                .setPositiveButton(getString(R.string.permissions_button_allow)) { dialog, which -> requestMultiplePermissions() }
-                                .setNegativeButton(getString(R.string.permissions_button_cancel)) { dialog, which -> dialog.dismiss() }
+                                .setPositiveButton(getString(R.string.permissions_button_allow)) { _, _ -> requestMultiplePermissions() }
+                                .setNegativeButton(getString(R.string.permissions_button_cancel)) { dialog, _ -> dialog.dismiss() }
                                 .create()
                                 .show()
                     }
