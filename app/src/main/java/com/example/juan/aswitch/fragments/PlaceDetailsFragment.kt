@@ -131,6 +131,7 @@ class PlaceDetailsFragment : BaseFragment(),
         }
 
         placeDetailsGoButton.setOnClickListener {
+            placeDetailsGoButton.isEnabled = false
             val gmmIntentUri = Uri.parse(
                     "google.navigation:q=${place.location.lat},${place.location.lng}"
             )
@@ -142,6 +143,7 @@ class PlaceDetailsFragment : BaseFragment(),
         }
 
         placeDetailsCallButton.setOnClickListener {
+            placeDetailsCallButton.isEnabled = false
             val intent = Intent(Intent.ACTION_DIAL).apply {
                 data = Uri.parse("tel:${place.phoneNumber}")
             }
@@ -151,6 +153,12 @@ class PlaceDetailsFragment : BaseFragment(),
         }
 
         Log.d("PLACE_OBJECT", "geo:${place.location.lat},${place.location.lng}")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        placeDetailsGoButton.isEnabled = true
+        placeDetailsCallButton.isEnabled = true
     }
 
     override fun onSliderClick(p0: BaseSliderView?) {}

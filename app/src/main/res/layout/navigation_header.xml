@@ -7,76 +7,56 @@
     android:focusable="true" >
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/navigation_account_header_background"
+        android:id="@+id/navigationHeaderBackground"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/navigation_account_header_height"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/navigation_statusbar_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="0dp" />
-
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/navigation_account_header_current"
+        android:id="@+id/navigationHeaderProfilePicture"
         android:layout_width="@dimen/navigation_account_header_selected"
         android:layout_height="@dimen/navigation_account_header_selected"
         android:layout_marginStart="@dimen/navigation_vertical_padding"
         android:layout_marginTop="@dimen/navigation_account_header_horizontal_top"
-        android:elevation="2dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/navigation_statusbar_guideline" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/navigation_text_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_end="@dimen/navigation_account_header_dropdown_guideline" />
+        android:elevation="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/navigation_account_header_name"
+        android:id="@+id/navigationHeaderName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/navigation_vertical_padding"
         android:layout_marginStart="@dimen/navigation_vertical_padding"
         android:fontFamily="sans-serif-medium"
         android:lines="1"
         android:maxLines="1"
+        android:textColor="@color/white"
         android:textSize="@dimen/navigation_account_header_title"
-        app:layout_constraintBottom_toTopOf="@id/navigation_account_header_email"
-        app:layout_constraintEnd_toStartOf="@id/navigation_account_header_text_switcher"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/navigation_text_guideline"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/navigationHeaderProfilePicture"/>
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/navigation_account_header_email"
+        android:id="@+id/navigationHeaderEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/navigation_padding"
         android:layout_marginStart="@dimen/navigation_vertical_padding"
-        android:layout_marginBottom="@dimen/navigation_padding"
         android:fontFamily="sans-serif"
         android:lines="1"
         android:maxLines="1"
+        android:textColor="@color/white"
         android:textSize="@dimen/navigation_account_header_subtext"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/navigation_account_header_text_switcher"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/navigation_account_header_name" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/navigation_account_header_text_switcher"
-        android:layout_width="@dimen/navigation_account_header_dropdown"
-        android:layout_height="@dimen/navigation_account_header_dropdown"
-        android:layout_marginEnd="@dimen/navigation_vertical_padding"
-        android:layout_marginBottom="@dimen/navigation_account_header_dropdown_margin_bottom"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/navigationHeaderName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

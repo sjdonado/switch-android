@@ -18,9 +18,11 @@ abstract class BaseActivity : AppCompatActivity() {
     private lateinit var fragmentHandler: FragmentHandler
 
     private val navigationBackPressListener = View.OnClickListener { fragmentManager.popBackStack() }
-
     private val backStackListener = FragmentManager.OnBackStackChangedListener { onBackStackChangedEvent() }
 
+    companion object {
+        var BACK_STACK_MIN_ENTRY_COUNT = 1
+    }
 
     private fun onBackStackChangedEvent() {
         syncDrawerToggleState()
@@ -28,7 +30,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     private fun syncDrawerToggleState() {
         Log.d("SYNC_DRAWER_START", getDrawerToggle().isDrawerIndicatorEnabled.toString())
-        if (fragmentManager.backStackEntryCount > 1 && fragmentHandler.currentFragment != null) {
+        if (fragmentManager.backStackEntryCount > BACK_STACK_MIN_ENTRY_COUNT && fragmentHandler.currentFragment != null) {
             Log.d("SYNC_DRAWER_FRAGMENT", fragmentHandler.currentFragment.toString())
             getDrawerToggle().isDrawerIndicatorEnabled = false
             getDrawerToggle().toolbarNavigationClickListener = navigationBackPressListener //pop backstack

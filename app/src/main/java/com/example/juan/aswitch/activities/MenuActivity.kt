@@ -3,7 +3,6 @@ package com.example.juan.aswitch.activities
 import com.example.juan.aswitch.R
 import android.os.Bundle
 import android.view.View
-import android.widget.FrameLayout
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
@@ -34,6 +33,7 @@ class MenuActivity : BaseActivity() {
         setContentView(R.layout.activity_menu)
 
         fragmentManager = supportFragmentManager
+        BaseActivity.BACK_STACK_MIN_ENTRY_COUNT = 1
         fragmentHandler = FragmentHandler(this@MenuActivity, R.id.menu_fragment_container)
 
         // Configure action bar
@@ -60,9 +60,9 @@ class MenuActivity : BaseActivity() {
                 Glide.with(this@MenuActivity)
                         .load(user.profilePicture?.url)
                         .apply(Utils.glideRequestOptions(this@MenuActivity))
-                        .into(navigation_account_header_current)
-                navigation_account_header_name.text = user.name
-                navigation_account_header_email.text = user.email
+                        .into(navigationHeaderProfilePicture)
+                navigationHeaderName.text = user.name
+                navigationHeaderEmail.text = user.email
 
                 if(user.role!!) {
                     navigation.menu.findItem(navigationNotifications).isVisible = true

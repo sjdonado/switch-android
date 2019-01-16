@@ -155,6 +155,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
         }
 
         userLocationEditText.editText!!.setOnClickListener {
+            userLocationEditText.isEnabled = false
             progressDialog = Utils.showLoading(activity!!)
             val builder = PlacePicker.IntentBuilder()
             val southwest = user.location?.viewport?.southwest
@@ -241,6 +242,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
             }
             PLACE_PICKER_REQUEST -> {
                 if (resultCode == AppCompatActivity.RESULT_OK) {
+                    userLocationEditText.isEnabled = true
                     val place = PlacePicker.getPlace(activity!!, data)
                     val locationObject = JSONObject()
                     val viewPort = JSONObject()

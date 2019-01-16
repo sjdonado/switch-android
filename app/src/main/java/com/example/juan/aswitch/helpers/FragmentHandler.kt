@@ -51,6 +51,7 @@ class FragmentHandler(private val activity: AppCompatActivity, private val fragm
         enterFade.duration = FADE_DEFAULT_TIME
         fragment.enterTransition = enterFade
 
+        activity.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         val transaction = activity.supportFragmentManager.beginTransaction()
         transaction.replace(fragmentContainer!!, fragment)
         transaction.addToBackStack(null)
@@ -69,7 +70,7 @@ class FragmentHandler(private val activity: AppCompatActivity, private val fragm
 
         val fragmentTransaction = activity.supportFragmentManager.beginTransaction()
         Log.d("SET_FRAGMENT_NAME", fragment.getTitle())
-        fragmentTransaction.replace(R.id.menu_fragment_container, fragment, fragment.getTitle())
+        fragmentTransaction.replace(fragmentContainer!!, fragment, fragment.getTitle())
         fragmentTransaction.addToBackStack(fragment.getTitle())
         fragmentTransaction.commit()
     }

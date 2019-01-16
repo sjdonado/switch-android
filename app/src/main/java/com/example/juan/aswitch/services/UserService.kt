@@ -7,8 +7,8 @@ import java.io.File
 
 open class UserService (activity: Activity) : MainService("/users", activity) {
 
-    fun get(callback: (response: JSONObject) -> Unit) {
-        super.get("/", callback, true)
+    fun get(loading: Boolean, callback: (response: JSONObject) -> Unit) {
+        super.get("/", callback, loading)
     }
 
     fun update(jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {

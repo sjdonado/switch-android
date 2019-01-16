@@ -18,6 +18,10 @@ import android.app.NotificationManager
 import android.app.NotificationChannel
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessaging
+import androidx.core.content.IntentCompat
+import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -35,6 +39,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         userService = UserService(this)
+
+        Log.d(TAG, "ON_CREATE")
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             if (arePermissionsEnabled()) {
@@ -128,7 +134,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(loginIntent)
         } else {
             Utils.setToken(this, currentUser) {
-                userService.get { res ->
+                userService.get(false) { res ->
                     Utils.setSharedPreferencesStringValue(
                             this,
                             Utils.USER_OBJECT,
@@ -136,9 +142,13 @@ class MainActivity : AppCompatActivity() {
                     )
                     if(Utils.getSharedPreferencesBooleanValue(this, Utils.SIGN_UP)!!){
                         val loginActivityIntent = Intent(this, LoginActivity::class.java)
+                        loginActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        loginActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(loginActivityIntent)
                     }else{
                         val menuActivityIntent = Intent(this, MenuActivity::class.java)
+                        menuActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        menuActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(menuActivityIntent)
                     }
                 }

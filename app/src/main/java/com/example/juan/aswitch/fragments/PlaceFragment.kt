@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 
 import com.example.juan.aswitch.R
+import com.example.juan.aswitch.activities.BaseActivity
 import com.example.juan.aswitch.helpers.FragmentHandler
 import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.models.Place
@@ -21,7 +23,6 @@ class PlaceFragment : androidx.fragment.app.Fragment() {
     private lateinit var place: Place
     private var editMode: Boolean = false
     private lateinit var fragmentHandler: FragmentHandler
-
 
     companion object {
         fun getInstance(): PlaceFragment = PlaceFragment()
@@ -39,6 +40,7 @@ class PlaceFragment : androidx.fragment.app.Fragment() {
         placeService = PlaceService(activity!!)
 
         fragmentHandler = FragmentHandler(activity!! as AppCompatActivity, R.id.place_fragment_container)
+        BaseActivity.BACK_STACK_MIN_ENTRY_COUNT = 2
 
         placeService.get {
             place = Utils.parseJSONPlace(it.getJSONObject("data"))

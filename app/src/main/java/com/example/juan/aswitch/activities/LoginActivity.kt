@@ -67,7 +67,7 @@ class LoginActivity : AppCompatActivity() {
             when {
                 resultCode == Activity.RESULT_OK -> {
                     Utils.setToken(this, FirebaseAuth.getInstance().currentUser) {
-                        userService.get { res ->
+                        userService.get(true) { res ->
                             if(res.length() == 0) {
                                 Utils.logout(this)
                             }else{
@@ -113,8 +113,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun openUserFragment(){
-        val userFragment = UserFragment()
-        fragmentHandler.add(userFragment)
+        fragmentHandler.add(UserFragment())
     }
 
 }

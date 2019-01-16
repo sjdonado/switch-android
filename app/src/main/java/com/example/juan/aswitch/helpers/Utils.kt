@@ -152,8 +152,10 @@ object Utils {
     fun logout(activity: Activity) {
         FirebaseAuth.getInstance().signOut()
         clearUserInfo(activity)
-        val mainActivity = Intent(activity, MainActivity::class.java)
-        activity.startActivity(mainActivity)
+        val mainActivityIntent = Intent(activity, MainActivity::class.java)
+        mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        activity.startActivity(mainActivityIntent)
     }
 
     fun glideRequestOptions(activity: Activity): RequestOptions {
