@@ -17,12 +17,10 @@ import android.net.Uri
 import com.bumptech.glide.request.RequestOptions
 import com.example.juan.aswitch.models.ImageObject
 import com.example.juan.aswitch.models.Place
-import com.example.juan.aswitch.models.User
 import com.glide.slider.library.SliderLayout
 import com.glide.slider.library.SliderTypes.BaseSliderView
 import com.glide.slider.library.SliderTypes.TextSliderView
 import com.glide.slider.library.Tricks.ViewPagerEx
-import kotlinx.android.synthetic.main.preference.*
 
 
 class PlaceDetailsFragment : BaseFragment(),
@@ -101,12 +99,6 @@ class PlaceDetailsFragment : BaseFragment(),
                 Utils.getRoundedDistance(place.distance)
         )
         placeDetailsDescriptionTextView.text = place.description
-        placeDetailsRatingBar.rating = place.rate!!.qualify!!.toFloat()
-        placeDetailsRatingTextView.text = place.rate!!.qualify!!.toString()
-        placeDetailsRatingSizeTextView.text = resources.getString(
-                R.string.place_details_rate_size,
-                place.rate!!.size!!.toString()
-        )
         placeDetailsTimeTextView.text = resources.getString(
                 R.string.place_details_time,
                 place.openingTime!!.hourOfDay.toString(),
@@ -127,6 +119,10 @@ class PlaceDetailsFragment : BaseFragment(),
                 ft.addToBackStack(null)
                 val dialogFragment = QualifyFragment.getInstance(place)
                 dialogFragment.show(ft, "dialog")
+                fragmentManager!!.executePendingTransactions()
+                dialogFragment.dialog.setOnDismissListener {
+                    setRate()
+                }
             }
         }
 
@@ -157,8 +153,18 @@ class PlaceDetailsFragment : BaseFragment(),
 
     override fun onResume() {
         super.onResume()
+        setRate()
         placeDetailsGoButton.isEnabled = true
         placeDetailsCallButton.isEnabled = true
+    }
+
+    private fun setRate(){
+        placeDetailsRatingBar.rating = place.rate!!.qualify!!.toFloat()
+        placeDetailsRatingTextView.text = place.rate!!.qualify!!.toString()
+        placeDetailsRatingSizeTextView.text = resources.getString(
+                R.string.place_details_rate_size,
+                place.rate!!.size!!.toString()
+        )
     }
 
     override fun onSliderClick(p0: BaseSliderView?) {}

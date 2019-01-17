@@ -120,23 +120,25 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
 //        undoBtn.setOnClickListener({ swipeView!!.undoLastSwipe() })
 
         swipeView!!.addItemRemoveListener {
-            if (isToUndo) {
-                isToUndo = false
-                swipeView!!.undoLastSwipe()
-            }
+            if (isToUndo) swipeView!!.undoLastSwipe()
             if(accept) {
                 usersPlaceService.accept(userObject.getString("id"), places[it].id) {}
                 accept = false
             } else {
                 usersPlaceService.reject(userObject.getString("id"), places[it].id) {}
             }
+            if(isToUndo) {
+                isToUndo = false
+            } else {
+                places.remove(places[it])
+            }
             if(it == 0) {
                 swipeNotFoundTextView.visibility = View.VISIBLE
                 swipeRejectButton.hide()
                 swipeAcceptButton.hide()
             }
-            places.remove(places[it])
-            Log.d("ITEM_REMOVE_LISTENER", accept.toString())
+            Log.d("ITEM_REMOVE_LISTENER", places.size.toString())
+            Log.d("ITEM_REMOVE_LISTENER", it.toString())
         }
     }
 
@@ -174,7 +176,6 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
     }
 
     override fun onSwipeUp() {
-        Utils.showSnackbar(view!!, "SUPER LIKE! Show any dialog here.")
         isToUndo = true
     }
 }
