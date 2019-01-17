@@ -16,7 +16,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="718c8d99-0a50-48e8-a238-002a31d97cff" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/menu/edit_place_menu.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.6/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.6/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.6/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.6/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.6/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.6/fileHashes/resourceHashesCache.bin" afterDir="false" />
@@ -27,17 +26,7 @@
       <change beforePath="$PROJECT_DIR$/.gradle/4.6/taskHistory/taskHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.6/taskHistory/taskHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/fragments/FiltersFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/fragments/FiltersFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/fragments/PlaceDetailsFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/fragments/PlaceDetailsFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/fragments/PlaceFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/fragments/PlaceFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/fragments/SwipeFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/fragments/SwipeFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/helpers/FragmentHandler.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/helpers/FragmentHandler.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_edit_place.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_edit_place.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_place.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_place.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/done_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/menu/done_menu.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/filter_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/menu/filter_menu.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values-es-rCO/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values-es-rCO/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -63,30 +52,30 @@
         <counts>
           <entry key="Translations Editor" value="2" />
           <entry key="gradle" value="1" />
-          <entry key="kt" value="29" />
-          <entry key="xml" value="11" />
+          <entry key="kt" value="33" />
+          <entry key="xml" value="15" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="" value="2" />
           <entry key="Groovy" value="1" />
-          <entry key="Kotlin" value="29" />
-          <entry key="XML" value="11" />
+          <entry key="Kotlin" value="33" />
+          <entry key="XML" value="15" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gradle" value="6" />
-          <entry key="kt" value="1118" />
-          <entry key="xml" value="193" />
+          <entry key="kt" value="1119" />
+          <entry key="xml" value="605" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Groovy" value="6" />
-          <entry key="Kotlin" value="1118" />
-          <entry key="XML" value="193" />
+          <entry key="Kotlin" value="1119" />
+          <entry key="XML" value="605" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.lifecycle.project">
@@ -102,7 +91,37 @@
     <favorites_list name="switch-android" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_edit_place.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="424">
+              <caret line="96" selection-start-line="96" selection-end-line="96" />
+            </state>
+          </provider>
+          <provider editor-type-id="android-designer2" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/values/dimens.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="300">
+              <caret line="20" column="35" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="35" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_place_details.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-64">
+              <caret line="32" column="52" selection-start-line="32" selection-start-column="52" selection-end-line="32" selection-end-column="52" />
+            </state>
+          </provider>
+          <provider editor-type-id="android-designer2" />
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -115,7 +134,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>user_fragment_label</find>
       <find>info update</find>
       <find>in</find>
       <find>info up</find>
@@ -145,6 +163,7 @@
       <find>done_action</find>
       <find>backStackListener</find>
       <find>menu</find>
+      <find>wrap_content</find>
     </findStrings>
     <replaceStrings>
       <replace>getSharedPreferencesStringValue</replace>
@@ -161,6 +180,7 @@
       <replace>editPlaceRemoveThirdButton</replace>
       <replace>wrap_content</replace>
       <replace>gone</replace>
+      <replace>@dimen/grid_layout_images</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/app</dir>
@@ -2676,9 +2696,7 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/fragments/StarredPlacesFragment.kt" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/fragments/QualifyFragment.kt" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/fragments/PlaceDetailsFragment.kt" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/helpers/FragmentHandler.kt" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_place_details.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_edit_place.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/menu/filter_menu.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/menu/edit_place_menu.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/fragments/SwipeFragment.kt" />
@@ -2687,6 +2705,8 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/fragments/FiltersFragment.kt" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_place.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/fragments/PlaceFragment.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/helpers/FragmentHandler.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_edit_place.xml" />
       </list>
     </option>
   </component>
@@ -2763,26 +2783,7 @@
               <item name="switch-android" type="1abcf292:AndroidViewProjectNode" />
               <item name="app" type="feadf853:AndroidModuleNode" />
               <item name="res" type="d4f16f75:AndroidResFolderNode" />
-              <item name="menu" type="ddeffd01:AndroidResFolderTypeNode" />
-            </path>
-            <path>
-              <item name="switch-android" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
               <item name="values" type="ddeffd01:AndroidResFolderTypeNode" />
-            </path>
-            <path>
-              <item name="switch-android" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-              <item name="values" type="ddeffd01:AndroidResFolderTypeNode" />
-              <item name="strings" type="c431d0b8:AndroidResGroupNode" />
-            </path>
-            <path>
-              <item name="switch-android" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-              <item name="xml" type="ddeffd01:AndroidResFolderTypeNode" />
             </path>
           </expand>
           <select />
@@ -3082,13 +3083,6 @@
       </provider>
       <provider editor-type-id="android-designer2" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/dimens.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="62" selection-start-line="16" selection-start-column="62" selection-end-line="16" selection-end-column="62" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/adapters/PlaceAdapter.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-85">
@@ -3224,14 +3218,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_place_details.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="32" column="52" selection-start-line="32" selection-start-column="52" selection-end-line="32" selection-end-column="52" />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/fragments/EditPlaceFragment.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -3249,13 +3235,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/fragments/SwipeFragment.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="244">
-          <caret line="156" column="29" selection-start-line="156" selection-start-column="29" selection-end-line="156" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
     <entry file="android-dummy:///Users/sjdonado/Documents/myprojects/switch/switch-android/app/Translations Editor">
       <provider selected="true" editor-type-id="string-resource-editor" />
     </entry>
@@ -3270,13 +3249,6 @@
       </provider>
       <provider editor-type-id="android-designer2" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/fragments/FiltersFragment.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="83" column="22" selection-start-line="83" selection-start-column="22" selection-end-line="83" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/filter_menu.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -3287,16 +3259,6 @@
         </state>
       </provider>
       <provider editor-type-id="android-designer2" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/fragments/PlaceFragment.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
-          <folding>
-            <element signature="e#45#599#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/fragments/PlaceDetailsFragment.kt">
       <provider selected="true" editor-type-id="text-editor">
@@ -3334,6 +3296,44 @@
       </provider>
       <provider editor-type-id="android-designer2" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="40" column="39" selection-start-line="40" selection-start-column="39" selection-end-line="40" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/helpers/FragmentHandler.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1017">
+          <caret line="72" column="55" lean-forward="true" selection-start-line="72" selection-start-column="55" selection-end-line="72" selection-end-column="55" />
+          <folding>
+            <element signature="e#42#399#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/fragments/SwipeFragment.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="141" column="9" lean-forward="true" selection-start-line="141" selection-start-column="9" selection-end-line="141" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/fragments/PlaceFragment.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/fragments/FiltersFragment.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="83" column="22" selection-start-line="83" selection-start-column="22" selection-end-line="83" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/edit_place_menu.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -3342,30 +3342,28 @@
       </provider>
       <provider editor-type-id="android-designer2" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_place_details.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="40" column="39" selection-start-line="40" selection-start-column="39" selection-end-line="40" selection-end-column="39" />
+        <state relative-caret-position="-64">
+          <caret line="32" column="52" selection-start-line="32" selection-start-column="52" selection-end-line="32" selection-end-column="52" />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/dimens.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="35" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="35" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_edit_place.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="446">
-          <caret line="145" column="56" selection-start-line="145" selection-start-column="56" selection-end-line="145" selection-end-column="56" />
+        <state relative-caret-position="424">
+          <caret line="96" selection-start-line="96" selection-end-line="96" />
         </state>
       </provider>
       <provider editor-type-id="android-designer2" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/juan/aswitch/helpers/FragmentHandler.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="58" column="36" selection-start-line="58" selection-start-column="36" selection-end-line="58" selection-end-column="36" />
-          <folding>
-            <element signature="e#42#399#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
     </entry>
   </component>
 </project>

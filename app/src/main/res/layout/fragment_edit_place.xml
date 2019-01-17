@@ -38,106 +38,100 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <GridLayout
-                    android:id="@+id/editPlaceImagesLayout"
-                    android:layout_width="match_parent"
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/editPlaceCoverImageView"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:alignmentMode="alignBounds"
-                    android:columnCount="2"
-                    android:rowCount="2"
-                    android:useDefaultMargins="true"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/editPlaceSecondImageView"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/editPlaceFirstImageView"/>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/editPlaceFirstImageView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/editPlaceThirdImageView"
+                    app:layout_constraintStart_toEndOf="@id/editPlaceCoverImageView"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/editPlaceSecondImageView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintTop_toBottomOf="@id/editPlaceCoverImageView"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/editPlaceThirdImageView"/>
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/editPlaceCoverImageView"
-                        android:layout_width="@dimen/grid_layout_images"
-                        android:layout_height="@dimen/grid_layout_images"
-                        android:layout_columnWeight="1"
-                        android:adjustViewBounds="true"
-                        android:scaleType="centerCrop" />
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/editPlaceFirstImageView"
-                        android:layout_width="@dimen/grid_layout_images"
-                        android:layout_height="@dimen/grid_layout_images"
-                        android:layout_columnWeight="1"
-                        android:adjustViewBounds="true"
-                        android:scaleType="centerCrop" />
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/editPlaceSecondImageView"
-                        android:layout_width="@dimen/grid_layout_images"
-                        android:layout_height="@dimen/grid_layout_images"
-                        android:layout_columnWeight="1"
-                        android:adjustViewBounds="true"
-                        android:scaleType="centerCrop" />
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/editPlaceThirdImageView"
-                        android:layout_width="@dimen/grid_layout_images"
-                        android:layout_height="@dimen/grid_layout_images"
-                        android:layout_columnWeight="1"
-                        android:adjustViewBounds="true"
-                        android:scaleType="centerCrop" />
-                </GridLayout>
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/editPlaceThirdImageView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintTop_toBottomOf="@id/editPlaceFirstImageView"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/editPlaceSecondImageView"
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/editPlaceRemoveFirstButton"
                     style="@style/Widget.MaterialComponents.Button.UnelevatedButton.Icon"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="50dp"
-                    android:layout_marginEnd="8dp"
+                    app:cornerRadius="24dp"
                     android:visibility="invisible"
                     app:backgroundTint="@color/white"
-                    app:cornerRadius="24dp"
                     app:iconTint="@color/white_grey"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    card_view:icon="@drawable/ic_close_white_24dp" />
+                    card_view:icon="@drawable/ic_close_white_24dp"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintVertical_bias="0"
+                    app:layout_constraintTop_toTopOf="@id/editPlaceFirstImageView"
+                    app:layout_constraintBottom_toTopOf="@id/editPlaceSecondImageView"
+                    app:layout_constraintStart_toEndOf="@id/editPlaceFirstImageView"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/editPlaceRemoveSecondButton"
                     style="@style/Widget.MaterialComponents.Button.UnelevatedButton.Icon"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="210dp"
-                    android:layout_marginEnd="8dp"
+                    app:cornerRadius="24dp"
                     android:visibility="invisible"
                     app:backgroundTint="@color/white"
-                    app:cornerRadius="24dp"
                     app:iconTint="@color/white_grey"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.404"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    card_view:icon="@drawable/ic_close_white_24dp" />
+                    card_view:icon="@drawable/ic_close_white_24dp"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintVertical_bias="0"
+                    app:layout_constraintTop_toTopOf="@id/editPlaceSecondImageView"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/editPlaceThirdImageView"
+                    app:layout_constraintStart_toEndOf="@id/editPlaceSecondImageView" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/editPlaceRemoveThirdButton"
                     style="@style/Widget.MaterialComponents.Button.UnelevatedButton.Icon"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="210dp"
-                    android:layout_marginEnd="8dp"
+                    app:cornerRadius="24dp"
                     android:visibility="invisible"
                     app:backgroundTint="@color/white"
-                    app:cornerRadius="24dp"
                     app:iconTint="@color/white_grey"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    card_view:icon="@drawable/ic_close_white_24dp" />
+                    card_view:icon="@drawable/ic_close_white_24dp"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintVertical_bias="0"
+                    app:layout_constraintTop_toTopOf="@id/editPlaceThirdImageView"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/editPlaceThirdImageView"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
