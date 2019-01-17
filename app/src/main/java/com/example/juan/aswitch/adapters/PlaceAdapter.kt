@@ -13,8 +13,11 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.models.Place
 
-class PlacesAdapter(private val activity: Activity, private val places: ArrayList<Place>, private val clickListener: OnClickListener) :
-        RecyclerView.Adapter<PlacesAdapter.MyViewHolder>() {
+
+class PlacesAdapter(private val view: View, private val activity: Activity,
+                    private val places: ArrayList<Place>, private val clickListener: OnClickListener,
+                    private val onSwipeListener: OnSwipeListener) :
+        SwipeAdapter(view, places, onSwipeListener) {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var name: TextView = itemView.findViewById(R.id.placeRecyclerCardNameTextView)
@@ -46,7 +49,6 @@ class PlacesAdapter(private val activity: Activity, private val places: ArrayLis
         }
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup,
                                     viewType: Int): PlacesAdapter.MyViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -63,4 +65,5 @@ class PlacesAdapter(private val activity: Activity, private val places: ArrayLis
     interface OnClickListener {
         fun onClick(place: Place)
     }
+
 }

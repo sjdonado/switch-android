@@ -2,19 +2,15 @@ package com.example.juan.aswitch.fragments
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 
 import com.example.juan.aswitch.R
-import com.example.juan.aswitch.activities.BaseActivity
 import com.example.juan.aswitch.helpers.FragmentHandler
 import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.models.Place
 import com.example.juan.aswitch.services.PlaceService
-import kotlinx.android.synthetic.main.fragment_filters.*
-import kotlinx.android.synthetic.main.fragment_place.*
 
 
 class PlaceFragment : androidx.fragment.app.Fragment() {
@@ -25,7 +21,7 @@ class PlaceFragment : androidx.fragment.app.Fragment() {
     private lateinit var placeMenu: Menu
 
     private val backStackListener = FragmentManager.OnBackStackChangedListener {
-        if(fragmentManager!!.backStackEntryCount == 2)
+        if(fragmentManager?.backStackEntryCount == 2)
             placeMenu.findItem(R.id.editPlaceAction).isVisible = true
     }
 

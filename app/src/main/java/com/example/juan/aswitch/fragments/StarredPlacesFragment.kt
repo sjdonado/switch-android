@@ -16,6 +16,9 @@ import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.models.Place
 import com.example.juan.aswitch.services.PlaceService
 import kotlinx.android.synthetic.main.fragment_starred_places.*
+import com.example.juan.aswitch.lib.SwipeToDeleteCallback
+import androidx.recyclerview.widget.ItemTouchHelper
+import com.example.juan.aswitch.adapters.SwipeAdapter
 
 
 class StarredPlacesFragment : androidx.fragment.app.Fragment() {
@@ -42,10 +45,15 @@ class StarredPlacesFragment : androidx.fragment.app.Fragment() {
         fragmentHandler = FragmentHandler(activity!! as AppCompatActivity, R.id.menu_fragment_container)
 
         val viewManager = LinearLayoutManager(activity)
-        val viewAdapter = PlacesAdapter(activity!!, places,
+        val placesAdapter = PlacesAdapter(view, activity!!, places,
             object: PlacesAdapter.OnClickListener {
                 override fun onClick(place: Place) {
                     fragmentHandler.add(PlaceDetailsFragment.getInstance(place, true))
+                }
+            },
+            object: SwipeAdapter.OnSwipeListener {
+                override fun onDelete(place: Place) {
+                    Log.d("DELETED", place.toString())
                 }
             }
         )
@@ -64,15 +72,13 @@ class StarredPlacesFragment : androidx.fragment.app.Fragment() {
                         places.add(place)
                     }
                     activity!!.runOnUiThread {
-                        viewAdapter.notifyDataSetChanged()
+                        placesAdapter.notifyDataSetChanged()
                     }
                 }
             }
         }
 
-
-
-         starredPlacesRecyclerView.apply {
+        starredPlacesRecyclerView.apply {
             // use this setting to improve performance if you know that changes
             // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)
@@ -81,8 +87,10 @@ class StarredPlacesFragment : androidx.fragment.app.Fragment() {
             layoutManager = viewManager
 
             // specify an viewAdapter (see also next example)
-            adapter = viewAdapter
-
+            adapter = placesAdapter
         }
+
+        val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(context!!, placesAdapter))
+        itemTouchHelper.attachToRecyclerView(starredPlacesRecyclerView)
     }
 }
