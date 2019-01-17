@@ -79,4 +79,7 @@
     <string name="place_details_open_chip">Abierto</string>
     <string name="place_details_closed_chip">Cerrado</string>
     <string name="place_details_distance">%1$s metros</string>
+    <string name="menu_title_filters">Filtros</string>
+    <string name="menu_title_edit_place">Editar lugar</string>
+    <string name="menu_title_done">Hecho</string>
 </resources>

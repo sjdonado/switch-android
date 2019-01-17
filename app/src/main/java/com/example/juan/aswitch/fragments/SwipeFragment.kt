@@ -154,7 +154,7 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item!!.itemId) {
-            R.id.filter_action -> {
+            R.id.filterAction -> {
                 fragmentHandler.add(FiltersFragment.getInstance())
                 return true
             }

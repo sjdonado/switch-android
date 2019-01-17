@@ -27,7 +27,7 @@ class PlaceDetailsFragment : BaseFragment(),
         BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener  {
 
     override fun getTitle(): String {
-        return "Place details"
+        return TITLE
     }
 
     private var qualify: Boolean = false
@@ -36,6 +36,7 @@ class PlaceDetailsFragment : BaseFragment(),
     lateinit var placeDetailsImageSlider: SliderLayout
 
     companion object {
+        var TITLE = "PlaceDetails"
         fun getInstance(place: Place, qualify: Boolean) = PlaceDetailsFragment().apply {
             arguments = Bundle().apply {
                 putParcelable("PLACE", place)

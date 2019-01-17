@@ -16,6 +16,7 @@ class FragmentHandler(private val activity: AppCompatActivity, private val fragm
     companion object {
         private const val MOVE_DEFAULT_TIME: Long = 1000
         private const val FADE_DEFAULT_TIME: Long = 150
+        const val NO_ADD_TO_BACK_STACK = "NO_ADD_TO_BACK_STACK"
     }
 
     val currentFragment: BaseFragment?
@@ -52,10 +53,10 @@ class FragmentHandler(private val activity: AppCompatActivity, private val fragm
         fragment.enterTransition = enterFade
 
         activity.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        val transaction = activity.supportFragmentManager.beginTransaction()
-        transaction.replace(fragmentContainer!!, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
+        val fragmentTransaction = activity.supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(fragmentContainer!!, fragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
     }
 
     fun add(fragment: BaseFragment) {
@@ -71,7 +72,11 @@ class FragmentHandler(private val activity: AppCompatActivity, private val fragm
         val fragmentTransaction = activity.supportFragmentManager.beginTransaction()
         Log.d("SET_FRAGMENT_NAME", fragment.getTitle())
         fragmentTransaction.replace(fragmentContainer!!, fragment, fragment.getTitle())
-        fragmentTransaction.addToBackStack(fragment.getTitle())
+        if(fragment.getTitle() != NO_ADD_TO_BACK_STACK) {
+            fragmentTransaction.addToBackStack(fragment.getTitle())
+        } else {
+            fragmentTransaction.addToBackStack(null)
+        }
         fragmentTransaction.commit()
     }
 }

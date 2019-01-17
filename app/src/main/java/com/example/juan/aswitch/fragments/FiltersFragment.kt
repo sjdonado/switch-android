@@ -52,7 +52,7 @@ class FiltersFragment : BaseFragment() {
 
         val userObjectValue = Utils.getSharedPreferencesStringValue(
                 activity!!,
-                "USER_OBJECT"
+                Utils.USER_OBJECT
         )
 
         if(userObjectValue != null) {
@@ -81,12 +81,12 @@ class FiltersFragment : BaseFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item!!.itemId) {
-            R.id.done_action -> {
+            R.id.doneAction -> {
                 if(radiusFilter.progress != userObject.getInt("radius")) {
                     userObject.put("radius", radiusFilter.progress)
                     Utils.updateSharedPreferencesObjectValue(
                             activity!!,
-                            "USER_OBJECT",
+                            Utils.USER_OBJECT,
                             userObject
                     )
                 }

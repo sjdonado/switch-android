@@ -2,9 +2,8 @@ package com.example.juan.aswitch.fragments
 
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 
@@ -14,6 +13,7 @@ import com.example.juan.aswitch.helpers.FragmentHandler
 import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.models.Place
 import com.example.juan.aswitch.services.PlaceService
+import kotlinx.android.synthetic.main.fragment_filters.*
 import kotlinx.android.synthetic.main.fragment_place.*
 
 
@@ -21,11 +21,21 @@ class PlaceFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var placeService: PlaceService
     private lateinit var place: Place
-    private var editMode: Boolean = false
     private lateinit var fragmentHandler: FragmentHandler
+    private lateinit var placeMenu: Menu
+
+    private val backStackListener = FragmentManager.OnBackStackChangedListener {
+        if(fragmentManager!!.backStackEntryCount == 2)
+            placeMenu.findItem(R.id.editPlaceAction).isVisible = true
+    }
 
     companion object {
         fun getInstance(): PlaceFragment = PlaceFragment()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -39,25 +49,34 @@ class PlaceFragment : androidx.fragment.app.Fragment() {
 
         placeService = PlaceService(activity!!)
 
-        fragmentHandler = FragmentHandler(activity!! as AppCompatActivity, R.id.place_fragment_container)
-
         placeService.get {
             place = Utils.parseJSONPlace(it.getJSONObject("data"))
             activity!!.runOnUiThread {
+                PlaceDetailsFragment.TITLE = FragmentHandler.NO_ADD_TO_BACK_STACK
                 fragmentHandler.add(PlaceDetailsFragment.getInstance(place, false))
             }
         }
 
-        placeEditOrSaveButton.setOnClickListener {
-            editMode = !editMode
-            if(editMode) {
-                placeEditOrSaveButton.setImageResource(R.drawable.ic_save_white_24dp)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item!!.itemId) {
+            R.id.editPlaceAction -> {
+                item.isVisible = false
                 fragmentHandler.add(EditPlaceFragment.getInstance(place))
-            } else {
-                placeEditOrSaveButton.setImageResource(R.drawable.ic_edit_white_24dp)
-                fragmentHandler.add(PlaceDetailsFragment.getInstance(place, false))
+                return true
             }
+
         }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.edit_place_menu, menu)
+        placeMenu = menu
+        fragmentHandler = FragmentHandler(activity!! as AppCompatActivity, R.id.place_fragment_container)
+        activity!!.supportFragmentManager.addOnBackStackChangedListener(backStackListener)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
 }

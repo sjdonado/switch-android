@@ -5,9 +5,9 @@
     tools:context=".MainActivity">
 
     <item
-        android:id="@+id/done_action"
+        android:id="@+id/doneAction"
         android:orderInCategory="300"
-        android:title="Done"
+        android:title="@string/menu_title_done"
         android:icon="@drawable/ic_done_white_24dp"
         app:showAsAction="ifRoom" />
 

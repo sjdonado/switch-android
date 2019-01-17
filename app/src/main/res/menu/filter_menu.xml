@@ -5,9 +5,9 @@
     tools:context=".MainActivity">
 
     <item
-        android:id="@+id/filter_action"
+        android:id="@+id/filterAction"
         android:orderInCategory="300"
-        android:title="Filter"
+        android:title="@string/menu_title_filters"
         android:icon="@drawable/ic_filter_list_white_24dp"
         app:showAsAction="ifRoom" />
 
