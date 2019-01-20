@@ -37,6 +37,7 @@ import com.example.juan.aswitch.models.Place
 import com.example.juan.aswitch.models.Time
 import com.example.juan.aswitch.models.User
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import org.json.JSONArray
 import java.io.File
 import java.io.FileOutputStream
@@ -185,16 +186,15 @@ object Utils {
     }
 
     fun getDisplaySize(windowManager: WindowManager): Point {
-        try {
+        return try {
             val display = windowManager.defaultDisplay
             val displayMetrics = DisplayMetrics()
             display.getMetrics(displayMetrics)
-            return Point(displayMetrics.widthPixels, displayMetrics.heightPixels)
+            Point(displayMetrics.widthPixels, displayMetrics.heightPixels)
         } catch (e: Exception) {
             e.printStackTrace()
-            return Point(0, 0)
+            Point(0, 0)
         }
-
     }
 
     fun dpToPx(dp: Int): Int {
@@ -213,6 +213,14 @@ object Utils {
     fun getSharedPreferencesUserObject(activity: Activity): User {
         val json = getSharedPreferencesStringValue(activity, USER_OBJECT)
         return Gson().fromJson(json, User::class.java)
+    }
+
+    fun updateSharedPreferencesUserObject(activity: Activity, user: User) {
+        updateSharedPreferencesObjectValue(
+                activity,
+                USER_OBJECT,
+                JSONObject(Gson().toJson(user).toString())
+        )
     }
 
     fun getRoundedDistance(distance: Double): String {

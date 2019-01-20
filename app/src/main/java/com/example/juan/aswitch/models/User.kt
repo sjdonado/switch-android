@@ -11,7 +11,8 @@ data class User(
         val name: String?,
         val phoneNumber: String?,
         val profilePicture: ImageObject?,
-        val radius: Int?,
+        var radius: Int?,
+        var filters: ArrayList<String>?,
         val role: Boolean?
 ) : Parcelable
 

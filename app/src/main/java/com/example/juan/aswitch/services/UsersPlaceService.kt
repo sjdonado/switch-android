@@ -25,5 +25,8 @@ open class UsersPlaceService (activity: Activity) : MainService("/users-places",
         super.post("/qualify/$id", jsonObject.toString(), callback, true)
     }
 
+    fun remove(id: String, callback: (response: JSONObject) -> Unit) {
+        super.put("/remove/$id", JSONObject().toString(), callback, false)
+    }
 
 }

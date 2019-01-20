@@ -13,8 +13,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.juan.aswitch.helpers.FragmentHandler
 import com.example.juan.aswitch.lib.SwipeCard
 import com.example.juan.aswitch.models.Place
+import com.example.juan.aswitch.models.User
 import com.example.juan.aswitch.services.PlaceService
 import com.example.juan.aswitch.services.UsersPlaceService
+import com.google.gson.JsonObject
 import com.mindorks.placeholderview.SwipeDecor
 import kotlinx.android.synthetic.main.fragment_swipe.*
 import org.json.JSONObject
@@ -28,7 +30,7 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
     private val animationDuration = 300
     private var isToUndo = false
     private var accept = false
-    private var userObject: JSONObject = JSONObject()
+    private lateinit var user: User
     private lateinit var fragmentHandler: FragmentHandler
 
     companion object {
@@ -54,11 +56,7 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
         placeService = PlaceService(activity!!)
         usersPlaceService = UsersPlaceService(activity!!)
 
-        val userObjectValue = Utils.getSharedPreferencesStringValue(
-                activity!!,
-                "USER_OBJECT"
-        )
-        if(userObjectValue != null) userObject = JSONObject(userObjectValue)
+        val user = Utils.getSharedPreferencesUserObject(activity!!)
 
         val bottomMargin = Utils.dpToPx(160)
         val windowSize = Utils.getDisplaySize(activity!!.windowManager)
@@ -83,7 +81,8 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
         val cardViewHolderSize = Point(windowSize.x, windowSize.y - bottomMargin)
 
         if(places.size == 0) {
-            placeService.search(userObject.getInt("radius")) {res ->
+//            if(userObject.has("filters")) Log.d("USER_OBJECT_FILTERS", userObject.getJSONArray("filters").toString())
+            placeService.search(user.radius!!, user.filters!!) {res ->
                 val placesObjects = res.getJSONArray("data")
                 Log.d("PLACES", res.toString())
                 if(placesObjects.length() == 0) {
@@ -122,10 +121,10 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
         swipeView!!.addItemRemoveListener {
             if (isToUndo) swipeView!!.undoLastSwipe()
             if(accept) {
-                usersPlaceService.accept(userObject.getString("id"), places[it].id) {}
+                usersPlaceService.accept(user.uid!!, places[it].id) {}
                 accept = false
             } else {
-                usersPlaceService.reject(userObject.getString("id"), places[it].id) {}
+                usersPlaceService.reject(user.uid!!, places[it].id) {}
             }
             if(isToUndo) {
                 isToUndo = false

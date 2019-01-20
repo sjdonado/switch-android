@@ -93,7 +93,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
         if (role) toggleCompanyFieldsVisibility(true)
 
         if(signUp || (user.role != null && role)) {
-            placeService.getCategories {
+            placeService.getAllCategories {
                 activity!!.runOnUiThread {
                     Log.d("getCategories", it.toString())
                     val categories = it.getJSONArray("data")
