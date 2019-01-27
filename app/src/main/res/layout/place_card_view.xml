@@ -29,32 +29,33 @@
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/placeCardNameTextView"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/placeCardNameTextView"
             style="@style/CardTitle"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/placeTimeChip"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toStartOf="@id/placeTimeChip"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/placeCardCoverImageView" />
+            app:layout_constraintTop_toBottomOf="@id/placeCardCoverImageView"
+            app:layout_constraintBottom_toTopOf="@id/placeCardRatingBar"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/placeTimeChip"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="16dp"
             app:chipIconSize="14dp"
             app:chipStartPadding="8dp"
             app:chipCornerRadius="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/placeCardDistanceTextView"
+            app:layout_constraintStart_toEndOf="@id/placeCardNameTextView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintVertical_bias="0.466" />
+            app:layout_constraintTop_toBottomOf="@id/placeCardCoverImageView"
+            app:layout_constraintBottom_toTopOf="@id/placeCardRatingBar" />
 
         <androidx.appcompat.widget.AppCompatRatingBar
             android:id="@+id/placeCardRatingBar"
@@ -62,30 +63,29 @@
             android:layout_width="wrap_content"
             android:layout_height="19dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="6dp"
-            android:gravity="center_vertical"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toTopOf="@id/placeCardLocationTextView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/placeCardNameTextView" />
+            app:layout_constraintTop_toBottomOf="@id/placeCardNameTextView" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/placeCardRatingTextView"
             android:layout_width="wrap_content"
             android:layout_height="19dp"
             android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
-            app:layout_constraintEnd_toStartOf="@+id/placeCardDistanceTextView"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/placeCardRatingBar"
-            app:layout_constraintTop_toBottomOf="@+id/placeCardNameTextView" />
+            app:layout_constraintStart_toEndOf="@id/placeCardRatingBar"
+            app:layout_constraintEnd_toStartOf="@id/placeCardRatingSizeTextView"
+            app:layout_constraintTop_toBottomOf="@id/placeCardNameTextView"
+            app:layout_constraintBottom_toTopOf="@id/placeCardLocationTextView"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/placeCardRatingSizeTextView"
             android:layout_width="wrap_content"
             android:layout_height="19dp"
             android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
-            app:layout_constraintStart_toEndOf="@+id/placeCardRatingTextView"
-            app:layout_constraintTop_toBottomOf="@+id/placeCardNameTextView" />
+            app:layout_constraintBottom_toTopOf="@id/placeCardLocationTextView"
+            app:layout_constraintStart_toEndOf="@id/placeCardRatingTextView"
+            app:layout_constraintTop_toBottomOf="@id/placeCardNameTextView" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/placeCardDistanceTextView"
@@ -93,6 +93,7 @@
             android:layout_height="19dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toTopOf="@id/placeCardLocationTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/placeCardNameTextView" />
 
@@ -104,9 +105,10 @@
             android:layout_marginEnd="16dp"
             android:layout_marginTop="6dp"
             android:singleLine="true"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/placeCardRatingBar" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/placeCardRatingBar"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: me.zhanghai.android.materialprogressbar:library:1.4.2@aar">
     <ANNOTATIONS>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-library-1.4.2.aar/aab22b97ba2b5cf8e1ab17b9392d71b7/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-library-1.4.2.aar/220f43e4b690ba9ec08c8844aec3aef5/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-library-1.4.2.aar/aab22b97ba2b5cf8e1ab17b9392d71b7/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-library-1.4.2.aar/aab22b97ba2b5cf8e1ab17b9392d71b7/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-library-1.4.2.aar/220f43e4b690ba9ec08c8844aec3aef5/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-library-1.4.2.aar/220f43e4b690ba9ec08c8844aec3aef5/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

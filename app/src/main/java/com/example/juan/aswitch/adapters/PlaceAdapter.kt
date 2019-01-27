@@ -17,7 +17,7 @@ import com.example.juan.aswitch.models.Place
 class PlacesAdapter(private val view: View, private val activity: Activity,
                     private val places: ArrayList<Place>, private val clickListener: OnClickListener,
                     private val onSwipeListener: OnSwipeListener) :
-        SwipeAdapter(view, places, onSwipeListener) {
+        SwipeAdapter(activity, view, places, onSwipeListener) {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var name: TextView = itemView.findViewById(R.id.placeRecyclerCardNameTextView)

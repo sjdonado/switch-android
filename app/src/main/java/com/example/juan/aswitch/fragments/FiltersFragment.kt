@@ -1,12 +1,10 @@
 package com.example.juan.aswitch.fragments
 
 
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.*
+import java.util.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.getColor
 
 import com.example.juan.aswitch.R
 import com.example.juan.aswitch.helpers.FragmentHandler
@@ -15,10 +13,12 @@ import com.example.juan.aswitch.models.User
 import com.example.juan.aswitch.services.PlaceService
 import com.example.juan.aswitch.services.UserService
 import com.google.android.material.chip.Chip
-import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.fragment_filters.*
 import org.json.JSONObject
-import org.json.JSONArray
+import android.widget.ArrayAdapter
+import moe.feng.common.view.breadcrumbs.DefaultBreadcrumbsCallback
+import moe.feng.common.view.breadcrumbs.model.BreadcrumbItem
+import kotlin.collections.ArrayList
 
 
 class FiltersFragment : BaseFragment() {
@@ -30,8 +30,14 @@ class FiltersFragment : BaseFragment() {
     private lateinit var userService: UserService
     private lateinit var placeService: PlaceService
     private lateinit var user: User
+    private lateinit var categoriesJSON: JSONObject
+    private lateinit var arrayAdapter: ArrayAdapter<String>
     private lateinit var fragmentHandler: FragmentHandler
     private var filtersArrayList = ArrayList<String>()
+    private var categoriesJSONKeys = ArrayList<String>()
+    private var segmentsJSONKeys = ArrayList<String>()
+    private var categoriesListSource = ArrayList<String>()
+    private var categoriesSelectedPosition = ArrayList<Int>()
 
     companion object {
         fun getInstance(): FiltersFragment = FiltersFragment()
@@ -59,6 +65,8 @@ class FiltersFragment : BaseFragment() {
 
 
         user = Utils.getSharedPreferencesUserObject(activity!!)
+
+
         filterRadiusSeekBar.progress = user.radius!!
         filtersArrayList = user.filters!!
 
@@ -66,49 +74,79 @@ class FiltersFragment : BaseFragment() {
             filterUserChipGroup.addView(createUserChip(it))
         }
 
-        filterAddFilterButton.setOnClickListener {
-            showCategoriesChips(filterCategoriesGroupsTextView.visibility == View.GONE)
-        }
+        filterCategoriesBreadcrumbs.setItems(ArrayList(Arrays.asList(
+                BreadcrumbItem.createSimpleItem(getString(R.string.filters_fragment_bread_crumbs_root))
+        )))
 
-        placeService.getCategoriesGroups {
-            val data = it.getJSONObject("data")
-            Log.d("ARRAY", data.toString())
-            activity!!.runOnUiThread {
-                val keys = data.keys()
-                while (keys.hasNext()) {
-                    val key = keys.next()
-                    if (data.get(key) is JSONArray) {
-                        val groupChip = createChip(key)
-                        groupChip.setOnClickListener {
-                            if (groupChip.isChecked) {
-                                val categories = data!!.get(key) as JSONArray
-                                Log.d("CATEGORIES", categories.toString())
-                                filterCategoriesChipGroup.removeAllViews()
-                                for(i in 0..(categories.length() - 1)) {
-                                    val category = (categories[i] as JSONObject).getString("subsegment")
-                                    if(!filtersArrayList.contains(category)) {
-                                        val categoryChip = createChip(category)
-                                        categoryChip.setOnClickListener {
-                                            filtersArrayList.add(category)
-                                            filterUserChipGroup.addView(createUserChip(category))
-                                            filterCategoriesGroupsChipGroup.clearCheck()
-                                            filterCategoriesChipGroup.clearCheck()
-                                            showCategoriesChips(false)
-                                        }
-                                        filterCategoriesChipGroup.addView(categoryChip)
-                                    }
-                                }
-//                                filterScrollView.smoothScrollTo(0, filterAddFilterButton.bottom)
-                            } else {
-                                filterCategoriesChipGroup.removeAllViews()
-                            }
-                        }
-                        filterCategoriesGroupsChipGroup.addView(groupChip)
+        filterCategoriesBreadcrumbs.setCallback(object : DefaultBreadcrumbsCallback<BreadcrumbItem>() {
+            override fun onNavigateBack(item: BreadcrumbItem, position: Int) {
+                when(position) {
+                    0 -> {
+                        categoriesSelectedPosition.clear()
+                        categoriesListSource.clear()
+                        categoriesListSource.addAll(categoriesJSONKeys)
+                    }
+                    1 -> {
+                        categoriesSelectedPosition.remove(1)
+                        categoriesListSource.clear()
+                        categoriesListSource.addAll(segmentsJSONKeys)
                     }
                 }
+                arrayAdapter.notifyDataSetChanged()
+            }
+
+            override fun onNavigateNewLocation(newItem: BreadcrumbItem, changedPosition: Int) {}
+        })
+
+        arrayAdapter = ArrayAdapter(context!!, R.layout.custom_text_view, categoriesListSource)
+
+        filterCategoriesList.apply {
+            adapter = arrayAdapter
+
+            setOnItemClickListener { _, _, position, _ ->
+                when(categoriesSelectedPosition.size) {
+                    0 -> {
+                        filterCategoriesBreadcrumbs.addItem(BreadcrumbItem.createSimpleItem(categoriesJSONKeys[position]))
+                        val segmentKeys= (categoriesJSON[categoriesJSONKeys[position]] as JSONObject).keys()
+                        segmentsJSONKeys.clear()
+                        while(segmentKeys.hasNext()) { segmentsJSONKeys.add(segmentKeys.next()) }
+                        categoriesListSource.clear()
+                        categoriesListSource.addAll(segmentsJSONKeys)
+                        categoriesSelectedPosition.add(position)
+                    }
+                    1 -> {
+                        filterCategoriesBreadcrumbs.addItem(BreadcrumbItem.createSimpleItem(segmentsJSONKeys[position]))
+                        val segments = categoriesJSON[categoriesJSONKeys[categoriesSelectedPosition[0]]] as JSONObject
+                        categoriesListSource.clear()
+                        Utils.toStringArray(segments.getJSONArray(segmentsJSONKeys[position]))!!.forEach { if(it != null) categoriesListSource.add(it) }
+                        categoriesSelectedPosition.add(position)
+                    }
+                    2 -> {
+                        filterUserChipGroup.addView(createUserChip(categoriesListSource[position]))
+                        filtersArrayList.add(categoriesListSource[position])
+                        filterCategoriesBreadcrumbs.removeLastItem()
+                        filterCategoriesBreadcrumbs.removeLastItem()
+                        categoriesSelectedPosition.clear()
+                        categoriesListSource.clear()
+                        categoriesListSource.addAll(categoriesJSONKeys)
+                    }
+                }
+                arrayAdapter.notifyDataSetChanged()
             }
         }
 
+        placeService.getCategoriesGroups {
+            activity!!.runOnUiThread {
+                categoriesJSON = it.getJSONObject("data")
+                val keys = categoriesJSON.keys()
+                while (keys.hasNext()) {
+                    val key = keys.next()
+                    if (categoriesJSON.get(key) is JSONObject) categoriesJSONKeys.add(key)
+                }
+                categoriesListSource.addAll(categoriesJSONKeys)
+                arrayAdapter.notifyDataSetChanged()
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -129,16 +167,11 @@ class FiltersFragment : BaseFragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    private fun createChip(text: String): Chip {
-        val chip = Chip(filterCategoriesGroupsChipGroup.context)
-        chip.text= text
-        chip.isClickable = true
-        chip.isCheckable = true
-        return chip
-    }
-
     private fun createUserChip(text: String): Chip {
-        val userChip = createChip(text)
+        val userChip = Chip(filterUserChipGroup.context)
+        userChip.text= text
+        userChip.isClickable = true
+        userChip.isCheckable = true
         userChip.isCloseIconVisible = true
         userChip.setOnCloseIconClickListener {
             filterUserChipGroup.removeView(userChip)
@@ -147,17 +180,4 @@ class FiltersFragment : BaseFragment() {
         return userChip
     }
 
-    private fun showCategoriesChips(show: Boolean) {
-        if (show) {
-            filterCategoriesGroupsTextView.visibility = View.VISIBLE
-            filterCategoriesGroupsChipGroup.visibility = View.VISIBLE
-            filterCategoriesTextView.visibility = View.VISIBLE
-            filterCategoriesChipGroup.visibility = View.VISIBLE
-        } else {
-            filterCategoriesGroupsTextView.visibility = View.GONE
-            filterCategoriesGroupsChipGroup.visibility = View.GONE
-            filterCategoriesTextView.visibility = View.GONE
-            filterCategoriesChipGroup.visibility = View.GONE
-        }
-    }
 }

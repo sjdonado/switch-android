@@ -121,10 +121,10 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
         swipeView!!.addItemRemoveListener {
             if (isToUndo) swipeView!!.undoLastSwipe()
             if(accept) {
-                usersPlaceService.accept(user.uid!!, places[it].id) {}
+                usersPlaceService.accept(user.id!!, places[it].id) {}
                 accept = false
             } else {
-                usersPlaceService.reject(user.uid!!, places[it].id) {}
+                usersPlaceService.reject(user.id!!, places[it].id) {}
             }
             if(isToUndo) {
                 isToUndo = false

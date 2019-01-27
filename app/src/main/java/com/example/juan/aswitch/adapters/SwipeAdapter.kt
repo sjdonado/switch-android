@@ -1,11 +1,14 @@
 package com.example.juan.aswitch.adapters
 
+import android.app.Activity
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.example.juan.aswitch.R
 import com.example.juan.aswitch.models.Place
 import com.google.android.material.snackbar.Snackbar
 
 abstract class SwipeAdapter(
+        private val activity: Activity,
         private val view: View,
         private val places: ArrayList<Place>,
         private val onSwipeListener: OnSwipeListener
@@ -20,9 +23,9 @@ abstract class SwipeAdapter(
         recentlyDeletedPlacePosition = position
         places.remove(recentlyDeletedPlace)
         notifyItemRemoved(position)
-        Snackbar.make(view, "Test",
+        Snackbar.make(view, activity.getString(R.string.starred_place_removed),
                 Snackbar.LENGTH_LONG)
-                .setAction("Undo"){ undoDelete() }
+                .setAction(activity.getString(R.string.starred_place_removed_undo)){ undoDelete() }
                 .addCallback(object : Snackbar.Callback() {
                     override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                         super.onDismissed(transientBottomBar, event)

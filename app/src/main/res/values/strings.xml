@@ -100,10 +100,12 @@
     <!-- Settings keys -->
     <string name="settings_key_logout" translatable="false">logout</string>
 
-    <!-- Filter labels -->
-    <string name="filters_radio_distance">Radio distance</string>
-    <string name="filters_restaurant">Restaurant</string>
-    <string name="filters_bar">Bar</string>
+    <!-- Filter Fragment -->
+    <string name="filters_fragment_radio_distance">Radio distance</string>
+    <string name="filters_fragment_add_category">Add category</string>
+    <string name="filters_fragment_categories">Categories</string>
+    <string name="filters_fragment_bread_crumbs_root">All Categories</string>
+
 
     <!-- Place details fragment -->
     <string name="place_details_go_button">Go</string>
@@ -119,6 +121,8 @@
 
     <!-- Starred Places fragment -->
     <string name="starred_not_places_found_message">Doesn\'t have starred places yet.</string>
+    <string name="starred_place_removed">Starred place removed successfully</string>
+    <string name="starred_place_removed_undo">Undo</string>
 
     <!-- Qualify dialog fragment -->
     <string name="qualify_dialog_fragment_title">Qualify</string>
@@ -132,6 +136,11 @@
     <string name="place_card_view_name_dummy" translatable="false">Name lorem name lorem</string>
     <string name="place_card_view_location_dummy" translatable="false">Location lorem location </string>
     <string name="place_card_view_distance_dummy" translatable="false">Distance lorem distance</string>
+    <string name="filters_radio_distance">Radio distance</string>
+    <string name="filters_fragment_add">Add Category</string>
+    <string name="filters_fragment_group_categories">Categories</string>
+    <string name="filters_fragment_my_filters">My filters</string>
+    <string name="settings_logout_button">Logout</string>
 
 
 </resources>

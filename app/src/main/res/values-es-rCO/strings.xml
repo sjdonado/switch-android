@@ -82,4 +82,13 @@
     <string name="menu_title_filters">Filtros</string>
     <string name="menu_title_edit_place">Editar lugar</string>
     <string name="menu_title_done">Hecho</string>
+    <string name="filters_fragment_radio_distance">Radio de distancia</string>
+    <string name="filters_fragment_add">Añadir filtro</string>
+    <string name="filters_fragment_my_filters">Mis filtros</string>
+    <string name="filters_fragment_group_categories">Grupos de categorías</string>
+    <string name="filters_fragment_categories">Categorías</string>
+    <string name="starred_place_removed">Lugar favorito removido correctamente</string>
+    <string name="starred_place_removed_undo">Deshacer</string>
+    <string name="filters_fragment_add_category">Añadir categoría</string>
+    <string name="filters_fragment_bread_crumbs_root">Todas las Categorias</string>
 </resources>
