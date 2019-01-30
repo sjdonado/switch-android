@@ -103,6 +103,7 @@
     <!-- Filter Fragment -->
     <string name="filters_fragment_radio_distance">Radio distance</string>
     <string name="filters_fragment_add_category">Add category</string>
+    <string name="filters_fragment_filters">Filters</string>
     <string name="filters_fragment_categories">Categories</string>
     <string name="filters_fragment_bread_crumbs_root">All Categories</string>
 

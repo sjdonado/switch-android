@@ -2,6 +2,7 @@ package com.example.juan.aswitch.fragments
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import java.util.*
 import androidx.appcompat.app.AppCompatActivity
@@ -33,6 +34,7 @@ class FiltersFragment : BaseFragment() {
     private lateinit var categoriesJSON: JSONObject
     private lateinit var arrayAdapter: ArrayAdapter<String>
     private lateinit var fragmentHandler: FragmentHandler
+    private var categoriesArrayList = ArrayList<String>()
     private var filtersArrayList = ArrayList<String>()
     private var categoriesJSONKeys = ArrayList<String>()
     private var segmentsJSONKeys = ArrayList<String>()
@@ -68,10 +70,16 @@ class FiltersFragment : BaseFragment() {
 
 
         filterRadiusSeekBar.progress = user.radius!!
-        filtersArrayList = user.filters!!
+        categoriesArrayList = user.categories!!.clone() as ArrayList<String>
+        filtersArrayList = user.filters!!.clone() as ArrayList<String>
 
-        filtersArrayList.forEach {
+        categoriesArrayList.forEach {
             filterUserChipGroup.addView(createUserChip(it))
+        }
+
+        user.filters!!.forEach {
+            if(it == "open") filterOpenChip.isChecked = true
+            if(it == "closed") filterClosedChip.isChecked = true
         }
 
         filterCategoriesBreadcrumbs.setItems(ArrayList(Arrays.asList(
@@ -123,7 +131,7 @@ class FiltersFragment : BaseFragment() {
                     }
                     2 -> {
                         filterUserChipGroup.addView(createUserChip(categoriesListSource[position]))
-                        filtersArrayList.add(categoriesListSource[position])
+                        categoriesArrayList.add(categoriesListSource[position])
                         filterCategoriesBreadcrumbs.removeLastItem()
                         filterCategoriesBreadcrumbs.removeLastItem()
                         categoriesSelectedPosition.clear()
@@ -132,6 +140,22 @@ class FiltersFragment : BaseFragment() {
                     }
                 }
                 arrayAdapter.notifyDataSetChanged()
+            }
+        }
+
+        filterOpenChip.setOnClickListener {
+            if(filtersArrayList.indexOf("open") == -1) {
+                filtersArrayList.add("open")
+            } else {
+                filtersArrayList.remove("open")
+            }
+        }
+
+        filterClosedChip.setOnClickListener {
+            if(filtersArrayList.indexOf("closed") == -1) {
+                filtersArrayList.add("closed")
+            } else {
+                filtersArrayList.remove("closed")
             }
         }
 
@@ -152,9 +176,14 @@ class FiltersFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item!!.itemId) {
             R.id.doneAction -> {
-                user.radius = filterRadiusSeekBar.progress
-                user.filters = filtersArrayList
-                Utils.updateSharedPreferencesUserObject(activity!!, user)
+                if(user.radius != filterRadiusSeekBar.progress
+                        || !Arrays.equals(user.categories!!.toArray(), categoriesArrayList.toArray())
+                        || !Arrays.equals(user.filters!!.toArray(), filtersArrayList.toArray())) {
+                    user.radius = filterRadiusSeekBar.progress
+                    user.categories = categoriesArrayList
+                    user.filters = filtersArrayList
+                    Utils.updateSharedPreferencesUserObject(activity!!, user)
+                }
                 fragmentHandler.add(SwipeFragment.getInstance())
                 return true
             }
@@ -175,7 +204,7 @@ class FiltersFragment : BaseFragment() {
         userChip.isCloseIconVisible = true
         userChip.setOnCloseIconClickListener {
             filterUserChipGroup.removeView(userChip)
-            filtersArrayList.remove(text)
+            categoriesArrayList.remove(text)
         }
         return userChip
     }

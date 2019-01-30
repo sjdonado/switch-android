@@ -82,7 +82,7 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
 
         if(places.size == 0) {
 //            if(userObject.has("filters")) Log.d("USER_OBJECT_FILTERS", userObject.getJSONArray("filters").toString())
-            placeService.search(user.radius!!, user.filters!!) {res ->
+            placeService.search(user.radius!!, user.categories!!, user.filters!!) {res ->
                 val placesObjects = res.getJSONArray("data")
                 Log.d("PLACES", res.toString())
                 if(placesObjects.length() == 0) {

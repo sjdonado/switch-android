@@ -91,4 +91,7 @@
     <string name="starred_place_removed_undo">Deshacer</string>
     <string name="filters_fragment_add_category">Añadir categoría</string>
     <string name="filters_fragment_bread_crumbs_root">Todas las Categorias</string>
+    <string name="filters_fragment_filters">Filtros</string>
+    <string name="filters_fragment_open_filter">Abierto</string>
+    <string name="filters_fragment_open_closed">Cerrado</string>
 </resources>

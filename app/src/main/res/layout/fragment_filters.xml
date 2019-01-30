@@ -17,94 +17,130 @@
         <!--app:layout_constraintStart_toStartOf="parent"-->
         <!--app:layout_constraintEnd_toEndOf="parent">-->
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="16dp">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/filterRadioTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/filters_fragment_radio_distance"
-                android:textColor="@color/white"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/filterRadiusSeekBar"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/filterRadioTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/filters_fragment_radio_distance"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/filterRadiusSeekBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
-                android:id="@+id/filterRadiusSeekBar"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                app:dsb_indicatorColor="@android:color/white"
-                app:dsb_indicatorTextAppearance="@android:color/white"
-                app:dsb_progressColor="@android:color/white"
-                app:dsb_trackColor="@android:color/darker_gray"
-                app:dsb_max="9000"
-                app:dsb_min="100"
-                app:dsb_value="100"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/filterRadioTextView"
-                app:layout_constraintBottom_toTopOf="@id/filterUserTextView"/>
+        <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+            android:id="@+id/filterRadiusSeekBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:dsb_indicatorColor="@android:color/white"
+            app:dsb_indicatorTextAppearance="@android:color/white"
+            app:dsb_max="9000"
+            app:dsb_min="100"
+            app:dsb_progressColor="@android:color/white"
+            app:dsb_trackColor="@android:color/darker_gray"
+            app:dsb_value="100"
+            app:layout_constraintBottom_toTopOf="@id/filterFiltersTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/filterRadioTextView" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/filterUserTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/filters_fragment_categories"
-                android:textColor="@color/white"
-                android:textAlignment="center"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/filterRadiusSeekBar"
-                app:layout_constraintBottom_toTopOf="@id/filterUserChipGroupScrollView"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/filterFiltersTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/filters_fragment_filters"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/filterOpenChip"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/filterRadiusSeekBar" />
 
-            <HorizontalScrollView
-                android:id="@+id/filterUserChipGroupScrollView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/filterUserTextView"
-                app:layout_constraintBottom_toTopOf="@id/filterCategoriesBreadcrumbs">
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/filterUserChipGroup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:singleSelection="true"
-                    app:singleLine="true" />
-            </HorizontalScrollView>
+        <com.google.android.material.chip.Chip
+            android:id="@+id/filterOpenChip"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/place_details_open_chip"
+            app:layout_constraintBottom_toTopOf="@id/filterCategoriesTextView"
+            app:layout_constraintEnd_toStartOf="@id/filterClosedChip"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/filterFiltersTextView" />
 
-            <moe.feng.common.view.breadcrumbs.BreadcrumbsView
-                android:id="@+id/filterCategoriesBreadcrumbs"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_constraintStart_toStartOf="parent"
-                android:background="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/filterUserChipGroupScrollView"
-                app:layout_constraintBottom_toTopOf="@id/filterCategoriesList"/>
+        <com.google.android.material.chip.Chip
+            android:id="@+id/filterClosedChip"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/place_details_closed_chip"
+            app:layout_constraintBottom_toTopOf="@id/filterCategoriesTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/filterOpenChip"
+            app:layout_constraintTop_toBottomOf="@id/filterFiltersTextView" />
 
-            <ListView
-                android:id="@+id/filterCategoriesList"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/filterCategoriesTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/filters_fragment_categories"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/filterUserChipGroupScrollView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/filterFiltersTextView" />
+
+        <HorizontalScrollView
+            android:id="@+id/filterUserChipGroupScrollView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@id/filterCategoriesBreadcrumbs"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/filterCategoriesTextView">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/filterUserChipGroup"
                 android:layout_width="wrap_content"
-                android:layout_height="320dp"
-                android:paddingBottom="24dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/filterCategoriesBreadcrumbs"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                android:layout_height="wrap_content"
+                app:singleLine="true"
+                app:singleSelection="true" />
+        </HorizontalScrollView>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <moe.feng.common.view.breadcrumbs.BreadcrumbsView
+            android:id="@+id/filterCategoriesBreadcrumbs"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/filterCategoriesList"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/filterUserChipGroupScrollView" />
+
+        <ListView
+            android:id="@+id/filterCategoriesList"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:paddingBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/filterCategoriesBreadcrumbs" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <!--</androidx.core.widget.NestedScrollView>-->
 
 

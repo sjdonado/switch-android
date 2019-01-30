@@ -9,8 +9,8 @@ import java.io.File
 
 open class PlaceService (activity: Activity) : MainService("/places", activity) {
 
-    fun search(radius: Int, filters: ArrayList<String>, callback: (response: JSONObject) -> Unit) {
-        super.get("/search?radius=$radius&filters=${filters.joinToString(separator = ",")}", callback, true)
+    fun search(radius: Int, categories: ArrayList<String>, filters: ArrayList<String>, callback: (response: JSONObject) -> Unit) {
+        super.get("/search?radius=$radius&categories=${categories.joinToString(separator = ",")}&filters=${filters.joinToString(separator = ",")}", callback, true)
     }
 
     fun starredPlaces(callback: (response: JSONObject) -> Unit) {
