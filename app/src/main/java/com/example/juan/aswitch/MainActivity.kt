@@ -135,11 +135,8 @@ class MainActivity : AppCompatActivity() {
         } else {
             Utils.setToken(this, currentUser) {
                 userService.get(false) { res ->
-                    Utils.setSharedPreferencesStringValue(
-                            this,
-                            Utils.USER_OBJECT,
-                            res.getJSONObject("data").toString()
-                    )
+                    Utils.setUserAndPreferences(this, res.getJSONObject("data"))
+
                     if(Utils.getSharedPreferencesBooleanValue(this, Utils.SIGN_UP)!!){
                         val loginActivityIntent = Intent(this, LoginActivity::class.java)
                         loginActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)

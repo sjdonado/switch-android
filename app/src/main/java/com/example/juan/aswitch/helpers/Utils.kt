@@ -53,15 +53,8 @@ object Utils {
     private const val PREFERENCES_NAME = "SWITCH_DATA"
     const val NOTIFICATIONS_CHANNEL = "switch"
     const val USER_OBJECT = "USER_OBJECT"
+    const val CATEGORIES_OBJECT = "CATEGORIES_OBJECT"
     const val SIGN_UP = "SIGN_UP"
-
-    fun showSnackbar (rootLayout : View, text : String ) {
-        Snackbar.make(
-                rootLayout,
-                text,
-                Snackbar.LENGTH_SHORT
-        ).show()
-    }
 
     fun setSharedPreferencesStringValue(activity: Activity, keyName : String, data: String) {
         val sp = activity.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
@@ -106,43 +99,53 @@ object Utils {
         }
     }
 
-    fun merge(objects: List<JSONObject>): JSONObject {
-        var i = 0
-        var j = 1
-        while (i < objects.size - 1) {
-            merge(objects[i], objects[j])
-            i++
-            j++
-        }
-        return objects[objects.size - 1]
+//    fun getSharedPreferencesCategoriesObject(activity: Activity): User {
+//        val json = getSharedPreferencesStringValue(activity, CATEGORIES_OBJECT)
+//        return Gson().fromJson(json, User::class.java)
+//    }
+//
+//    fun updateSharedPreferencesCategoriesObject(activity: Activity, user: User) {
+//        updateSharedPreferencesObjectValue(
+//                activity,
+//                CATEGORIES_OBJECT,
+//                JSONObject(Gson().toJson(user).toString())
+//        )
+//    }
+
+    fun getSharedPreferencesUserObject(activity: Activity): User {
+        val json = getSharedPreferencesStringValue(activity, USER_OBJECT)
+        return Gson().fromJson(json, User::class.java)
     }
 
-    private fun merge(j1: JSONObject, j2: JSONObject) {
-        val keys = j1.keys()
-        var obj1: Any
-        var obj2: Any
-        while (keys.hasNext()) {
-            val next = keys.next()
-            if (j1.isNull(next)) continue
-            obj1 = j1.get(next)
-            if (!j2.has(next)) j2.putOpt(next, obj1)
-            obj2 = j2.get(next)
-            if (obj1 is JSONObject && obj2 is JSONObject) {
-                merge(obj1, obj2)
-            }
-        }
+    fun updateSharedPreferencesUserObject(activity: Activity, user: User) {
+        updateSharedPreferencesObjectValue(
+                activity,
+                USER_OBJECT,
+                JSONObject(Gson().toJson(user).toString())
+        )
+    }
+
+    fun setUserAndPreferences(context: Activity, data: JSONObject) {
+        setSharedPreferencesStringValue(
+                context,
+                USER_OBJECT,
+                data.getJSONObject("user").toString()
+        )
+        setSharedPreferencesStringValue(
+                context,
+                CATEGORIES_OBJECT,
+                data.getJSONObject("categories").toString()
+        )
     }
 
     fun setToken(activity: Activity, currentUser: FirebaseUser?, callback: () -> Unit) {
-        currentUser!!.getIdToken(true).addOnCompleteListener(object : OnCompleteListener<GetTokenResult> {
-            override fun onComplete(task: Task<GetTokenResult>) {
-                if (task.isSuccessful) {
-                    val idToken = task.result!!.token
-                    setSharedPreferencesStringValue(activity, "USER_TOKEN", "Bearer ${idToken!!}")
-                    callback()
-                }
+        currentUser!!.getIdToken(true).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val idToken = task.result!!.token
+                setSharedPreferencesStringValue(activity, "USER_TOKEN", "Bearer ${idToken!!}")
+                callback()
             }
-        })
+        }
     }
 
     private fun clearUserInfo(activity: Activity){
@@ -175,16 +178,6 @@ object Utils {
         return circularProgressDrawable
     }
 
-    fun toStringArray(array: JSONArray?): Array<String?>? {
-        if (array == null)
-            return null
-        val arr = arrayOfNulls<String>(array.length())
-        for (i in arr.indices) {
-            arr[i] = array.optString(i)
-        }
-        return arr
-    }
-
     fun getDisplaySize(windowManager: WindowManager): Point {
         return try {
             val display = windowManager.defaultDisplay
@@ -210,28 +203,15 @@ object Utils {
         return Gson().fromJson(jsonObject.toString(), Place::class.java)
     }
 
-    fun getSharedPreferencesUserObject(activity: Activity): User {
-        val json = getSharedPreferencesStringValue(activity, USER_OBJECT)
-        return Gson().fromJson(json, User::class.java)
-    }
-
-    fun updateSharedPreferencesUserObject(activity: Activity, user: User) {
-        updateSharedPreferencesObjectValue(
-                activity,
-                USER_OBJECT,
-                JSONObject(Gson().toJson(user).toString())
-        )
-    }
-
     fun getRoundedDistance(distance: Double): String {
         return distance.toBigDecimal().setScale(1, RoundingMode.UP).toDouble().toString()
     }
 
     fun copyInputStreamToFile(activity: Activity, input: InputStream, mimeType : String) : File {
         val file = File(activity.cacheDir, "${System.currentTimeMillis()/1000}.$mimeType")
-        try {
+        input.use {
             val output = FileOutputStream(file)
-            try {
+            output.use {
                 val buffer = ByteArray(4 * 1024) // or other buffer size
                 var read: Int
                 read = input.read(buffer)
@@ -240,11 +220,7 @@ object Utils {
                     read = input.read(buffer)
                 }
                 output.flush()
-            } finally {
-                output.close()
             }
-        } finally {
-            input.close()
         }
         return file
     }
@@ -252,14 +228,14 @@ object Utils {
     fun getMimeType(context: Context, uri: Uri): String? {
         val extension: String?
         //Check uri format to avoid null
-        if (uri.scheme!! == ContentResolver.SCHEME_CONTENT) {
+        extension = if (uri.scheme!! == ContentResolver.SCHEME_CONTENT) {
             //If scheme is a content
             val mime = MimeTypeMap.getSingleton()
-            extension = mime.getExtensionFromMimeType(context.contentResolver.getType(uri))
+            mime.getExtensionFromMimeType(context.contentResolver.getType(uri))
         } else {
             //If scheme is a File
             //This will replace white spaces with %20 and also other special characters. This will avoid returning null values on file name with spaces and special characters.
-            extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(File(uri.path)).toString())
+            MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(File(uri.path)).toString())
         }
         return extension
     }
@@ -275,6 +251,43 @@ object Utils {
         )
     }
 
+    private fun merge(objects: List<JSONObject>): JSONObject {
+        var i = 0
+        var j = 1
+        while (i < objects.size - 1) {
+            mergeTwoJSONObject(objects[i], objects[j])
+            i++
+            j++
+        }
+        return objects[objects.size - 1]
+    }
+
+    private fun mergeTwoJSONObject(j1: JSONObject, j2: JSONObject) {
+        val keys = j1.keys()
+        var obj1: Any
+        var obj2: Any
+        while (keys.hasNext()) {
+            val next = keys.next()
+            if (j1.isNull(next)) continue
+            obj1 = j1.get(next)
+            if (!j2.has(next)) j2.putOpt(next, obj1)
+            obj2 = j2.get(next)
+            if (obj1 is JSONObject && obj2 is JSONObject) {
+                mergeTwoJSONObject(obj1, obj2)
+            }
+        }
+    }
+
+    fun toStringArray(array: JSONArray?): Array<String?>? {
+        if (array == null)
+            return null
+        val arr = arrayOfNulls<String>(array.length())
+        for (i in arr.indices) {
+            arr[i] = array.optString(i)
+        }
+        return arr
+    }
+
     fun showLoading(activity: Activity): Dialog {
         val progressDialog = Dialog(activity)
         val dialog = ProgressBar(activity)
@@ -286,15 +299,23 @@ object Utils {
         return progressDialog
     }
 
+    fun showSnackbar (rootLayout : View, text : String ) {
+        Snackbar.make(
+                rootLayout,
+                text,
+                Snackbar.LENGTH_SHORT
+        ).show()
+    }
+
     fun setChipTime(activity: Activity, openingTime: Time, closingTime: Time): String {
         val cal = Calendar.getInstance()
 
         val openingCal = setCalByTime(openingTime)
         val closingCal = setCalByTime(closingTime)
 
-        when (cal.time > openingCal.time && cal.time < closingCal.time) {
-            true -> return activity.resources.getString(R.string.place_details_open_chip)
-            false -> return activity.resources.getString(R.string.place_details_closed_chip)
+        return when (cal.time > openingCal.time && cal.time < closingCal.time) {
+            true -> activity.resources.getString(R.string.place_details_open_chip)
+            false -> activity.resources.getString(R.string.place_details_closed_chip)
         }
     }
 

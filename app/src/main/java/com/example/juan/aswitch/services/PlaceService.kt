@@ -25,10 +25,6 @@ open class PlaceService (activity: Activity) : MainService("/places", activity) 
         super.get("/categories/all", callback, true)
     }
 
-    fun getCategoriesGroups(callback: (response: JSONObject) -> Unit) {
-        super.get("/categories/groups", callback, true)
-    }
-
     fun update(jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
         super.put("/", jsonObject.toString(), callback, true)
     }

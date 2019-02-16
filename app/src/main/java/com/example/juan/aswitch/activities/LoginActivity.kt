@@ -3,6 +3,7 @@ package com.example.juan.aswitch.activities
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.juan.aswitch.MainActivity
 import com.example.juan.aswitch.R
@@ -68,14 +69,10 @@ class LoginActivity : AppCompatActivity() {
                 resultCode == Activity.RESULT_OK -> {
                     Utils.setToken(this, FirebaseAuth.getInstance().currentUser) {
                         userService.get(true) { res ->
-                            if(res.length() == 0) {
+                            if (res.length() == 0) {
                                 Utils.logout(this)
-                            }else{
-                                Utils.setSharedPreferencesStringValue(
-                                        this,
-                                        Utils.USER_OBJECT,
-                                        res.getJSONObject("data").toString()
-                                )
+                            } else {
+                                Utils.setUserAndPreferences(this, res.getJSONObject("data"))
                                 Utils.setSharedPreferencesBooleanValue(
                                         this,
                                         "SIGN_UP",

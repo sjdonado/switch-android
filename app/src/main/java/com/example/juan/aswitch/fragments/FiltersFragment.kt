@@ -143,34 +143,37 @@ class FiltersFragment : BaseFragment() {
             }
         }
 
-        filterOpenChip.setOnClickListener {
-            if(filtersArrayList.indexOf("open") == -1) {
-                filtersArrayList.add("open")
-            } else {
-                filtersArrayList.remove("open")
-            }
+        filtersChipGroup.setOnCheckedChangeListener { _, i ->
+            val chip:Chip? = activity!!.findViewById(i)
+            val text = chip?.text
+            filtersArrayList.clear()
+            if (!text.isNullOrBlank())
+                filtersArrayList.add(text.toString().toLowerCase())
         }
 
-        filterClosedChip.setOnClickListener {
-            if(filtersArrayList.indexOf("closed") == -1) {
-                filtersArrayList.add("closed")
-            } else {
-                filtersArrayList.remove("closed")
-            }
-        }
+        Log.d("CATEGORIES", Utils.getSharedPreferencesStringValue(activity!!, Utils.CATEGORIES_OBJECT))
 
-        placeService.getCategoriesGroups {
-            activity!!.runOnUiThread {
-                categoriesJSON = it.getJSONObject("data")
-                val keys = categoriesJSON.keys()
-                while (keys.hasNext()) {
-                    val key = keys.next()
-                    if (categoriesJSON.get(key) is JSONObject) categoriesJSONKeys.add(key)
-                }
-                categoriesListSource.addAll(categoriesJSONKeys)
-                arrayAdapter.notifyDataSetChanged()
-            }
+        categoriesJSON = JSONObject(Utils.getSharedPreferencesStringValue(activity!!, Utils.CATEGORIES_OBJECT))
+        val keys = categoriesJSON.keys()
+        while (keys.hasNext()) {
+            val key = keys.next()
+            if (categoriesJSON.get(key) is JSONObject) categoriesJSONKeys.add(key)
         }
+        categoriesListSource.addAll(categoriesJSONKeys)
+        arrayAdapter.notifyDataSetChanged()
+
+//        placeService.getCategoriesGroups {
+//            activity!!.runOnUiThread {
+//                categoriesJSON = it.getJSONObject("data")
+//                val keys = categoriesJSON.keys()
+//                while (keys.hasNext()) {
+//                    val key = keys.next()
+//                    if (categoriesJSON.get(key) is JSONObject) categoriesJSONKeys.add(key)
+//                }
+//                categoriesListSource.addAll(categoriesJSONKeys)
+//                arrayAdapter.notifyDataSetChanged()
+//            }
+//        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
