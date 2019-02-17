@@ -16,6 +16,7 @@ data class Place(
         val openingTime: Time?,
         val closingTime: Time?,
         val images: ArrayList<ImageObject>,
+        val stories: ArrayList<ImageObject>,
         val location: Location,
         val description: String,
         val category: String,

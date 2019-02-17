@@ -2,7 +2,6 @@ package com.example.juan.aswitch.fragments
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import java.util.*
 import androidx.appcompat.app.AppCompatActivity
@@ -151,8 +150,6 @@ class FiltersFragment : BaseFragment() {
                 filtersArrayList.add(text.toString().toLowerCase())
         }
 
-        Log.d("CATEGORIES", Utils.getSharedPreferencesStringValue(activity!!, Utils.CATEGORIES_OBJECT))
-
         categoriesJSON = JSONObject(Utils.getSharedPreferencesStringValue(activity!!, Utils.CATEGORIES_OBJECT))
         val keys = categoriesJSON.keys()
         while (keys.hasNext()) {
@@ -161,19 +158,6 @@ class FiltersFragment : BaseFragment() {
         }
         categoriesListSource.addAll(categoriesJSONKeys)
         arrayAdapter.notifyDataSetChanged()
-
-//        placeService.getCategoriesGroups {
-//            activity!!.runOnUiThread {
-//                categoriesJSON = it.getJSONObject("data")
-//                val keys = categoriesJSON.keys()
-//                while (keys.hasNext()) {
-//                    val key = keys.next()
-//                    if (categoriesJSON.get(key) is JSONObject) categoriesJSONKeys.add(key)
-//                }
-//                categoriesListSource.addAll(categoriesJSONKeys)
-//                arrayAdapter.notifyDataSetChanged()
-//            }
-//        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

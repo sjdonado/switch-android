@@ -59,7 +59,7 @@ class PlaceFragment : androidx.fragment.app.Fragment() {
         when(item!!.itemId) {
             R.id.editPlaceAction -> {
                 item.isVisible = false
-                fragmentHandler.add(EditPlaceFragment.getInstance(place))
+                fragmentHandler.add(EditPlaceFragment.getInstance(place, "images"))
                 return true
             }
 

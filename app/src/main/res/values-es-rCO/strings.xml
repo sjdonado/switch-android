@@ -94,4 +94,6 @@
     <string name="filters_fragment_filters">Filtros</string>
     <string name="filters_fragment_open_filter">Abierto</string>
     <string name="filters_fragment_open_closed">Cerrado</string>
+    <string name="title_fragment_stories">Historias</string>
+    <string name="edit_place_fragment_stories_title">Editar historias</string>
 </resources>

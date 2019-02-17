@@ -22,6 +22,7 @@ import com.example.juan.aswitch.services.UserService
 import kotlinx.android.synthetic.main.fragment_edit_place.*
 import kotlinx.android.synthetic.main.fragment_users.*
 import org.json.JSONObject
+import java.io.File
 
 
 class EditPlaceFragment : BaseFragment() {
@@ -31,16 +32,16 @@ class EditPlaceFragment : BaseFragment() {
     }
 
     private lateinit var placeService: PlaceService
-    private lateinit var userService: UserService
     private lateinit var place: Place
-    private var editCoverImage: Boolean = false
+    private lateinit var path: String
     private var position: Int = 0
     private val emptyImageObject = ImageObject(null, null)
 
     companion object {
-        fun getInstance(place: Place) = EditPlaceFragment().apply {
+        fun getInstance(place: Place, path: String) = EditPlaceFragment().apply {
             arguments = Bundle().apply {
                 putParcelable("PLACE", place)
+                putString("PATH", path)
             }
         }
         private const val PICK_IMAGE = 0
@@ -50,6 +51,9 @@ class EditPlaceFragment : BaseFragment() {
         super.onAttach(context)
         arguments?.getParcelable<Place>("PLACE")?.let {
             place = it
+        }
+        arguments?.getString("PATH")?.let {
+            path = it
         }
     }
     
@@ -63,23 +67,27 @@ class EditPlaceFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         
         placeService = PlaceService(activity!!)
-        userService = UserService(activity!!)
 
-        loadImageInView(place.profilePicture.url, editPlaceCoverImageView)
+//        when (path) {
+//            "images" -> {
+//                editPlaceTitleTextView.text = getString(R.string.edit_place_fragment_images_title)
+//            }
+//            "stories" -> {
+//                editPlaceTitleTextView.text = getString(R.string.edit_place_fragment_stories_title)
+//            }
+//        }
 
-        loadImageInView(place.images[0].url, editPlaceFirstImageView)
-        loadImageInView(place.images[1].url, editPlaceSecondImageView)
-        loadImageInView(place.images[2].url, editPlaceThirdImageView)
+        Log.d("PLACE", place.toString())
 
-        if(!place.images[0].url.isNullOrBlank()) editPlaceRemoveFirstButton.visibility = View.VISIBLE
-        if(!place.images[0].url.isNullOrBlank()) editPlaceRemoveFirstButton.visibility = View.VISIBLE
-        if(!place.images[1].url.isNullOrBlank()) editPlaceRemoveSecondButton.visibility = View.VISIBLE
-        if(!place.images[2].url.isNullOrBlank()) editPlaceRemoveThirdButton.visibility = View.VISIBLE
+        loadImageInView(getMedia(place, 0).url, editPlaceFirstImageView)
+        loadImageInView(getMedia(place, 1).url, editPlaceSecondImageView)
+        loadImageInView(getMedia(place, 2).url, editPlaceThirdImageView)
+        loadImageInView(getMedia(place, 3).url, editPlaceFourthImageView)
 
-        editPlaceCoverImageView.setOnClickListener {
-            editCoverImage = true
-            Utils.openImagePickerIntent(this, PICK_IMAGE)
-        }
+        if(!getMedia(place, 0).url.isNullOrBlank()) editPlaceRemoveFirstButton.visibility = View.VISIBLE
+        if(!getMedia(place, 1).url.isNullOrBlank()) editPlaceRemoveSecondButton.visibility = View.VISIBLE
+        if(!getMedia(place, 2).url.isNullOrBlank()) editPlaceRemoveThirdButton.visibility = View.VISIBLE
+        if(!getMedia(place, 3).url.isNullOrBlank()) editPlaceRemoveFourthButton.visibility = View.VISIBLE
 
         editPlaceFirstImageView.setOnClickListener {
             position = 0
@@ -96,12 +104,17 @@ class EditPlaceFragment : BaseFragment() {
             Utils.openImagePickerIntent(this, PICK_IMAGE)
         }
 
+        editPlaceFourthImageView.setOnClickListener {
+            position = 3
+            Utils.openImagePickerIntent(this, PICK_IMAGE)
+        }
+
         editPlaceRemoveFirstButton.setOnClickListener {
             val jsonObject = JSONObject()
             jsonObject.put("position", 0)
-            placeService.removeImage(jsonObject) {
+            removeMedia(jsonObject) {
                 activity!!.runOnUiThread {
-                    place.images[0] = emptyImageObject
+                    updateMedia(place, 0, emptyImageObject)
                     loadImageInView(null, editPlaceFirstImageView)
                     editPlaceRemoveFirstButton.visibility = View.INVISIBLE
                 }
@@ -111,9 +124,9 @@ class EditPlaceFragment : BaseFragment() {
         editPlaceRemoveSecondButton.setOnClickListener {
             val jsonObject = JSONObject()
             jsonObject.put("position", 1)
-            placeService.removeImage(jsonObject) {
+            removeMedia(jsonObject) {
                 activity!!.runOnUiThread {
-                    place.images[1] = emptyImageObject
+                    updateMedia(place, 1, emptyImageObject)
                     loadImageInView(null, editPlaceSecondImageView)
                     editPlaceRemoveSecondButton.visibility = View.INVISIBLE
                 }
@@ -123,10 +136,22 @@ class EditPlaceFragment : BaseFragment() {
         editPlaceRemoveThirdButton.setOnClickListener {
             val jsonObject = JSONObject()
             jsonObject.put("position", 2)
-            placeService.removeImage(jsonObject) {
+            removeMedia(jsonObject) {
                 activity!!.runOnUiThread {
-                    place.images[2] = emptyImageObject
+                    updateMedia(place, 2, emptyImageObject)
                     loadImageInView(null, editPlaceThirdImageView)
+                    editPlaceRemoveThirdButton.visibility = View.INVISIBLE
+                }
+            }
+        }
+
+        editPlaceRemoveFourthButton.setOnClickListener {
+            val jsonObject = JSONObject()
+            jsonObject.put("position", 3)
+            removeMedia(jsonObject) {
+                activity!!.runOnUiThread {
+                    updateMedia(place, 3, emptyImageObject)
+                    loadImageInView(null, editPlaceFourthImageView)
                     editPlaceRemoveThirdButton.visibility = View.INVISIBLE
                 }
             }
@@ -143,45 +168,29 @@ class EditPlaceFragment : BaseFragment() {
                             activity!!.contentResolver!!.openInputStream(data.data!!)!!,
                             Utils.getMimeType(activity!!, data.data!!)!!
                     )
-                    if (editCoverImage) {
-                        editCoverImage = false
-                        userService.uploadImage("profilePicture", image) { res ->
-                            activity!!.runOnUiThread {
-                                Utils.updateSharedPreferencesObjectValue(
-                                        activity!!,
-                                        "USER_OBJECT",
-                                        res.getJSONObject("data")
-                                )
-                                val profilePicture = res.getJSONObject("data")
-                                        .getJSONObject("profilePicture")
-                                place.profilePicture = ImageObject(
-                                        profilePicture.getString("ref"),
-                                        profilePicture.getString("url")
-                                )
-                                loadImageInView(place.profilePicture.url, editPlaceCoverImageView)
-                            }
-                        }
-                    } else {
-                        placeService.uploadImage(position.toString(), image) { res ->
-                            val newPlace = Utils.parseJSONPlace(res.getJSONObject("data"))
-                            activity!!.runOnUiThread {
-                                when(position) {
-                                    0 -> {
-                                        place.images[0] = newPlace.images[0]
-                                        loadImageInView(place.images[0].url, editPlaceFirstImageView)
-                                        editPlaceRemoveFirstButton.visibility = View.VISIBLE
-                                    }
-                                    1 -> {
-                                        place.images[1] = newPlace.images[1]
-                                        loadImageInView(place.images[1].url, editPlaceSecondImageView)
-                                        editPlaceRemoveSecondButton.visibility = View.VISIBLE
-
-                                    }
-                                    2 -> {
-                                        place.images[2] = newPlace.images[2]
-                                        loadImageInView(place.images[2].url, editPlaceThirdImageView)
-                                        editPlaceRemoveThirdButton.visibility = View.VISIBLE
-                                    }
+                    uploadMedia(position.toString(), image) { res ->
+                        val newPlace = Utils.parseJSONPlace(res.getJSONObject("data"))
+                        activity!!.runOnUiThread {
+                            when(position) {
+                                0 -> {
+                                    updateMedia(place, 0, getMedia(newPlace, 0))
+                                    loadImageInView(getMedia(place, 0).url, editPlaceFirstImageView)
+                                    editPlaceRemoveFirstButton.visibility = View.VISIBLE
+                                }
+                                1 -> {
+                                    updateMedia(place, 1, getMedia(newPlace, 1))
+                                    loadImageInView(getMedia(place, 1).url, editPlaceSecondImageView)
+                                    editPlaceRemoveSecondButton.visibility = View.VISIBLE
+                                }
+                                2 -> {
+                                    updateMedia(place, 2, getMedia(newPlace, 2))
+                                    loadImageInView(getMedia(place, 2).url, editPlaceThirdImageView)
+                                    editPlaceRemoveThirdButton.visibility = View.VISIBLE
+                                }
+                                3 -> {
+                                    updateMedia(place, 3, getMedia(newPlace, 3))
+                                    loadImageInView(getMedia(place, 3).url, editPlaceFourthImageView)
+                                    editPlaceRemoveFourthButton.visibility = View.VISIBLE
                                 }
                             }
                         }
@@ -199,5 +208,48 @@ class EditPlaceFragment : BaseFragment() {
                 .apply(RequestOptions().placeholder(Utils.getCircularProgressDrawable(activity!!)))
                 .apply(RequestOptions().error(R.drawable.ic_image_white_grey_24dp))
                 .into(imageView)
+    }
+
+    private fun getMedia(place: Place, position: Int): ImageObject {
+        return when (path) {
+            "images" -> place.images[position]
+            "stories" -> place.stories[position]
+            else -> { // Note the block
+                ImageObject(null, null)
+            }
+        }
+    }
+
+    private fun updateMedia(place: Place, position: Int, imageObject: ImageObject) {
+         when (path) {
+            "images" -> {
+                place.images[position] = imageObject
+            }
+            "stories" -> {
+                place.stories[position] = imageObject
+            }
+         }
+    }
+
+    private fun uploadMedia(position: String, image: File, callback: (response: JSONObject) -> Unit) {
+        when (path) {
+            "images" -> {
+                placeService.uploadImage(position, image, callback)
+            }
+            "stories" -> {
+                placeService.uploadStory(position, image, callback)
+            }
+        }
+    }
+
+    private fun removeMedia(jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
+        when (path) {
+            "images" -> {
+                placeService.removeImage(jsonObject, callback)
+            }
+            "stories" -> {
+                placeService.removeStory(jsonObject, callback)
+            }
+        }
     }
 }

@@ -34,19 +34,30 @@ open class PlaceService (activity: Activity) : MainService("/places", activity) 
     }
 
     fun uploadImage(position : String, image : File, callback: (response: JSONObject) -> Unit) {
+        super.upload("/image/$position", uploadMedia(position, image), callback, true)
+    }
+
+    fun uploadStory(position : String, image : File, callback: (response: JSONObject) -> Unit) {
+        super.upload("/story/$position", uploadMedia(position, image), callback, true)
+    }
+
+    fun removeImage(jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
+        super.delete("/image", jsonObject.toString(), callback, true)
+    }
+
+    fun removeStory(jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
+        super.delete("/story", jsonObject.toString(), callback, true)
+    }
+
+    private fun uploadMedia(position : String, image : File): MultipartBody {
         val mediaType = if (image.endsWith("png"))
             MediaType.parse("image/png")
         else
             MediaType.parse("image/jpeg")
 
-        val multipartBody = MultipartBody.Builder()
+        return MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("image", image.name, RequestBody.create(mediaType, image))
                 .build()
-        super.upload("/image/$position", multipartBody, callback, true)
-    }
-
-    fun removeImage(jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
-        super.delete("/image", jsonObject.toString(), callback, true)
     }
 }
