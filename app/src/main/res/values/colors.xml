@@ -8,4 +8,5 @@
     <color name="black">#000</color>
     <color name="star">#4caf50</color>
     <color name="reject">#e91e63</color>
+    <color name="stories">#ffc107</color>
 </resources>

@@ -2,7 +2,11 @@ apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
+apply plugin: 'kotlin-kapt'
+
 apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 28
@@ -43,8 +47,8 @@ dependencies {
     implementation 'com.android.support:support-compat:28.0.0'
     implementation 'androidx.preference:preference:1.0.0'
 
-    implementation 'com.google.firebase:firebase-core:16.0.5'
-    implementation 'com.google.firebase:firebase-auth:16.0.5'
+    implementation 'com.google.firebase:firebase-core:16.0.7'
+    implementation 'com.google.firebase:firebase-auth:16.1.0'
     implementation 'com.google.firebase:firebase-iid:17.0.4'
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
@@ -59,13 +63,13 @@ dependencies {
 
     implementation 'androidx.vectordrawable:vectordrawable:1.0.1'
 
-    implementation 'com.google.android.gms:play-services-maps:16.0.0'
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
     implementation 'com.google.android.gms:play-services-places:16.0.0'
 
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
 
-    kapt 'com.github.bumptech.glide:compiler:4.8.0'
     implementation 'com.github.bumptech.glide:glide:4.8.0'
+    kapt 'com.github.bumptech.glide:compiler:4.8.0'
 
     implementation 'org.adw.library:discrete-seekbar:1.0.1'
 
@@ -84,14 +88,13 @@ dependencies {
 
     implementation 'com.github.shts:StoriesProgressView:3.0.0'
 
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.1'
+
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 
     configurations.all {
         exclude group: 'com.android.support', module: 'support-v13'
     }
 }
-
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'kotlin-kapt'

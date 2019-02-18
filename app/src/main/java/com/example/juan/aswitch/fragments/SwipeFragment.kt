@@ -12,6 +12,7 @@ import android.view.MenuInflater
 import androidx.appcompat.app.AppCompatActivity
 import com.example.juan.aswitch.helpers.FragmentHandler
 import com.example.juan.aswitch.lib.SwipeCard
+import com.example.juan.aswitch.models.ImageObject
 import com.example.juan.aswitch.models.Place
 import com.example.juan.aswitch.models.User
 import com.example.juan.aswitch.services.PlaceService
@@ -25,6 +26,7 @@ import org.json.JSONObject
 class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
 
     private var places: ArrayList<Place> = ArrayList()
+    private lateinit var place: Place
     private lateinit var placeService: PlaceService
     private lateinit var usersPlaceService: UsersPlaceService
     private val animationDuration = 300
@@ -98,6 +100,8 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
                     }
                     activity!!.runOnUiThread {
                         places.reverse()
+                        place = places[places.size - 1]
+                        verifyPlaceStories()
                         updatePlaceViews(cardViewHolderSize)
                     }
                 }
@@ -107,13 +111,20 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
         }
 
         swipeRejectButton.setOnClickListener {
+            swipeRejectButton.isEnabled = false
             accept = false
             swipeView!!.doSwipe(accept)
         }
 
         swipeAcceptButton.setOnClickListener{
+            swipeAcceptButton.isEnabled = false
             accept = true
             swipeView!!.doSwipe(accept)
+        }
+
+        swipeStoriesButton.setOnClickListener {
+            swipeStoriesButton.isEnabled = false
+            Utils.openStories(activity!!, place.stories)
         }
 //
 //        undoBtn.setOnClickListener({ swipeView!!.undoLastSwipe() })
@@ -135,10 +146,18 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
                 swipeNotFoundTextView.visibility = View.VISIBLE
                 swipeRejectButton.hide()
                 swipeAcceptButton.hide()
+            } else {
+                place = places[it - 1]
+                verifyPlaceStories()
+                swipeRejectButton.isEnabled = false
+                swipeAcceptButton.isEnabled = true
             }
-            Log.d("ITEM_REMOVE_LISTENER", places.size.toString())
-            Log.d("ITEM_REMOVE_LISTENER", it.toString())
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        swipeStoriesButton.isEnabled = true
     }
 
     private fun updatePlaceViews(cardViewHolderSize: Point) {
@@ -161,11 +180,6 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.filter_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
     override fun onSwipeAccept(place: Place) {
         accept = true
     }
@@ -177,4 +191,17 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
     override fun onSwipeUp() {
         isToUndo = true
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.filter_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    private fun verifyPlaceStories() {
+        if (Utils.getNotNullStoriesArray(place.stories).isNotEmpty())
+            swipeStoriesButton.show()
+        else
+            swipeStoriesButton.hide()
+    }
+
 }

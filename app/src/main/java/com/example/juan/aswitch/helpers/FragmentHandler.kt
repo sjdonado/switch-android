@@ -79,4 +79,11 @@ class FragmentHandler(private val activity: AppCompatActivity, private val fragm
         }
         fragmentTransaction.commit()
     }
+
+    fun simpleAdd(fragment: androidx.fragment.app.Fragment) {
+        val fragmentTransaction = activity.supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(fragmentContainer!!, fragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+    }
 }

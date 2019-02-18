@@ -20,6 +20,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GetTokenResult
 import org.json.JSONObject
 import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Point
 import android.net.Uri
 import android.util.DisplayMetrics
@@ -32,18 +34,17 @@ import com.bumptech.glide.Priority
 import com.google.firebase.auth.FirebaseAuth
 import com.bumptech.glide.request.RequestOptions
 import com.example.juan.aswitch.MainActivity
+import com.example.juan.aswitch.activities.StoriesActivity
 import com.example.juan.aswitch.fragments.UserFragment
-import com.example.juan.aswitch.models.Place
-import com.example.juan.aswitch.models.Time
-import com.example.juan.aswitch.models.User
+import com.example.juan.aswitch.models.*
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import okhttp3.*
 import org.json.JSONArray
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
+import java.io.*
 import java.math.RoundingMode
 import java.util.*
+import kotlin.collections.ArrayList
 
 object Utils {
 
@@ -324,6 +325,48 @@ object Utils {
         cal.set(Calendar.HOUR_OF_DAY, time.hourOfDay!!)
         cal.set(Calendar.MINUTE, time.minute!!)
         return cal
+    }
+
+    fun openStories(context: Context, stories: ArrayList<ImageObject>) {
+        val storiesArray = ArrayList<Story>()
+        val notNullStoriesArray= getNotNullStoriesArray(stories)
+        notNullStoriesArray.forEachIndexed { index, obj ->
+            bitmapFromUrl(context, storiesArray, index, notNullStoriesArray.size, obj.url!!) {
+                val storiesIntent = Intent(context, StoriesActivity::class.java)
+                storiesIntent.putExtra("stories", storiesArray)
+                context.startActivity(storiesIntent)
+            }
+        }
+    }
+
+    fun getNotNullStoriesArray(stories: ArrayList<ImageObject>): List<ImageObject> {
+        return stories.mapNotNull { t: ImageObject ->
+            if (t.ref !== null) t else null
+        }
+    }
+
+    private fun bitmapFromUrl(context: Context, array: ArrayList<Story>, index: Int, size: Int, url: String, callback : () -> Unit) {
+        OkHttpClient().newCall(Request.Builder().url(url).build()).enqueue(object : Callback {
+            override fun onFailure(call: Call?, e: IOException?) {
+                Log.d("RESOURCES", e.toString())
+            }
+            override fun onResponse(call : Call?, response : Response?) {
+                val bitmap = BitmapFactory.decodeStream(response!!.body()!!.byteStream())
+                array.add(Story(tempFileImage(context, bitmap, index), index))
+                if (array.size == size) callback()
+            }
+        })
+    }
+
+    private fun tempFileImage(context: Context, bitmap: Bitmap, index: Int): String {
+        val imageFile = File(context.cacheDir, "story_$index.jpg")
+        try {
+            val os = FileOutputStream(imageFile);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os)
+            os.flush()
+            os.close()
+        } catch (e: Exception) {}
+        return imageFile.absolutePath
     }
 }
 

@@ -6,8 +6,16 @@
     tools:context=".fragments.EditStoriesFragment">
 
     <FrameLayout
-        android:id="@+id/stories_fragment_container"
+        android:id="@+id/storiesContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/storiesWatchButton"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="123dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:text="VER" />
 
 </FrameLayout>

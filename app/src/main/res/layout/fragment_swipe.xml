@@ -31,10 +31,21 @@
             android:src="@drawable/ic_close_white_24dp"
             app:backgroundTint="@color/reject"
             android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.2"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/swipeStoriesButton"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/swipeStoriesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_radio_button_checked_white_24dp"
+            app:backgroundTint="@color/stories"
+            android:visibility="invisible"
+            app:layout_constraintStart_toEndOf="@id/swipeRejectButton"
+            app:layout_constraintEnd_toStartOf="@id/swipeAcceptButton"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/swipeAcceptButton"
@@ -44,10 +55,9 @@
             android:src="@drawable/ic_star_white_24dp"
             app:backgroundTint="@color/star"
             android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/swipeStoriesButton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.8"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
