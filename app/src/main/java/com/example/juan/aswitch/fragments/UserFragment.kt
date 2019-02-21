@@ -57,7 +57,7 @@ class UserFragment : androidx.fragment.app.Fragment() {
     companion object {
         fun getInstance(): UserFragment = UserFragment()
         private const val PICK_IMAGE = 0
-        var PLACE_PICKER_REQUEST = 1
+        private const val PLACE_PICKER_REQUEST = 1
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.MaterialComponents.CardView"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginEnd="8dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    card_view:cardCornerRadius="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/storyRecyclerCardCoverImageView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintDimensionRatio="1:1"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/placeRecyclerCardNameTextView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <View
+            android:id="@+id/storyRemainingTimeIconRecyclerCardView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/ic_access_time_black_24dp"
+            app:layout_constraintVertical_bias="0.3"
+            app:layout_constraintStart_toEndOf="@id/storyRecyclerCardCoverImageView"
+            app:layout_constraintEnd_toStartOf="@id/storyDeleteRecyclerCardView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/storyRemainingTimeRecyclerCardTextView"
+            style="@style/CardTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textSize="12sp"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="@id/storyRemainingTimeIconRecyclerCardView"
+            app:layout_constraintEnd_toEndOf="@id/storyRemainingTimeIconRecyclerCardView"
+            app:layout_constraintTop_toBottomOf="@id/storyRemainingTimeIconRecyclerCardView" />
+
+        <View
+            android:id="@+id/storyViewsIconRecyclerCardView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/ic_remove_red_eye_black_24dp"
+            app:layout_constraintVertical_bias="0.3"
+            app:layout_constraintStart_toEndOf="@id/storyRemainingTimeIconRecyclerCardView"
+            app:layout_constraintEnd_toStartOf="@id/storyDeleteRecyclerCardView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/storyViewsRecyclerCardTextView"
+            style="@style/CardTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textSize="12sp"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="@id/storyViewsIconRecyclerCardView"
+            app:layout_constraintEnd_toEndOf="@id/storyViewsIconRecyclerCardView"
+            app:layout_constraintTop_toBottomOf="@id/storyViewsIconRecyclerCardView" />
+
+        <View
+            android:id="@+id/storyDeleteRecyclerCardView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/ic_close_white_24dp"
+            android:backgroundTint="@color/black"
+            app:layout_constraintHorizontal_bias="0.7"
+            app:layout_constraintStart_toEndOf="@id/storyViewsRecyclerCardTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

@@ -1,21 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.EditStoriesFragment">
 
-    <FrameLayout
-        android:id="@+id/storiesContainer"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/storiesNotFoundTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/starred_not_places_found_message"
+        android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/storiesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.google.android.material.button.MaterialButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/storiesWatchButton"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-        android:layout_width="123dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:text="VER" />
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="8dp"
+        android:visibility="invisible"
+        android:src="@drawable/ic_radio_button_checked_white_24dp"
+        app:backgroundTint="@color/stories"
+        android:layout_gravity="bottom|start" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/storiesNewButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/ic_camera_alt_white_24dp"
+        app:backgroundTint="@color/colorAccent"
+        android:layout_gravity="bottom|end" />
+
 
 </FrameLayout>

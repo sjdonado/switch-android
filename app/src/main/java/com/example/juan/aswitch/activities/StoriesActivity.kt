@@ -1,6 +1,7 @@
 package com.example.juan.aswitch.activities
 
 import android.content.Intent
+import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
@@ -12,7 +13,12 @@ import kotlinx.android.synthetic.main.activity_stories.*
 import android.util.Log
 import android.graphics.BitmapFactory
 import android.graphics.Bitmap
+import com.example.juan.aswitch.helpers.Stories
+import com.example.juan.aswitch.helpers.Utils
 import com.example.juan.aswitch.models.Story
+import com.example.juan.aswitch.models.User
+import com.example.juan.aswitch.services.StoriesService
+import org.json.JSONObject
 import java.io.File
 
 
@@ -20,7 +26,10 @@ class StoriesActivity : AppCompatActivity(), StoriesProgressView.StoriesListener
 
     private var PROGRESS_COUNT: Int = 0
     private var counter = 0
-    private lateinit var resources: Array<Bitmap?>
+    private lateinit var user: User
+    private lateinit var storiesService: StoriesService
+    private val resources = ArrayList<Bitmap?>()
+    private lateinit var stories: ArrayList<Story>
 
 //    private val durations = longArrayOf(50000L, 1000L, 1500L, 4000L, 5000L, 1000)
 
@@ -30,14 +39,15 @@ class StoriesActivity : AppCompatActivity(), StoriesProgressView.StoriesListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val storiesArray = intent.getParcelableArrayListExtra<Story>("stories")
+        storiesService = StoriesService(this)
+        user = Utils.getSharedPreferencesUserObject(this)
 
-        PROGRESS_COUNT = storiesArray.size
-        resources = arrayOfNulls(PROGRESS_COUNT)
+        stories = Stories.get(intent.getIntExtra("index", 0))
 
-        storiesArray.forEach { story ->
-            resources[story.index] = BitmapFactory.decodeFile(File(story.path).absolutePath)
-        }
+        PROGRESS_COUNT = stories.size
+
+        stories.sortBy { story -> story.seconds }
+        stories.forEach { story -> resources.add(story.image) }
 
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_stories)
@@ -51,6 +61,8 @@ class StoriesActivity : AppCompatActivity(), StoriesProgressView.StoriesListener
         storiesProgressView.startStories(counter)
 
         storiesMainImage.setImageBitmap(resources[counter])
+        setStoryTime(counter)
+        saveStoryView(stories[counter].id)
 
         val reverse = storiesReverseView
         reverse.setOnClickListener{ storiesProgressView.reverse() }
@@ -82,7 +94,13 @@ class StoriesActivity : AppCompatActivity(), StoriesProgressView.StoriesListener
     }
 
     override fun onNext() {
-        if(counter < resources.size - 1) storiesMainImage.setImageBitmap(resources[++counter])
+        if(counter < PROGRESS_COUNT - 1) {
+            Log.d("INDEX_COUNTER", counter.toString())
+            val index = ++counter
+            setStoryTime(index)
+            saveStoryView(stories[index].id)
+            storiesMainImage.setImageBitmap(resources[index])
+        }
     }
 
     override fun onPrev() {
@@ -97,5 +115,21 @@ class StoriesActivity : AppCompatActivity(), StoriesProgressView.StoriesListener
     private fun close() {
         storiesProgressView.destroy()
         finish()
+    }
+
+    private fun setStoryTime(index: Int) {
+        if (stories[index].seconds.compareTo(3600) == 1) {
+            storiesTime.text = "${stories[index].seconds / 3600} h"
+        } else {
+            storiesTime.text = "${stories[index].seconds / 60} m"
+        }
+    }
+
+    private fun saveStoryView(storyId: String) {
+        val jsonObject = JSONObject()
+        if(!user.role!!) {
+            jsonObject.put("userId", user.id)
+            storiesService.viewStory(storyId, jsonObject) {}
+        }
     }
 }

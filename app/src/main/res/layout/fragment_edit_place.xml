@@ -11,17 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!--<androidx.appcompat.widget.AppCompatTextView-->
-            <!--android:id="@+id/editPlaceTitleTextView"-->
-            <!--style="@style/CardTitle"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginStart="16dp"-->
-            <!--android:layout_marginTop="16dp"-->
-            <!--android:text="@string/edit_place_fragment_images_title"-->
-            <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--app:layout_constraintTop_toTopOf="parent" />-->
-
         <com.google.android.material.card.MaterialCardView
             style="@style/Widget.MaterialComponents.CardView"
             android:layout_width="match_parent"
@@ -39,6 +28,17 @@
                 android:layout_height="match_parent">
 
                 <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/editPlaceCoverImageView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/editPlaceSecondImageView"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/editPlaceFirstImageView"/>
+
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/editPlaceFirstImageView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -46,8 +46,8 @@
                     android:scaleType="centerCrop"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toTopOf="@+id/editPlaceThirdImageView"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/editPlaceSecondImageView"/>
+                    app:layout_constraintStart_toEndOf="@id/editPlaceCoverImageView"
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/editPlaceSecondImageView"
@@ -55,10 +55,10 @@
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/editPlaceFourthImageView"
-                    app:layout_constraintStart_toEndOf="@id/editPlaceFirstImageView"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    app:layout_constraintTop_toBottomOf="@id/editPlaceCoverImageView"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/editPlaceThirdImageView"/>
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/editPlaceThirdImageView"
@@ -68,18 +68,7 @@
                     android:scaleType="centerCrop"
                     app:layout_constraintTop_toBottomOf="@id/editPlaceFirstImageView"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/editPlaceFourthImageView"/>
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/editPlaceFourthImageView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    app:layout_constraintTop_toBottomOf="@id/editPlaceSecondImageView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/editPlaceThirdImageView"
+                    app:layout_constraintStart_toEndOf="@id/editPlaceSecondImageView"
                     app:layout_constraintEnd_toEndOf="parent"/>
 
                 <com.google.android.material.button.MaterialButton
@@ -92,12 +81,8 @@
                     app:backgroundTint="@color/white"
                     app:iconTint="@color/white_grey"
                     card_view:icon="@drawable/ic_close_white_24dp"
-                    app:layout_constraintHorizontal_bias="1"
-                    app:layout_constraintVertical_bias="0"
                     app:layout_constraintTop_toTopOf="@id/editPlaceFirstImageView"
-                    app:layout_constraintBottom_toTopOf="@id/editPlaceThirdImageView"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/editPlaceSecondImageView" />
+                    app:layout_constraintEnd_toEndOf="parent" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/editPlaceRemoveSecondButton"
@@ -109,12 +94,9 @@
                     app:backgroundTint="@color/white"
                     app:iconTint="@color/white_grey"
                     card_view:icon="@drawable/ic_close_white_24dp"
-                    app:layout_constraintHorizontal_bias="1"
-                    app:layout_constraintVertical_bias="0"
                     app:layout_constraintTop_toTopOf="@id/editPlaceSecondImageView"
-                    app:layout_constraintBottom_toTopOf="@id/editPlaceThirdImageView"
-                    app:layout_constraintStart_toEndOf="@id/editPlaceSecondImageView"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toStartOf="@id/editPlaceThirdImageView"
+                    app:layout_constraintStart_toEndOf="@id/editPlaceSecondImageView" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/editPlaceRemoveThirdButton"
@@ -126,28 +108,7 @@
                     app:backgroundTint="@color/white"
                     app:iconTint="@color/white_grey"
                     card_view:icon="@drawable/ic_close_white_24dp"
-                    app:layout_constraintHorizontal_bias="1"
-                    app:layout_constraintVertical_bias="0"
                     app:layout_constraintTop_toTopOf="@id/editPlaceThirdImageView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/editPlaceThirdImageView"
-                    app:layout_constraintEnd_toStartOf="@id/editPlaceFourthImageView" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/editPlaceRemoveFourthButton"
-                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton.Icon"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    app:cornerRadius="24dp"
-                    android:visibility="invisible"
-                    app:backgroundTint="@color/white"
-                    app:iconTint="@color/white_grey"
-                    card_view:icon="@drawable/ic_close_white_24dp"
-                    app:layout_constraintHorizontal_bias="1"
-                    app:layout_constraintVertical_bias="0"
-                    app:layout_constraintTop_toTopOf="@id/editPlaceFourthImageView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/editPlaceFourthImageView"
                     app:layout_constraintEnd_toEndOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

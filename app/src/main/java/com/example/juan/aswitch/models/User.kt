@@ -17,29 +17,3 @@ data class User(
         var filters: ArrayList<String>?,
         val role: Boolean?
 ) : Parcelable
-
-@Parcelize
-data class ImageObject(
-        val ref: String?,
-        val url: String?
-) : Parcelable
-
-@Parcelize
-data class Location(
-        val address: String,
-        val lat: Double,
-        val lng: Double,
-        val viewport: Viewport
-) : Parcelable
-
-@Parcelize
-data class Viewport(
-        val northeast: LocationData,
-        val southwest: LocationData
-) : Parcelable
-
-@Parcelize
-data class LocationData(
-        val lat: Double,
-        val lng: Double
-) : Parcelable

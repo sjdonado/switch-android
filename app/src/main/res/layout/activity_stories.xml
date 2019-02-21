@@ -13,6 +13,16 @@
         android:contentDescription="@null"
         android:scaleType="centerCrop" />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/storiesTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="8dp"
+        android:layout_gravity="top|start"/>
+
     <View
         android:id="@+id/storiesClose"
         android:layout_width="30dp"

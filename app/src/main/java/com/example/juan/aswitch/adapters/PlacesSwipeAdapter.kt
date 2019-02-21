@@ -7,7 +7,7 @@ import com.example.juan.aswitch.R
 import com.example.juan.aswitch.models.Place
 import com.google.android.material.snackbar.Snackbar
 
-abstract class SwipeAdapter(
+abstract class PlacesSwipeAdapter(
         private val activity: Activity,
         private val view: View,
         private val places: ArrayList<Place>,

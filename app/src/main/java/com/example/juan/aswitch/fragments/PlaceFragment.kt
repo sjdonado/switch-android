@@ -48,6 +48,7 @@ class PlaceFragment : androidx.fragment.app.Fragment() {
         placeService.get {
             place = Utils.parseJSONPlace(it.getJSONObject("data"))
             activity!!.runOnUiThread {
+                Utils.setSharedPreferencesPlaceObject(activity!!, it.getJSONObject("data"))
                 PlaceDetailsFragment.TITLE = FragmentHandler.NO_ADD_TO_BACK_STACK
                 fragmentHandler.add(PlaceDetailsFragment.getInstance(place, false))
             }
@@ -59,7 +60,7 @@ class PlaceFragment : androidx.fragment.app.Fragment() {
         when(item!!.itemId) {
             R.id.editPlaceAction -> {
                 item.isVisible = false
-                fragmentHandler.add(EditPlaceFragment.getInstance(place, "images"))
+                fragmentHandler.add(EditPlaceFragment.getInstance(place))
                 return true
             }
 

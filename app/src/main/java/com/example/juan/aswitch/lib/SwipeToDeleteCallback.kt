@@ -8,13 +8,13 @@ import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.juan.aswitch.adapters.SwipeAdapter
+import com.example.juan.aswitch.adapters.PlacesSwipeAdapter
 import com.example.juan.aswitch.R
 
 // ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-class SwipeToDeleteCallback(context: Context, adapter: SwipeAdapter) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+class SwipeToDeleteCallback(context: Context, adapterPlaces: PlacesSwipeAdapter) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
-    private val mAdapter: SwipeAdapter = adapter
+    private val mAdapterPlaces: PlacesSwipeAdapter = adapterPlaces
     private val icon: Drawable? = ContextCompat.getDrawable(context,
             R.drawable.ic_delete_white_24dp)
     private val background: ColorDrawable = ColorDrawable(Color.RED)
@@ -27,7 +27,7 @@ class SwipeToDeleteCallback(context: Context, adapter: SwipeAdapter) : ItemTouch
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val position = viewHolder.adapterPosition
-        mAdapter.deleteItem(position)
+        mAdapterPlaces.deleteItem(position)
     }
 
     override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {

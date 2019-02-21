@@ -2,11 +2,7 @@ package com.example.juan.aswitch.helpers
 
 import com.example.juan.aswitch.R
 import com.google.android.material.snackbar.Snackbar
-import android.transition.Fade
 import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AppCompatActivity
-import android.transition.TransitionInflater
-import android.transition.TransitionSet
 import android.view.View
 import android.app.Activity
 import android.app.Dialog
@@ -14,10 +10,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GetTokenResult
 import org.json.JSONObject
 import android.content.res.Resources
 import android.graphics.Bitmap
@@ -35,10 +28,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.bumptech.glide.request.RequestOptions
 import com.example.juan.aswitch.MainActivity
 import com.example.juan.aswitch.activities.StoriesActivity
-import com.example.juan.aswitch.fragments.UserFragment
 import com.example.juan.aswitch.models.*
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import okhttp3.*
 import org.json.JSONArray
 import java.io.*
@@ -54,15 +45,9 @@ object Utils {
     private const val PREFERENCES_NAME = "SWITCH_DATA"
     const val NOTIFICATIONS_CHANNEL = "switch"
     const val USER_OBJECT = "USER_OBJECT"
+    const val PLACE_OBJECT = "PLACE_OBJECT"
     const val CATEGORIES_OBJECT = "CATEGORIES_OBJECT"
     const val SIGN_UP = "SIGN_UP"
-
-    fun setSharedPreferencesStringValue(activity: Activity, keyName : String, data: String) {
-        val sp = activity.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
-        val editor = sp.edit()
-        editor.putString(keyName, data)
-        editor.apply()
-    }
 
     fun setSharedPreferencesBooleanValue(activity: Activity, keyName : String, data: Boolean) {
         val sp = activity.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
@@ -100,19 +85,6 @@ object Utils {
         }
     }
 
-//    fun getSharedPreferencesCategoriesObject(activity: Activity): User {
-//        val json = getSharedPreferencesStringValue(activity, CATEGORIES_OBJECT)
-//        return Gson().fromJson(json, User::class.java)
-//    }
-//
-//    fun updateSharedPreferencesCategoriesObject(activity: Activity, user: User) {
-//        updateSharedPreferencesObjectValue(
-//                activity,
-//                CATEGORIES_OBJECT,
-//                JSONObject(Gson().toJson(user).toString())
-//        )
-//    }
-
     fun getSharedPreferencesUserObject(activity: Activity): User {
         val json = getSharedPreferencesStringValue(activity, USER_OBJECT)
         return Gson().fromJson(json, User::class.java)
@@ -139,6 +111,27 @@ object Utils {
         )
     }
 
+    fun getSharedPreferencesPlaceObject(activity: Activity): Place {
+        val json = getSharedPreferencesStringValue(activity, PLACE_OBJECT)
+        return Gson().fromJson(json, Place::class.java)
+    }
+
+    fun setSharedPreferencesPlaceObject(context: Activity, data: JSONObject) {
+        setSharedPreferencesStringValue(
+                context,
+                PLACE_OBJECT,
+                data.toString()
+        )
+    }
+
+    fun updateSharedPreferencesPlaceObject(activity: Activity, place: Place) {
+        updateSharedPreferencesObjectValue(
+                activity,
+                PLACE_OBJECT,
+                JSONObject(Gson().toJson(place).toString())
+        )
+    }
+
     fun setToken(activity: Activity, currentUser: FirebaseUser?, callback: () -> Unit) {
         currentUser!!.getIdToken(true).addOnCompleteListener { task ->
             if (task.isSuccessful) {
@@ -147,6 +140,13 @@ object Utils {
                 callback()
             }
         }
+    }
+
+    private fun setSharedPreferencesStringValue(activity: Activity, keyName : String, data: String) {
+        val sp = activity.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
+        val editor = sp.edit()
+        editor.putString(keyName, data)
+        editor.apply()
     }
 
     private fun clearUserInfo(activity: Activity){
@@ -327,46 +327,40 @@ object Utils {
         return cal
     }
 
-    fun openStories(context: Context, stories: ArrayList<ImageObject>) {
-        val storiesArray = ArrayList<Story>()
-        val notNullStoriesArray= getNotNullStoriesArray(stories)
-        notNullStoriesArray.forEachIndexed { index, obj ->
-            bitmapFromUrl(context, storiesArray, index, notNullStoriesArray.size, obj.url!!) {
-                val storiesIntent = Intent(context, StoriesActivity::class.java)
-                storiesIntent.putExtra("stories", storiesArray)
-                context.startActivity(storiesIntent)
-            }
+    fun downloadStories(stories: ArrayList<PlaceStory>, callback : (stories: ArrayList<Story>) -> Unit){
+        val storiesRes = ArrayList<Story>()
+        stories.forEach { placeStory ->
+            createStory(storiesRes, stories.size, placeStory.id,
+                    placeStory.profilePicture.url!!, placeStory.views,
+                    placeStory.seconds, callback)
         }
     }
 
-    fun getNotNullStoriesArray(stories: ArrayList<ImageObject>): List<ImageObject> {
-        return stories.mapNotNull { t: ImageObject ->
-            if (t.ref !== null) t else null
+    fun openStories(context: Activity, index: Int) {
+        val storiesIntent = Intent(context, StoriesActivity::class.java)
+        storiesIntent.putExtra("index", index)
+        context.startActivity(storiesIntent)
+    }
+
+    private fun createStory(array: ArrayList<Story>, size: Int,
+                              id: String, url: String, views: ArrayList<String>, seconds: Int, callback : (stories: ArrayList<Story>) -> Unit) {
+        downloadImage(url) {
+            val story = Story(id, it, views, seconds)
+            array.add(story)
+            if (array.size == size) callback(array)
         }
     }
 
-    private fun bitmapFromUrl(context: Context, array: ArrayList<Story>, index: Int, size: Int, url: String, callback : () -> Unit) {
+    fun downloadImage(url: String, callback : (image: Bitmap) -> Unit) {
         OkHttpClient().newCall(Request.Builder().url(url).build()).enqueue(object : Callback {
             override fun onFailure(call: Call?, e: IOException?) {
                 Log.d("RESOURCES", e.toString())
             }
             override fun onResponse(call : Call?, response : Response?) {
                 val bitmap = BitmapFactory.decodeStream(response!!.body()!!.byteStream())
-                array.add(Story(tempFileImage(context, bitmap, index), index))
-                if (array.size == size) callback()
+                callback(bitmap)
             }
         })
-    }
-
-    private fun tempFileImage(context: Context, bitmap: Bitmap, index: Int): String {
-        val imageFile = File(context.cacheDir, "story_$index.jpg")
-        try {
-            val os = FileOutputStream(imageFile);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os)
-            os.flush()
-            os.close()
-        } catch (e: Exception) {}
-        return imageFile.absolutePath
     }
 }
 

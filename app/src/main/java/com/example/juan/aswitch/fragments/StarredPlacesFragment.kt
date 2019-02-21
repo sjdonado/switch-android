@@ -18,7 +18,7 @@ import com.example.juan.aswitch.services.PlaceService
 import kotlinx.android.synthetic.main.fragment_starred_places.*
 import com.example.juan.aswitch.lib.SwipeToDeleteCallback
 import androidx.recyclerview.widget.ItemTouchHelper
-import com.example.juan.aswitch.adapters.SwipeAdapter
+import com.example.juan.aswitch.adapters.PlacesSwipeAdapter
 import com.example.juan.aswitch.services.UsersPlaceService
 
 
@@ -55,7 +55,7 @@ class StarredPlacesFragment : androidx.fragment.app.Fragment() {
                     fragmentHandler.add(PlaceDetailsFragment.getInstance(place, true))
                 }
             },
-            object: SwipeAdapter.OnSwipeListener {
+            object: PlacesSwipeAdapter.OnSwipeListener {
                 override fun onDelete(place: Place) {
                     Log.d("DELETED", place.toString())
                     placeUsersPlaceService.remove(place.id) {}

@@ -11,16 +11,16 @@ import com.example.juan.aswitch.helpers.Utils
 import android.view.MenuInflater
 import androidx.appcompat.app.AppCompatActivity
 import com.example.juan.aswitch.helpers.FragmentHandler
+import com.example.juan.aswitch.helpers.Stories
 import com.example.juan.aswitch.lib.SwipeCard
-import com.example.juan.aswitch.models.ImageObject
 import com.example.juan.aswitch.models.Place
+import com.example.juan.aswitch.models.Story
 import com.example.juan.aswitch.models.User
 import com.example.juan.aswitch.services.PlaceService
 import com.example.juan.aswitch.services.UsersPlaceService
-import com.google.gson.JsonObject
 import com.mindorks.placeholderview.SwipeDecor
 import kotlinx.android.synthetic.main.fragment_swipe.*
-import org.json.JSONObject
+import org.json.JSONArray
 
 
 class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
@@ -29,11 +29,10 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
     private lateinit var place: Place
     private lateinit var placeService: PlaceService
     private lateinit var usersPlaceService: UsersPlaceService
+    private lateinit var fragmentHandler: FragmentHandler
     private val animationDuration = 300
     private var isToUndo = false
     private var accept = false
-    private lateinit var user: User
-    private lateinit var fragmentHandler: FragmentHandler
 
     companion object {
         fun getInstance(): SwipeFragment = SwipeFragment()
@@ -84,7 +83,7 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
 
         if(places.size == 0) {
 //            if(userObject.has("filters")) Log.d("USER_OBJECT_FILTERS", userObject.getJSONArray("filters").toString())
-            placeService.search(user.radius!!, user.categories!!, user.filters!!) {res ->
+            placeService.search(user.radius!!, user.categories!!, user.filters!!) { res ->
                 val placesObjects = res.getJSONArray("data")
                 Log.d("PLACES", res.toString())
                 if(placesObjects.length() == 0) {
@@ -92,18 +91,25 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
                         swipeNotFoundTextView.visibility = View.VISIBLE
                     }
                 } else {
-                    for (i in 0..(placesObjects.length()-1)) {
-                        val place = Utils.parseJSONPlace(
-                            placesObjects.getJSONObject(i)
-                        )
-                        places.add(place)
-                    }
-                    activity!!.runOnUiThread {
+                    createPlaces(placesObjects) {
                         places.reverse()
                         place = places[places.size - 1]
                         verifyPlaceStories()
                         updatePlaceViews(cardViewHolderSize)
                     }
+//                    for (i in 0..(placesObjects.length()-1)) {
+//                        val place = Utils.parseJSONPlace(
+//                            placesObjects.getJSONObject(i)
+//                        )
+//                        Utils.downloadStories(place.stories!!) { stories ->
+//                            activity!!.runOnUiThread {
+//                                val downloadedStories = ArrayList<Story>()
+//                                stories.forEach { story -> downloadedStories.add(story) }
+//                                place.downloadedStoriesIndex = Stories.add(downloadedStories)
+//                            }
+//                        }
+//                        places.add(place)
+//                    }
                 }
             }
         } else {
@@ -124,7 +130,8 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
 
         swipeStoriesButton.setOnClickListener {
             swipeStoriesButton.isEnabled = false
-            Utils.openStories(activity!!, place.stories)
+//            Stories.get(place.downloadedStoriesIndex!!)
+            Utils.openStories(activity!!, place.downloadedStoriesIndex!!)
         }
 //
 //        undoBtn.setOnClickListener({ swipeView!!.undoLastSwipe() })
@@ -197,11 +204,25 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    private fun createPlaces(placesObjects: JSONArray, callback : () -> Unit) {
+        for (i in 0..(placesObjects.length() - 1)) {
+            val place = Utils.parseJSONPlace(
+                    placesObjects.getJSONObject(i)
+            )
+            Utils.downloadStories(place.stories!!) { stories ->
+                activity!!.runOnUiThread {
+                    val downloadedStories = ArrayList<Story>()
+                    stories.forEach { story -> downloadedStories.add(story) }
+                    place.downloadedStoriesIndex = Stories.add(downloadedStories)
+                    if(i == placesObjects.length() - 1) callback()
+                }
+            }
+            places.add(place)
+        }
+    }
+
     private fun verifyPlaceStories() {
-        if (Utils.getNotNullStoriesArray(place.stories).isNotEmpty())
-            swipeStoriesButton.show()
-        else
-            swipeStoriesButton.hide()
+        if (place.downloadedStoriesIndex != null) swipeStoriesButton.show() else swipeStoriesButton.hide()
     }
 
 }

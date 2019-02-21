@@ -3,6 +3,7 @@ package com.example.juan.aswitch.models
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import java.util.*
+import kotlin.collections.ArrayList
 
 @Parcelize
 data class Place(
@@ -16,23 +17,12 @@ data class Place(
         val openingTime: Time?,
         val closingTime: Time?,
         var images: ArrayList<ImageObject>,
-        var stories: ArrayList<ImageObject>,
         val location: Location,
         val description: String,
         val category: String,
         var qualify: Double?,
         var rate: Rate?,
-        var profilePicture: ImageObject
-) : Parcelable
-
-@Parcelize
-data class Time(
-        val hourOfDay: Int?,
-        val minute: Int?
-) : Parcelable
-
-@Parcelize
-data class Rate(
-        val qualify: Double?,
-        val size: Int?
+        var profilePicture: ImageObject,
+        var stories: ArrayList<PlaceStory>?,
+        var downloadedStoriesIndex: Int?
 ) : Parcelable
