@@ -118,10 +118,23 @@ class StoriesActivity : AppCompatActivity(), StoriesProgressView.StoriesListener
     }
 
     private fun setStoryTime(index: Int) {
-        if (stories[index].seconds.compareTo(3600) == 1) {
-            storiesTime.text = "${stories[index].seconds / 3600} h"
+        if (stories[index].seconds.compareTo(86400) == -1) {
+            if (stories[index].seconds.compareTo(3600) == 1) {
+                storiesTime.text = getString(
+                        R.string.stories_remaining_time_h,
+                        (stories[index].seconds / 3600).toString()
+                )
+            } else {
+                storiesTime.text = getString(
+                        R.string.stories_remaining_time_m,
+                        (stories[index].seconds / 60).toString()
+                )
+            }
         } else {
-            storiesTime.text = "${stories[index].seconds / 60} m"
+            storiesTime.text = getString(
+                    R.string.stories_remaining_time_d,
+                    (stories[index].seconds / 86400).toString()
+            )
         }
     }
 

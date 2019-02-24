@@ -136,9 +136,10 @@
     <string name="edit_place_fragment_stories_title">Edit stories</string>
 
     <!-- Stories activity -->
-    <string name="stories_remaining_time_h" translatable="false">%1$s h</string>
-    <string name="stories_remaining_time_m" translatable="false">%1$s m</string>
-
+    <string name="stories_remaining_time_h">%1$s h ago</string>
+    <string name="stories_remaining_time_m">%1$s m ago</string>
+    <string name="stories_remaining_time_d">%1$s days ago</string>
+    <string name="stories_remaining_time_finished">Finished</string>
 
     <!-- Place card dummy data -->
     <string name="place_card_view_name_dummy" translatable="false">Name lorem name lorem</string>

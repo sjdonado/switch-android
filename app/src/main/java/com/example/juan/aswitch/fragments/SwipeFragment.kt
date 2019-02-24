@@ -156,7 +156,7 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
             } else {
                 place = places[it - 1]
                 verifyPlaceStories()
-                swipeRejectButton.isEnabled = false
+                swipeRejectButton.isEnabled = true
                 swipeAcceptButton.isEnabled = true
             }
         }

@@ -15,8 +15,11 @@ import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.juan.aswitch.adapters.StoriesAdapter
 import com.example.juan.aswitch.helpers.Stories
+import com.example.juan.aswitch.models.PlaceStory
 import com.example.juan.aswitch.models.Story
+import com.example.juan.aswitch.services.PlaceService
 import com.example.juan.aswitch.services.StoriesService
+import com.google.gson.Gson
 
 
 class EditStoriesFragment : androidx.fragment.app.Fragment() {
@@ -24,6 +27,8 @@ class EditStoriesFragment : androidx.fragment.app.Fragment() {
     private lateinit var storiesService: StoriesService
     private lateinit var place: Place
     private lateinit var storiesAdapter: StoriesAdapter
+    private lateinit var placeService: PlaceService
+
     private var stories = ArrayList<Story>()
     private var allStories = ArrayList<Story>()
 
@@ -43,32 +48,20 @@ class EditStoriesFragment : androidx.fragment.app.Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         storiesService = StoriesService(activity!!)
+        placeService = PlaceService(activity!!)
         place = Utils.getSharedPreferencesPlaceObject(activity!!)
-
-//        storiesService.get(place.id) {
-//            Log.d("storiesServiceUser", it.toString())
-//            activity!!.runOnUiThread {
-//                Utils.downloadStories(it.getJSONArray("data")) { res ->
-//                    activity!!.runOnUiThread {
-//                        res.forEach { story -> stories.add(story) }
-//                        storiesWatchButton.show()
-//                        Log.d("storiesUser", stories.toString())
-//                    }
-//                }
-//            }
-//        }
 
         val viewManager = LinearLayoutManager(activity!!)
         storiesAdapter = StoriesAdapter(activity!!, allStories, object: StoriesAdapter.OnClickListener {
             override fun onClick(stories: ArrayList<Story>) {
                 Log.d("ON_CLICK", stories.toString())
-                place.downloadedStoriesIndex = Stories.add(stories)
-                Utils.openStories(activity!!, place.downloadedStoriesIndex!!)
+                Utils.openStories(activity!!, Stories.add(stories))
             }
             override fun onClickDeleteButton(story: Story) {
                 storiesService.delete(story.id) {
                     activity!!.runOnUiThread {
                         allStories.remove(story)
+                        if (allStories.isNullOrEmpty()) storiesWatchButton.hide()
                         storiesAdapter.notifyDataSetChanged()
                     }
                 }
@@ -77,7 +70,15 @@ class EditStoriesFragment : androidx.fragment.app.Fragment() {
 
         storiesService.getAll(place.id) {
             Log.d("storiesServiceAll", it.toString())
-            Utils.downloadStories(place.stories!!) { res ->
+            val storiesJSONArray = it.getJSONArray("data")
+            val placeStories = ArrayList<PlaceStory>()
+            for (i in 0..(storiesJSONArray.length() - 1)) {
+                placeStories.add(
+                        Gson().fromJson(storiesJSONArray.getJSONObject(i).toString(),
+                        PlaceStory::class.java)
+                )
+            }
+            Utils.downloadStories(placeStories) { res ->
                 activity!!.runOnUiThread {
                     if (res.isEmpty()) {
                         storiesNotFoundTextView.visibility = View.VISIBLE
@@ -103,27 +104,12 @@ class EditStoriesFragment : androidx.fragment.app.Fragment() {
             adapter = storiesAdapter
         }
 
-        if(!place.stories.isNullOrEmpty()) {
-            Utils.downloadStories(place.stories!!) {
-                activity!!.runOnUiThread {
-                    Log.d("PLACE_STORIES", it.toString())
-                    val index = Stories.add(it)
-                    place.downloadedStoriesIndex = index
-                    Log.d("PLACE_STORIES_INDEX", Stories.get(index).toString())
-                    storiesWatchButton.setOnClickListener {
-                        storiesWatchButton.isEnabled = false
-                        Utils.openStories(activity!!, place.downloadedStoriesIndex!!)
-                    }
-                    storiesWatchButton.show()
-                }
-            }
-        } else {
-            storiesWatchButton.hide()
-        }
+        showViewStoriesButton()
 
         storiesNewButton.setOnClickListener {
             Utils.openImagePickerIntent(this, PICK_IMAGE)
         }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -140,9 +126,15 @@ class EditStoriesFragment : androidx.fragment.app.Fragment() {
                         val storyJSON = it.getJSONObject("data")
                         Log.d("newStory", it.toString())
                         activity!!.runOnUiThread {
+                            placeService.get {
+                                activity!!.runOnUiThread {
+                                    place.stories = Utils.parseJSONPlace(it.getJSONObject("data")).stories
+                                    showViewStoriesButton()
+                                }
+                            }
                             Utils.downloadImage(storyJSON.getJSONObject("profilePicture").getString("url")) { image ->
                                 activity!!.runOnUiThread {
-                                    allStories.add(Story(
+                                    allStories.add(0, Story(
                                             storyJSON.getString("id"),
                                             image,
                                             ArrayList(),
@@ -163,5 +155,31 @@ class EditStoriesFragment : androidx.fragment.app.Fragment() {
     override fun onResume() {
         super.onResume()
         storiesWatchButton.isEnabled = true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Stories.clear()
+    }
+
+    private fun showViewStoriesButton() {
+        if(!place.stories.isNullOrEmpty()) {
+            Stories.clear()
+            Utils.downloadStories(place.stories!!) {
+                activity!!.runOnUiThread {
+                    Log.d("PLACE_STORIES", it.toString())
+                    val index = Stories.add(it)
+                    place.downloadedStoriesIndex = index
+                    Log.d("PLACE_STORIES_INDEX", Stories.get(index).toString())
+                    storiesWatchButton.setOnClickListener {
+                        storiesWatchButton.isEnabled = false
+                        Utils.openStories(activity!!, place.downloadedStoriesIndex!!)
+                    }
+                    storiesWatchButton.show()
+                }
+            }
+        } else {
+            storiesWatchButton.hide()
+        }
     }
 }

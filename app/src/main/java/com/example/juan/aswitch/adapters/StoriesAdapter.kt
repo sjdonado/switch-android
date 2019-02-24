@@ -1,6 +1,7 @@
 package com.example.juan.aswitch.adapters
 
 import android.app.Activity
+import android.util.Log
 import com.example.juan.aswitch.R
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +22,6 @@ class StoriesAdapter(private val activity: Activity,
         private var viewsNumber: TextView = itemView.findViewById(R.id.storyViewsRecyclerCardTextView)
         private var remainingTimeNumber: TextView = itemView.findViewById(R.id.storyRemainingTimeRecyclerCardTextView)
 
-        private var storyViewsIcon: View = itemView.findViewById(R.id.storyViewsIconRecyclerCardView)
         private var coverImageView: View = itemView.findViewById(R.id.storyRecyclerCardCoverImageView)
         private var deleteButton: View = itemView.findViewById(R.id.storyDeleteRecyclerCardView)
 
@@ -30,22 +30,28 @@ class StoriesAdapter(private val activity: Activity,
                     .apply(RequestOptions().placeholder(Utils.getCircularProgressDrawable(activity)))
                     .into(itemView.findViewById(R.id.storyRecyclerCardCoverImageView))
             viewsNumber.text = story.views.size.toString()
-            if (story.seconds.compareTo(86400) == -1) {
-                if (story.seconds.compareTo(3600) == 1) {
-                    remainingTimeNumber.text = activity.resources.getString(
-                            R.string.stories_remaining_time_h,
-                            (story.seconds / 3600).toString()
-                    )
-                } else {
-                    remainingTimeNumber.text = activity.resources.getString(
-                            R.string.stories_remaining_time_m,
-                            (story.seconds / 60).toString()
-                    )
+            Log.d("SECONDS", story.seconds.toString())
+            deleteButton.visibility = View.VISIBLE
+            when(story.seconds.compareTo(86400)) {
+                -1 -> {
+                    if (story.seconds.compareTo(3600) == 1) {
+                        remainingTimeNumber.text = activity.resources.getString(
+                                R.string.stories_remaining_time_h,
+                                (story.seconds / 3600).toString()
+                        )
+                    } else {
+                        remainingTimeNumber.text = activity.resources.getString(
+                                R.string.stories_remaining_time_m,
+                                (story.seconds / 60).toString()
+                        )
+                    }
                 }
-            } else {
-                storyViewsIcon.visibility = View.GONE
-                remainingTimeNumber.visibility = View.GONE
-                deleteButton.visibility = View.GONE
+                1 -> {
+                    remainingTimeNumber.text = activity.resources.getString(
+                            R.string.stories_remaining_time_finished
+                    )
+                    deleteButton.visibility = View.INVISIBLE
+                }
             }
 
             deleteButton.setOnClickListener {

@@ -96,4 +96,8 @@
     <string name="filters_fragment_open_closed">Cerrado</string>
     <string name="title_fragment_stories">Historias</string>
     <string name="edit_place_fragment_stories_title">Editar historias</string>
+    <string name="stories_remaining_time_h">Hace %1$s h</string>
+    <string name="stories_remaining_time_m">Hace %1$s m</string>
+    <string name="stories_remaining_time_finished">Terminado</string>
+    <string name="stories_remaining_time_d">Hace %1$s días</string>
 </resources>

@@ -16,4 +16,8 @@ object Stories {
     fun get(index: Int): ArrayList<Story> {
         return array[index]
     }
+
+    fun clear() {
+        array.clear()
+    }
 }
