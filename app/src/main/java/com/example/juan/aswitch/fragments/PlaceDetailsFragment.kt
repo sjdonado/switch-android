@@ -137,7 +137,6 @@ class PlaceDetailsFragment : BaseFragment(),
                 fragmentManager!!.executePendingTransactions()
                 dialogFragment.dialog.setOnDismissListener {
                     setRate()
-                    Log.d("PLACE_DIALOG", place.toString())
                     commentsVerification()
                 }
             }

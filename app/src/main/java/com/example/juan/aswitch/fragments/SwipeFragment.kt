@@ -155,13 +155,11 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
     override fun onResume() {
         super.onResume()
         swipeStoriesButton.isEnabled = true
+        if(::place.isInitialized) verifyPlaceStories()
     }
 
     private fun updatePlaceViews(cardViewHolderSize: Point) {
-        Log.d("PLACES_VIEW", places.toString())
-
         for (i in 1..places.size) {
-            Log.d("PLACES_VIEW", places[places.size - i].toString())
             swipeView!!.addView(
                 SwipeCard(activity!!, places[places.size - i], cardViewHolderSize, this)
             )
@@ -198,9 +196,9 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
     }
 
     private fun createPlaces(placesObjects: JSONArray) {
-        for (i in 0..(placesObjects.length() - 1)) {
+        for (i in 1..placesObjects.length()) {
             val place = Utils.parseJSONPlace(
-                    placesObjects.getJSONObject(i)
+                    placesObjects.getJSONObject(placesObjects.length() - i)
             )
             Log.d("PLACES_i_out", i.toString())
             if (!place.stories.isNullOrEmpty()) {
@@ -224,6 +222,7 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
     }
 
     private fun verifyPlaceStories() {
+        Log.d("verifyPlaceStories", place.toString())
         if (place.downloadedStoriesIndex != null) swipeStoriesButton.show() else swipeStoriesButton.hide()
     }
 

@@ -72,8 +72,8 @@ class StarredPlacesFragment : androidx.fragment.app.Fragment() {
                         starredNotFoundTextView.visibility = View.VISIBLE
                     }
                 } else {
-                    for (i in 0..(placesObjects.length() - 1)) {
-                        val place = Utils.parseJSONPlace(placesObjects.getJSONObject(i))
+                    for (i in 1..placesObjects.length()) {
+                        val place = Utils.parseJSONPlace(placesObjects.getJSONObject(placesObjects.length() - i))
                         places.add(place)
                     }
                     activity!!.runOnUiThread {
