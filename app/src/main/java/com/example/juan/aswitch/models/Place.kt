@@ -2,7 +2,6 @@ package com.example.juan.aswitch.models
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
-import java.util.*
 import kotlin.collections.ArrayList
 
 @Parcelize
@@ -20,7 +19,7 @@ data class Place(
         val location: Location,
         val description: String,
         val category: String,
-        var qualify: Double?,
+        var myQualify: MyQualify?,
         var rate: Rate?,
         var profilePicture: ImageObject,
         var stories: ArrayList<PlaceStory>?,

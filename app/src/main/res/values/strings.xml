@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Switch</string>
+    <string name="app_name">Nearmy</string>
     <string name="country_iso_code">co</string>
 
     <!-- Firebase notifications -->
@@ -23,7 +23,7 @@
     <string name="alert_profile_picture_updated">Profile picture updated</string>
 
     <!-- Permissions -->
-    <string name="permissions_error">Switch needs know your location</string>
+    <string name="permissions_error">Nearmy needs know your location</string>
     <string name="permissions_button_allow">Allow</string>
     <string name="permissions_button_cancel">Cancel</string>
 
@@ -117,6 +117,8 @@
     <string name="place_details_distance">%1$s meters</string>
     <string name="place_details_time" translatable="false">%1$s:%2$s - %3$s:%4$s</string>
     <string name="place_details_rate_size" translatable="false">(%1$s)</string>
+    <string name="place_details_comments">Comments</string>
+
 
     <!-- Swipe fragment -->
     <string name="swipe_not_places_found_message">No places were found.</string>
@@ -126,8 +128,9 @@
     <string name="starred_place_removed">Starred place removed successfully</string>
     <string name="starred_place_removed_undo">Undo</string>
 
-    <!-- Qualify dialog fragment -->
+    <!-- MyQualify dialog fragment -->
     <string name="qualify_dialog_fragment_title">Qualify</string>
+    <string name="qualify_dialog_fragment_comment">Comment</string>
     <string name="qualify_dialog_fragment_send_button">Send</string>
     <string name="qualify_dialog_fragment_cancel_button">Cancel</string>
 

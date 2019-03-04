@@ -20,7 +20,10 @@ import com.example.juan.aswitch.services.PlaceService
 import com.example.juan.aswitch.services.UsersPlaceService
 import com.mindorks.placeholderview.SwipeDecor
 import kotlinx.android.synthetic.main.fragment_swipe.*
+import kotlinx.coroutines.runBlocking
 import org.json.JSONArray
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
@@ -86,30 +89,17 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
             placeService.search(user.radius!!, user.categories!!, user.filters!!) { res ->
                 val placesObjects = res.getJSONArray("data")
                 Log.d("PLACES", res.toString())
-                if(placesObjects.length() == 0) {
-                    activity!!.runOnUiThread {
+                activity!!.runOnUiThread {
+                    if(placesObjects.length() == 0) {
                         swipeNotFoundTextView.visibility = View.VISIBLE
-                    }
-                } else {
-                    createPlaces(placesObjects) {
+                    } else {
+                        createPlaces(placesObjects)
+                        Log.d("PLACES_CALLBACK", places.toString())
                         places.reverse()
                         place = places[places.size - 1]
                         verifyPlaceStories()
                         updatePlaceViews(cardViewHolderSize)
                     }
-//                    for (i in 0..(placesObjects.length()-1)) {
-//                        val place = Utils.parseJSONPlace(
-//                            placesObjects.getJSONObject(i)
-//                        )
-//                        Utils.downloadStories(place.stories!!) { stories ->
-//                            activity!!.runOnUiThread {
-//                                val downloadedStories = ArrayList<Story>()
-//                                stories.forEach { story -> downloadedStories.add(story) }
-//                                place.downloadedStoriesIndex = Stories.add(downloadedStories)
-//                            }
-//                        }
-//                        places.add(place)
-//                    }
                 }
             }
         } else {
@@ -168,7 +158,10 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
     }
 
     private fun updatePlaceViews(cardViewHolderSize: Point) {
+        Log.d("PLACES_VIEW", places.toString())
+
         for (i in 1..places.size) {
+            Log.d("PLACES_VIEW", places[places.size - i].toString())
             swipeView!!.addView(
                 SwipeCard(activity!!, places[places.size - i], cardViewHolderSize, this)
             )
@@ -204,20 +197,29 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    private fun createPlaces(placesObjects: JSONArray, callback : () -> Unit) {
+    private fun createPlaces(placesObjects: JSONArray) {
         for (i in 0..(placesObjects.length() - 1)) {
             val place = Utils.parseJSONPlace(
                     placesObjects.getJSONObject(i)
             )
-            Utils.downloadStories(place.stories!!) { stories ->
-                activity!!.runOnUiThread {
-                    val downloadedStories = ArrayList<Story>()
-                    stories.forEach { story -> downloadedStories.add(story) }
-                    place.downloadedStoriesIndex = Stories.add(downloadedStories)
-                    if(i == placesObjects.length() - 1) callback()
+            Log.d("PLACES_i_out", i.toString())
+            if (!place.stories.isNullOrEmpty()) {
+                runBlocking {
+                    place.downloadedStoriesIndex = downloadStories(place)
                 }
             }
+            Log.d("PLACES", place.toString())
             places.add(place)
+        }
+    }
+
+    private suspend fun downloadStories(place: Place): Int {
+        return suspendCoroutine { continuation ->
+            Utils.downloadStories(place.stories!!) { stories ->
+                val downloadedStories = ArrayList<Story>()
+                stories.forEach { story -> downloadedStories.add(story) }
+                continuation.resume(Stories.add(downloadedStories))
+            }
         }
     }
 

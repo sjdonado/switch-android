@@ -19,9 +19,10 @@ open class UsersPlaceService (activity: Activity) : MainService("/users-places",
         super.post("/reject", jsonObject.toString(), callback, false)
     }
 
-    fun qualify(id: String, qualify: Float, callback: (response: JSONObject) -> Unit) {
+    fun qualify(id: String, value: Float, comment: String, callback: (response: JSONObject) -> Unit) {
         val jsonObject = JSONObject()
-        jsonObject.put("qualify", qualify)
+        jsonObject.put("value", value)
+        jsonObject.put("comment", comment)
         super.post("/qualify/$id", jsonObject.toString(), callback, true)
     }
 

@@ -68,11 +68,11 @@ class SwipeCard(private val context: Activity,
                 R.string.place_details_distance,
                 Utils.getRoundedDistance(place.distance)
         )
-        placeCardRatingBar.rating = place.rate!!.qualify!!.toFloat()
-        placeCardRatingTextView.text = place.rate!!.qualify!!.toString()
+        placeCardRatingBar.rating = place.rate!!.value.toFloat()
+        placeCardRatingTextView.text = place.rate!!.value.toString()
         placeCardRatingSizeTextView.text = context.resources.getString(
                 R.string.place_details_rate_size,
-                place.rate!!.size!!.toString()
+                place.rate!!.size.toString()
         )
         placeTimeChip.text = Utils.setChipTime(context, place.openingTime!!, place.closingTime!!)
         swipeView.alpha = 1f

@@ -14,7 +14,9 @@ import kotlinx.android.synthetic.main.fragment_place_details.*
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.request.RequestOptions
+import com.example.juan.aswitch.adapters.CommentsAdapter
 import com.example.juan.aswitch.models.ImageObject
 import com.example.juan.aswitch.models.Place
 import com.glide.slider.library.SliderLayout
@@ -34,6 +36,7 @@ class PlaceDetailsFragment : BaseFragment(),
     private val images: ArrayList<ImageObject> = ArrayList()
     lateinit var place: Place
     lateinit var placeDetailsImageSlider: SliderLayout
+    private lateinit var commentsAdapter: CommentsAdapter
 
     companion object {
         var TITLE = "PlaceDetails"
@@ -123,6 +126,8 @@ class PlaceDetailsFragment : BaseFragment(),
                 fragmentManager!!.executePendingTransactions()
                 dialogFragment.dialog.setOnDismissListener {
                     setRate()
+                    Log.d("PLACE_DIALOG", place.toString())
+                    commentsAdapter.notifyDataSetChanged()
                 }
             }
         }
@@ -150,21 +155,36 @@ class PlaceDetailsFragment : BaseFragment(),
         }
 
         Log.d("PLACE_OBJECT", "geo:${place.location.lat},${place.location.lng}")
+
+        if (!place.rate!!.comments.isNullOrEmpty()) {
+            placeDetailsCommentsTitle.visibility = View.VISIBLE
+            placeDetailsCommentsRecyclerView.visibility = View.VISIBLE
+
+            val viewManager = LinearLayoutManager(activity!!)
+            commentsAdapter = CommentsAdapter(activity!!, place.rate!!.comments)
+
+            placeDetailsCommentsRecyclerView.apply {
+                setHasFixedSize(true)
+                layoutManager = viewManager
+                adapter = commentsAdapter
+            }
+        }
+
+        setRate()
     }
 
     override fun onResume() {
         super.onResume()
-        setRate()
         placeDetailsGoButton.isEnabled = true
         placeDetailsCallButton.isEnabled = true
     }
 
     private fun setRate(){
-        placeDetailsRatingBar.rating = place.rate!!.qualify!!.toFloat()
-        placeDetailsRatingTextView.text = place.rate!!.qualify!!.toString()
+        placeDetailsRatingBar.rating = place.rate!!.value.toFloat()
+        placeDetailsRatingTextView.text = place.rate!!.value.toString()
         placeDetailsRatingSizeTextView.text = resources.getString(
                 R.string.place_details_rate_size,
-                place.rate!!.size!!.toString()
+                place.rate!!.size.toString()
         )
     }
 

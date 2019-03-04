@@ -100,4 +100,6 @@
     <string name="stories_remaining_time_m">Hace %1$s m</string>
     <string name="stories_remaining_time_finished">Terminado</string>
     <string name="stories_remaining_time_d">Hace %1$s días</string>
+    <string name="qualify_dialog_fragment_comment">Comentario</string>
+    <string name="place_details_comments">Comentarios</string>
 </resources>

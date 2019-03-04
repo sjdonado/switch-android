@@ -12,9 +12,11 @@ import kotlinx.android.synthetic.main.fragment_qualify.*
 
 
 import com.example.juan.aswitch.R
+import com.example.juan.aswitch.models.MyQualify
 import com.example.juan.aswitch.models.Place
 import com.example.juan.aswitch.models.Rate
 import com.example.juan.aswitch.services.UsersPlaceService
+import com.google.gson.Gson
 
 
 class QualifyFragment : DialogFragment() {
@@ -48,15 +50,16 @@ class QualifyFragment : DialogFragment() {
 
         usersPlaceService = UsersPlaceService(activity!!)
 
-        if (place.qualify != null) qualifyRatingBar.rating = place.qualify!!.toFloat()
+        if (place.myQualify != null) {
+            qualifyRatingBar.rating = place.myQualify!!.value.toFloat()
+            qualifyCommentTextField.editText!!.setText(place.myQualify!!.comment)
+        }
 
         qualifySendButton.setOnClickListener {
-            usersPlaceService.qualify(place.userPlaceId!!, qualifyRatingBar.rating) { res ->
+            usersPlaceService.qualify(place.userPlaceId!!, qualifyRatingBar.rating, qualifyCommentTextField.editText!!.text.toString()) { res ->
                 activity!!.runOnUiThread {
-                    Log.d("QUALIFY_RESPONSE", res.getJSONObject("data").toString())
-                    place.qualify = res.getJSONObject("data").getDouble("qualify")
-                    val rate = res.getJSONObject("data").getJSONObject("rate")
-                    place.rate = Rate(rate.getDouble("qualify"), rate.getInt("size"))
+                    place.myQualify = Gson().fromJson(res.getJSONObject("data").getJSONObject("myQualify").toString(), MyQualify::class.java)
+                    place.rate = Gson().fromJson(res.getJSONObject("data").getJSONObject("rate").toString(), Rate::class.java)
                     dismiss()
                 }
             }

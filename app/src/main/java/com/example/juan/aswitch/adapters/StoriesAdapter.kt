@@ -30,7 +30,6 @@ class StoriesAdapter(private val activity: Activity,
                     .apply(RequestOptions().placeholder(Utils.getCircularProgressDrawable(activity)))
                     .into(itemView.findViewById(R.id.storyRecyclerCardCoverImageView))
             viewsNumber.text = story.views.size.toString()
-            Log.d("SECONDS", story.seconds.toString())
             deleteButton.visibility = View.VISIBLE
             when(story.seconds.compareTo(86400)) {
                 -1 -> {

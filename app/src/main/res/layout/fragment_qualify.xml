@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:minWidth="300dp"
-    android:minHeight="200dp"
+    android:maxHeight="350dp"
     tools:context=".fragments.QualifyFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,17 +13,15 @@
         android:layout_height="match_parent"
         android:layout_marginTop="16dp"
         android:minWidth="300dp"
-        android:minHeight="200dp">
+        android:maxHeight="350dp">
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/qualifyTitle"
             style="@style/CardTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:text="@string/qualify_dialog_fragment_title"
+            app:layout_constraintBottom_toTopOf="@id/qualifyRatingBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -33,14 +31,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            app:layout_constraintBottom_toTopOf="@id/qualifyCommentTextField"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/qualifyTitle" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/qualifyCommentTextField"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/qualifyRatingBar"
+            app:layout_constraintBottom_toTopOf="@id/qualifyCancelButton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent" >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:gravity="top"
+                android:hint="@string/qualify_dialog_fragment_comment"
+                android:inputType="textMultiLine" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/qualifyCancelButton"
@@ -49,8 +63,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp"
             android:text="@string/qualify_dialog_fragment_cancel_button"
+            app:layout_constraintTop_toBottomOf="@id/qualifyCommentTextField"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:textAllCaps="false" />
@@ -60,10 +74,9 @@
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
             android:text="@string/qualify_dialog_fragment_send_button"
+            app:layout_constraintTop_toBottomOf="@id/qualifyCommentTextField"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:textAllCaps="false" />

@@ -7,191 +7,223 @@
     android:layout_height="match_parent"
     tools:context=".fragments.PlaceDetailsFragment">
 
-    <com.google.android.material.card.MaterialCardView
-        style="@style/Widget.MaterialComponents.CardView"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        card_view:cardCornerRadius="8dp">
+        android:fillViewport="true">
 
-        <androidx.core.widget.NestedScrollView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true">
+            android:paddingBottom="84dp"
+            android:animateLayoutChanges="true">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/placeDetailsCardView"
+                style="@style/Widget.MaterialComponents.CardView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="16dp"
-                android:animateLayoutChanges="true">
+                android:layout_margin="8dp"
+                app:layout_constraintVertical_bias="0.0"
+                app:layout_constraintBottom_toTopOf="@id/placeDetailsCommentsRecyclerView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                card_view:cardCornerRadius="8dp">
 
-                <com.glide.slider.library.SliderLayout
-                    android:id="@+id/placeDetailsImageSlider"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    app:layout_constraintBottom_toTopOf="@id/placeDetailsNameTextView"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_height="match_parent"
+                    android:paddingBottom="16dp"
+                    android:animateLayoutChanges="true">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/placeDetailsNameTextView"
-                    style="@style/CardTitle"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="8dp"
-                    app:layout_constraintEnd_toStartOf="@+id/placeDetailsTimeChip"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/placeDetailsImageSlider" />
+                    <com.glide.slider.library.SliderLayout
+                        android:id="@+id/placeDetailsImageSlider"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        app:layout_constraintBottom_toTopOf="@id/placeDetailsNameTextView"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/placeDetailsTimeChip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
-                    app:chipCornerRadius="10dp"
-                    app:chipIconSize="14dp"
-                    app:chipStartPadding="8dp"
-                    app:layout_constraintBottom_toTopOf="@+id/placeDetailsDistanceTextView"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/placeDetailsNameTextView"
+                        style="@style/CardTitle"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintEnd_toStartOf="@+id/placeDetailsTimeChip"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/placeDetailsImageSlider" />
 
-                <androidx.appcompat.widget.AppCompatRatingBar
-                    android:id="@+id/placeDetailsRatingBar"
-                    style="?android:attr/ratingBarStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="19dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="8dp"
-                    app:layout_constraintEnd_toStartOf="@+id/placeDetailsDistanceTextView"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/placeDetailsNameTextView" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/placeDetailsTimeChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        app:chipCornerRadius="10dp"
+                        app:chipIconSize="14dp"
+                        app:chipStartPadding="8dp"
+                        app:layout_constraintBottom_toTopOf="@+id/placeDetailsDistanceTextView"
+                        app:layout_constraintEnd_toEndOf="parent" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/placeDetailsRatingTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintStart_toEndOf="@+id/placeDetailsRatingBar"
-                    app:layout_constraintTop_toBottomOf="@+id/placeDetailsNameTextView" />
+                    <androidx.appcompat.widget.AppCompatRatingBar
+                        android:id="@+id/placeDetailsRatingBar"
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="19dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintEnd_toStartOf="@+id/placeDetailsDistanceTextView"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/placeDetailsNameTextView" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/placeDetailsRatingSizeTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintEnd_toStartOf="@+id/placeDetailsDistanceTextView"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/placeDetailsRatingTextView"
-                    app:layout_constraintTop_toBottomOf="@+id/placeDetailsNameTextView" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/placeDetailsRatingTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintStart_toEndOf="@+id/placeDetailsRatingBar"
+                        app:layout_constraintTop_toBottomOf="@+id/placeDetailsNameTextView" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/placeDetailsDistanceTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="19dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/placeDetailsNameTextView" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/placeDetailsRatingSizeTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintEnd_toStartOf="@+id/placeDetailsDistanceTextView"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/placeDetailsRatingTextView"
+                        app:layout_constraintTop_toBottomOf="@+id/placeDetailsNameTextView" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/placeDetailsTimeTextView"
-                    android:layout_width="0dp"
-                    android:layout_height="19dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginEnd="16dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/placeDetailsGoButton"
-                    app:layout_constraintTop_toBottomOf="@+id/placeDetailsRatingBar" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/placeDetailsDistanceTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="19dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/placeDetailsNameTextView" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/placeDetailsLocationTextView"
-                    android:layout_width="0dp"
-                    android:layout_height="19dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintEnd_toStartOf="@id/placeDetailsGoButton"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/placeDetailsTimeTextView" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/placeDetailsTimeTextView"
+                        android:layout_width="0dp"
+                        android:layout_height="19dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/placeDetailsGoButton"
+                        app:layout_constraintTop_toBottomOf="@+id/placeDetailsRatingBar" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/placeDetailsGoButton"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-                    android:layout_width="123dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="28dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="@string/place_details_go_button"
-                    app:icon="@drawable/ic_map_white_24dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/placeDetailsTimeTextView"
-                    app:layout_constraintTop_toBottomOf="@+id/placeDetailsNameTextView"
-                    app:textAllCaps="false" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/placeDetailsLocationTextView"
+                        android:layout_width="0dp"
+                        android:layout_height="19dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintEnd_toStartOf="@id/placeDetailsGoButton"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/placeDetailsTimeTextView" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/placeDetailsPhoneTextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/placeDetailsCallButton"
-                    app:layout_constraintTop_toBottomOf="@+id/placeDetailsLocationTextView" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/placeDetailsGoButton"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                        android:layout_width="123dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="28dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/place_details_go_button"
+                        app:icon="@drawable/ic_map_white_24dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/placeDetailsTimeTextView"
+                        app:layout_constraintTop_toBottomOf="@+id/placeDetailsNameTextView"
+                        app:textAllCaps="false" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/placeDetailsCallButton"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-                    android:layout_width="123dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="@string/place_details_call_button"
-                    app:layout_constraintTop_toBottomOf="@+id/placeDetailsGoButton"
-                    app:textAllCaps="false"
-                    card_view:icon="@drawable/ic_call_white_24dp"
-                    card_view:layout_constraintEnd_toEndOf="parent"
-                    card_view:layout_constraintHorizontal_bias="1.0"
-                    card_view:layout_constraintStart_toEndOf="@+id/placeDetailsPhoneTextView" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/placeDetailsPhoneTextView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/placeDetailsCallButton"
+                        app:layout_constraintTop_toBottomOf="@+id/placeDetailsLocationTextView" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/placeDetailsDescriptionTextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/placeDetailsCallButton" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/placeDetailsCallButton"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                        android:layout_width="123dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/place_details_call_button"
+                        app:layout_constraintTop_toBottomOf="@+id/placeDetailsGoButton"
+                        app:textAllCaps="false"
+                        card_view:icon="@drawable/ic_call_white_24dp"
+                        card_view:layout_constraintEnd_toEndOf="parent"
+                        card_view:layout_constraintHorizontal_bias="1.0"
+                        card_view:layout_constraintStart_toEndOf="@+id/placeDetailsPhoneTextView" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/placeDetailsDescriptionTextView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/placeDetailsCallButton" />
 
-        </androidx.core.widget.NestedScrollView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+            </com.google.android.material.card.MaterialCardView>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/placeDetailsCommentsTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:textSize="20sp"
+                android:text="@string/place_details_comments"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/placeDetailsCardView"
+                app:layout_constraintBottom_toTopOf="@id/placeDetailsCommentsRecyclerView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"  />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/placeDetailsCommentsRecyclerView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/placeDetailsCommentsTitle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/placeDetailsQualifyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:visibility="invisible"
+        android:visibility="gone"
         android:src="@drawable/ic_assignment_turned_in_white_24dp"
         android:layout_margin="16dp" />
 

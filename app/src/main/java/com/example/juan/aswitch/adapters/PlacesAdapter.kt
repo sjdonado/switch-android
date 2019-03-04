@@ -37,11 +37,11 @@ class PlacesAdapter(private val view: View, private val activity: Activity,
                     R.string.place_details_distance,
                     Utils.getRoundedDistance(place.distance)
             )
-            ratingBar.rating = place.rate!!.qualify!!.toFloat()
-            ratingText.text = place.rate!!.qualify!!.toString()
+            ratingBar.rating = place.rate!!.value.toFloat()
+            ratingText.text = place.rate!!.value.toString()
             ratingSizeText.text = activity.resources.getString(
                     R.string.place_details_rate_size,
-                    place.rate!!.size!!.toString()
+                    place.rate!!.size.toString()
             )
             itemView.setOnClickListener {
                 clickListener.onClick(place)
