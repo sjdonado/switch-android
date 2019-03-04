@@ -36,6 +36,9 @@ import java.io.*
 import java.math.RoundingMode
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 object Utils {
 
@@ -327,40 +330,36 @@ object Utils {
         return cal
     }
 
-    fun downloadStories(stories: ArrayList<PlaceStory>, callback : (stories: ArrayList<Story>) -> Unit){
-        val storiesRes = ArrayList<Story>()
-        stories.forEach { placeStory ->
-            createStory(storiesRes, stories.size, placeStory.id,
-                    placeStory.profilePicture.url!!, placeStory.views,
-                    placeStory.seconds, callback)
-        }
-    }
-
     fun openStories(context: Activity, index: Int) {
         val storiesIntent = Intent(context, StoriesActivity::class.java)
         storiesIntent.putExtra("index", index)
         context.startActivity(storiesIntent)
     }
 
-    private fun createStory(array: ArrayList<Story>, size: Int,
-                              id: String, url: String, views: ArrayList<String>, seconds: Int, callback : (stories: ArrayList<Story>) -> Unit) {
-        downloadImage(url) {
-            val story = Story(id, it, views, seconds)
-            array.add(story)
-            if (array.size == size) callback(array)
+    suspend fun downloadStories(stories: ArrayList<PlaceStory>): ArrayList<Story> {
+        return stories.map { placeStory ->
+            Story(placeStory.id,downloadImage(placeStory.profilePicture.url!!), placeStory.views,
+                    placeStory.seconds)
+        } as ArrayList<Story>
+    }
+
+    suspend fun downloadImage(url: String): Bitmap {
+        return suspendCoroutine { continuation ->
+            OkHttpClient().newCall(Request.Builder().url(url).build()).enqueue(object : Callback {
+                override fun onFailure(call: Call?, e: IOException?) {
+                    Log.d("RESOURCES", e.toString())
+                    continuation.resumeWithException(e!!.fillInStackTrace())
+                }
+                override fun onResponse(call : Call?, response : Response?) {
+                    val bitmap = BitmapFactory.decodeStream(response!!.body()!!.byteStream())
+                    continuation.resume(bitmap)
+                }
+            })
         }
     }
 
-    fun downloadImage(url: String, callback : (image: Bitmap) -> Unit) {
-        OkHttpClient().newCall(Request.Builder().url(url).build()).enqueue(object : Callback {
-            override fun onFailure(call: Call?, e: IOException?) {
-                Log.d("RESOURCES", e.toString())
-            }
-            override fun onResponse(call : Call?, response : Response?) {
-                val bitmap = BitmapFactory.decodeStream(response!!.body()!!.byteStream())
-                callback(bitmap)
-            }
-        })
+    suspend fun downloadStories(place: Place): Int {
+        return Stories.add(downloadStories(place.stories!!))
     }
 }
 

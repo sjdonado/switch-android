@@ -23,6 +23,10 @@ import com.glide.slider.library.SliderLayout
 import com.glide.slider.library.SliderTypes.BaseSliderView
 import com.glide.slider.library.SliderTypes.TextSliderView
 import com.glide.slider.library.Tricks.ViewPagerEx
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 class PlaceDetailsFragment : BaseFragment(),
@@ -166,6 +170,18 @@ class PlaceDetailsFragment : BaseFragment(),
 
         Log.d("PLACE_OBJECT", "geo:${place.location.lat},${place.location.lng}")
 
+        if (qualify && !place.stories.isNullOrEmpty()) {
+            CoroutineScope(Dispatchers.Main).launch {
+                place.downloadedStoriesIndex = Utils.downloadStories(place)
+                placeDetailsStoriesButton.show()
+            }
+
+            placeDetailsStoriesButton.setOnClickListener {
+                placeDetailsStoriesButton.isEnabled = false
+                Utils.openStories(activity!!, place.downloadedStoriesIndex!!)
+            }
+        }
+
         setRate()
     }
 
@@ -173,6 +189,7 @@ class PlaceDetailsFragment : BaseFragment(),
         super.onResume()
         placeDetailsGoButton.isEnabled = true
         placeDetailsCallButton.isEnabled = true
+        placeDetailsStoriesButton.isEnabled = true
     }
 
     private fun setRate(){

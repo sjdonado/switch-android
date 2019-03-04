@@ -2,6 +2,8 @@ package com.example.juan.aswitch.fragments
 
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,6 +22,10 @@ import com.example.juan.aswitch.models.Story
 import com.example.juan.aswitch.services.PlaceService
 import com.example.juan.aswitch.services.StoriesService
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 class EditStoriesFragment : androidx.fragment.app.Fragment() {
@@ -28,8 +34,8 @@ class EditStoriesFragment : androidx.fragment.app.Fragment() {
     private lateinit var place: Place
     private lateinit var storiesAdapter: StoriesAdapter
     private lateinit var placeService: PlaceService
+    private lateinit var progressDialog: Dialog
 
-    private var stories = ArrayList<Story>()
     private var allStories = ArrayList<Story>()
 
     companion object {
@@ -54,17 +60,26 @@ class EditStoriesFragment : androidx.fragment.app.Fragment() {
         val viewManager = LinearLayoutManager(activity!!)
         storiesAdapter = StoriesAdapter(activity!!, allStories, object: StoriesAdapter.OnClickListener {
             override fun onClick(stories: ArrayList<Story>) {
-                Log.d("ON_CLICK", stories.toString())
                 Utils.openStories(activity!!, Stories.add(stories))
             }
             override fun onClickDeleteButton(story: Story) {
-                storiesService.delete(story.id) {
-                    activity!!.runOnUiThread {
-                        allStories.remove(story)
-                        if (allStories.isNullOrEmpty()) storiesWatchButton.hide()
-                        storiesAdapter.notifyDataSetChanged()
+                AlertDialog.Builder(activity!!)
+                    .setTitle(getString(R.string.stories_dialog_title))
+                    .setMessage(R.string.stories_dialog_message)
+                    .setPositiveButton(getString(R.string.stories_dialog_positive_button)) { _, _ ->
+                        storiesService.delete(story.id) {
+                            activity!!.runOnUiThread {
+                                allStories.remove(story)
+                                if (allStories.isNullOrEmpty()) storiesWatchButton.hide()
+                                storiesAdapter.notifyDataSetChanged()
+                            }
+                        }
                     }
-                }
+                    .setNeutralButton(getString(R.string.stories_dialog_neutral_button)) { dialog, _ ->
+                        dialog.cancel()
+                    }
+                    .create()
+                    .show()
             }
         })
 
@@ -78,16 +93,19 @@ class EditStoriesFragment : androidx.fragment.app.Fragment() {
                         PlaceStory::class.java)
                 )
             }
-            Utils.downloadStories(placeStories) { res ->
-                activity!!.runOnUiThread {
-                    if (res.isEmpty()) {
+            activity!!.runOnUiThread {
+                progressDialog = Utils.showLoading(activity!!)
+                CoroutineScope(Dispatchers.Main).launch {
+                    val stories = Utils.downloadStories(placeStories)
+                    if (stories.isEmpty()) {
                         storiesNotFoundTextView.visibility = View.VISIBLE
                     } else {
-                        res.forEach { story -> allStories.add(story) }
+                        stories.forEach { story -> allStories.add(story) }
                         allStories.sortBy { story -> story.seconds }
                         storiesNotFoundTextView.visibility = View.GONE
                         storiesAdapter.notifyDataSetChanged()
                     }
+                    progressDialog.hide()
                 }
             }
         }
@@ -132,15 +150,13 @@ class EditStoriesFragment : androidx.fragment.app.Fragment() {
                                     showViewStoriesButton()
                                 }
                             }
-                            Utils.downloadImage(storyJSON.getJSONObject("profilePicture").getString("url")) { image ->
-                                activity!!.runOnUiThread {
-                                    allStories.add(0, Story(
-                                            storyJSON.getString("id"),
-                                            image,
-                                            ArrayList(),
-                                            storyJSON.getInt("seconds")))
-                                    storiesAdapter.notifyDataSetChanged()
-                                }
+                            runBlocking {
+                                allStories.add(0, Story(
+                                        storyJSON.getString("id"),
+                                        Utils.downloadImage(storyJSON.getJSONObject("profilePicture").getString("url")),
+                                        ArrayList(),
+                                        storyJSON.getInt("seconds")))
+                                storiesAdapter.notifyDataSetChanged()
                             }
                         }
                     }
@@ -165,18 +181,17 @@ class EditStoriesFragment : androidx.fragment.app.Fragment() {
     private fun showViewStoriesButton() {
         if(!place.stories.isNullOrEmpty()) {
             Stories.clear()
-            Utils.downloadStories(place.stories!!) {
-                activity!!.runOnUiThread {
-                    Log.d("PLACE_STORIES", it.toString())
-                    val index = Stories.add(it)
-                    place.downloadedStoriesIndex = index
-                    Log.d("PLACE_STORIES_INDEX", Stories.get(index).toString())
-                    storiesWatchButton.setOnClickListener {
-                        storiesWatchButton.isEnabled = false
-                        Utils.openStories(activity!!, place.downloadedStoriesIndex!!)
-                    }
-                    storiesWatchButton.show()
+            CoroutineScope(Dispatchers.Main).launch {
+                val stories = Utils.downloadStories(place.stories!!)
+                Log.d("PLACE_STORIES", stories.toString())
+                val index = Stories.add(stories)
+                place.downloadedStoriesIndex = index
+                Log.d("PLACE_STORIES_INDEX", Stories.get(index).toString())
+                storiesWatchButton.setOnClickListener {
+                    storiesWatchButton.isEnabled = false
+                    Utils.openStories(activity!!, place.downloadedStoriesIndex!!)
                 }
+                storiesWatchButton.show()
             }
         } else {
             storiesWatchButton.hide()

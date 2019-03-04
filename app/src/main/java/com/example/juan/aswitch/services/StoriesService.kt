@@ -35,7 +35,7 @@ open class StoriesService (activity: Activity) : MainService("/stories", activit
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("image", image.name, RequestBody.create(mediaType, image))
                 .build()
-        super.upload("/?place=$placeId", multipartBody, callback, false)
+        super.upload("/?place=$placeId", multipartBody, callback, true)
     }
 
 }

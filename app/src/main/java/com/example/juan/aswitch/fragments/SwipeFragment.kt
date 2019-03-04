@@ -1,6 +1,7 @@
 package com.example.juan.aswitch.fragments
 
 
+import android.app.Dialog
 import android.graphics.Point
 import android.os.Bundle
 import android.util.Log
@@ -20,6 +21,9 @@ import com.example.juan.aswitch.services.PlaceService
 import com.example.juan.aswitch.services.UsersPlaceService
 import com.mindorks.placeholderview.SwipeDecor
 import kotlinx.android.synthetic.main.fragment_swipe.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.json.JSONArray
 import kotlin.coroutines.resume
@@ -33,6 +37,7 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
     private lateinit var placeService: PlaceService
     private lateinit var usersPlaceService: UsersPlaceService
     private lateinit var fragmentHandler: FragmentHandler
+    private lateinit var progressDialog: Dialog
     private val animationDuration = 300
     private var isToUndo = false
     private var accept = false
@@ -202,22 +207,12 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
             )
             Log.d("PLACES_i_out", i.toString())
             if (!place.stories.isNullOrEmpty()) {
-                runBlocking {
-                    place.downloadedStoriesIndex = downloadStories(place)
+                CoroutineScope(Dispatchers.Main).launch {
+                    place.downloadedStoriesIndex = Utils.downloadStories(place)
+                    if (i == 1) verifyPlaceStories()
                 }
             }
-            Log.d("PLACES", place.toString())
             places.add(place)
-        }
-    }
-
-    private suspend fun downloadStories(place: Place): Int {
-        return suspendCoroutine { continuation ->
-            Utils.downloadStories(place.stories!!) { stories ->
-                val downloadedStories = ArrayList<Story>()
-                stories.forEach { story -> downloadedStories.add(story) }
-                continuation.resume(Stories.add(downloadedStories))
-            }
         }
     }
 
