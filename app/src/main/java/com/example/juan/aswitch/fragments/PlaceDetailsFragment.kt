@@ -112,6 +112,17 @@ class PlaceDetailsFragment : BaseFragment(),
         )
         placeDetailsTimeChip.text = Utils.setChipTime(activity!!, place.openingTime!!, place.closingTime!!)
 
+        val viewManager = LinearLayoutManager(activity!!)
+        commentsAdapter = CommentsAdapter(activity!!, place.rate!!.comments)
+
+        commentsVerification()
+
+        placeDetailsCommentsRecyclerView.apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = commentsAdapter
+        }
+
         if (qualify) {
             placeDetailsQualifyButton.show()
             placeDetailsQualifyButton.setOnClickListener {
@@ -127,7 +138,7 @@ class PlaceDetailsFragment : BaseFragment(),
                 dialogFragment.dialog.setOnDismissListener {
                     setRate()
                     Log.d("PLACE_DIALOG", place.toString())
-                    commentsAdapter.notifyDataSetChanged()
+                    commentsVerification()
                 }
             }
         }
@@ -156,20 +167,6 @@ class PlaceDetailsFragment : BaseFragment(),
 
         Log.d("PLACE_OBJECT", "geo:${place.location.lat},${place.location.lng}")
 
-        if (!place.rate!!.comments.isNullOrEmpty()) {
-            placeDetailsCommentsTitle.visibility = View.VISIBLE
-            placeDetailsCommentsRecyclerView.visibility = View.VISIBLE
-
-            val viewManager = LinearLayoutManager(activity!!)
-            commentsAdapter = CommentsAdapter(activity!!, place.rate!!.comments)
-
-            placeDetailsCommentsRecyclerView.apply {
-                setHasFixedSize(true)
-                layoutManager = viewManager
-                adapter = commentsAdapter
-            }
-        }
-
         setRate()
     }
 
@@ -186,6 +183,15 @@ class PlaceDetailsFragment : BaseFragment(),
                 R.string.place_details_rate_size,
                 place.rate!!.size.toString()
         )
+    }
+
+    private fun commentsVerification() {
+        if (place.rate!!.comments.isNullOrEmpty()) {
+            placeDetailsCommentsTitle.text = getString(R.string.place_details_not_comments)
+        } else {
+            placeDetailsCommentsTitle.text = getString(R.string.place_details_comments)
+            commentsAdapter.notifyDataSetChanged()
+        }
     }
 
     override fun onSliderClick(p0: BaseSliderView?) {}

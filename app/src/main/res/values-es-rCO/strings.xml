@@ -102,4 +102,5 @@
     <string name="stories_remaining_time_d">Hace %1$s días</string>
     <string name="qualify_dialog_fragment_comment">Comentario</string>
     <string name="place_details_comments">Comentarios</string>
+    <string name="place_details_not_comments">No tiene comentarios</string>
 </resources>

@@ -59,7 +59,9 @@ class QualifyFragment : DialogFragment() {
             usersPlaceService.qualify(place.userPlaceId!!, qualifyRatingBar.rating, qualifyCommentTextField.editText!!.text.toString()) { res ->
                 activity!!.runOnUiThread {
                     place.myQualify = Gson().fromJson(res.getJSONObject("data").getJSONObject("myQualify").toString(), MyQualify::class.java)
-                    place.rate = Gson().fromJson(res.getJSONObject("data").getJSONObject("rate").toString(), Rate::class.java)
+                    val rate = Gson().fromJson(res.getJSONObject("data").getJSONObject("rate").toString(), Rate::class.java)
+                    place.rate!!.comments.clear()
+                    place.rate!!.comments.addAll(rate.comments)
                     dismiss()
                 }
             }

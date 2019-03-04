@@ -118,6 +118,7 @@
     <string name="place_details_time" translatable="false">%1$s:%2$s - %3$s:%4$s</string>
     <string name="place_details_rate_size" translatable="false">(%1$s)</string>
     <string name="place_details_comments">Comments</string>
+    <string name="place_details_not_comments">Doesn\'t have comments yet</string>
 
 
     <!-- Swipe fragment -->
