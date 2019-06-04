@@ -51,6 +51,7 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
         setHasOptionsMenu(true)
     }
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -91,19 +92,21 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
 
         if(places.size == 0) {
 //            if(userObject.has("filters")) Log.d("USER_OBJECT_FILTERS", userObject.getJSONArray("filters").toString())
-            placeService.search(user.radius!!, user.categories!!, user.filters!!) { res ->
-                val placesObjects = res.getJSONArray("data")
-                Log.d("PLACES", res.toString())
-                activity!!.runOnUiThread {
-                    if(placesObjects.length() == 0) {
-                        swipeNotFoundTextView.visibility = View.VISIBLE
-                    } else {
-                        createPlaces(placesObjects)
-                        Log.d("PLACES_CALLBACK", places.toString())
-                        places.reverse()
-                        place = places[places.size - 1]
-                        verifyPlaceStories()
-                        updatePlaceViews(cardViewHolderSize)
+            placeService.search(user.radius!!, user.categories!!, user.filters!!) { err, res ->
+                if (!err) {
+                    val placesObjects = res.getJSONArray("data")
+                    Log.d("PLACES", res.toString())
+                    activity!!.runOnUiThread {
+                        if(placesObjects.length() == 0) {
+                            swipeNotFoundTextView.visibility = View.VISIBLE
+                        } else {
+                            createPlaces(placesObjects)
+                            Log.d("PLACES_CALLBACK", places.toString())
+                            places.reverse()
+                            place = places[places.size - 1]
+                            verifyPlaceStories()
+                            updatePlaceViews(cardViewHolderSize)
+                        }
                     }
                 }
             }
@@ -134,10 +137,13 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
         swipeView!!.addItemRemoveListener {
             if (isToUndo) swipeView!!.undoLastSwipe()
             if(accept) {
-                usersPlaceService.accept(user.id!!, places[it].id) {}
-                accept = false
+                usersPlaceService.accept(user.id!!, places[it].id) { err, _ ->
+                    if (!err) {
+                        accept = false
+                    }
+                }
             } else {
-                usersPlaceService.reject(user.id!!, places[it].id) {}
+                usersPlaceService.reject(user.id!!, places[it].id) { _, _ -> }
             }
             if(isToUndo) {
                 isToUndo = false
@@ -218,7 +224,9 @@ class SwipeFragment : androidx.fragment.app.Fragment(), SwipeCard.Callback {
 
     private fun verifyPlaceStories() {
         Log.d("verifyPlaceStories", place.toString())
-        if (place.downloadedStoriesIndex != null) swipeStoriesButton.show() else swipeStoriesButton.hide()
+        Log.d("verifyPlaceStories", (activity!!.supportFragmentManager.findFragmentById(R.id.menu_fragment_container) is SwipeFragment).toString())
+        if (activity!!.supportFragmentManager.findFragmentById(R.id.menu_fragment_container) is SwipeFragment) {
+            if (place.downloadedStoriesIndex != null) swipeStoriesButton.show() else swipeStoriesButton.hide()
+        }
     }
-
 }

@@ -67,11 +67,13 @@ class EditStoriesFragment : androidx.fragment.app.Fragment() {
                     .setTitle(getString(R.string.stories_dialog_title))
                     .setMessage(R.string.stories_dialog_message)
                     .setPositiveButton(getString(R.string.stories_dialog_positive_button)) { _, _ ->
-                        storiesService.delete(story.id) {
-                            activity!!.runOnUiThread {
-                                allStories.remove(story)
-                                if (allStories.isNullOrEmpty()) storiesWatchButton.hide()
-                                storiesAdapter.notifyDataSetChanged()
+                        storiesService.delete(story.id) { err, _ ->
+                            if (!err) {
+                                activity!!.runOnUiThread {
+                                    allStories.remove(story)
+                                    if (allStories.isNullOrEmpty()) storiesWatchButton.hide()
+                                    storiesAdapter.notifyDataSetChanged()
+                                }
                             }
                         }
                     }
@@ -83,29 +85,31 @@ class EditStoriesFragment : androidx.fragment.app.Fragment() {
             }
         })
 
-        storiesService.getAll(place.id) {
-            Log.d("storiesServiceAll", it.toString())
-            val storiesJSONArray = it.getJSONArray("data")
-            val placeStories = ArrayList<PlaceStory>()
-            for (i in 0..(storiesJSONArray.length() - 1)) {
-                placeStories.add(
-                        Gson().fromJson(storiesJSONArray.getJSONObject(i).toString(),
-                        PlaceStory::class.java)
-                )
-            }
-            activity!!.runOnUiThread {
-                progressDialog = Utils.showLoading(activity!!)
-                CoroutineScope(Dispatchers.Main).launch {
-                    val stories = Utils.downloadStories(placeStories)
-                    if (stories.isEmpty()) {
-                        storiesNotFoundTextView.visibility = View.VISIBLE
-                    } else {
-                        stories.forEach { story -> allStories.add(story) }
-                        allStories.sortBy { story -> story.seconds }
-                        storiesNotFoundTextView.visibility = View.GONE
-                        storiesAdapter.notifyDataSetChanged()
+        storiesService.getAll(place.id) { err, res ->
+            if (!err) {
+                Log.d("storiesServiceAll", res.toString())
+                val storiesJSONArray = res.getJSONArray("data")
+                val placeStories = ArrayList<PlaceStory>()
+                for (i in 0..(storiesJSONArray.length() - 1)) {
+                    placeStories.add(
+                            Gson().fromJson(storiesJSONArray.getJSONObject(i).toString(),
+                                    PlaceStory::class.java)
+                    )
+                }
+                activity!!.runOnUiThread {
+                    progressDialog = Utils.showLoading(activity!!)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val stories = Utils.downloadStories(placeStories)
+                        if (stories.isEmpty()) {
+                            storiesNotFoundTextView.visibility = View.VISIBLE
+                        } else {
+                            stories.forEach { story -> allStories.add(story) }
+                            allStories.sortBy { story -> story.seconds }
+                            storiesNotFoundTextView.visibility = View.GONE
+                            storiesAdapter.notifyDataSetChanged()
+                        }
+                        progressDialog.hide()
                     }
-                    progressDialog.hide()
                 }
             }
         }
@@ -140,23 +144,27 @@ class EditStoriesFragment : androidx.fragment.app.Fragment() {
                             activity!!.contentResolver!!.openInputStream(data.data!!)!!,
                             Utils.getMimeType(activity!!, data.data!!)!!
                     )
-                    storiesService.create(place.id, image) {
-                        val storyJSON = it.getJSONObject("data")
-                        Log.d("newStory", it.toString())
-                        activity!!.runOnUiThread {
-                            placeService.get {
-                                activity!!.runOnUiThread {
-                                    place.stories = Utils.parseJSONPlace(it.getJSONObject("data")).stories
-                                    showViewStoriesButton()
+                    storiesService.create(place.id, image) { err, res ->
+                        if (!err) {
+                            val storyJSON = res.getJSONObject("data")
+                            Log.d("newStory", res.toString())
+                            activity!!.runOnUiThread {
+                                placeService.get { err, psRes ->
+                                    if (!err) {
+                                        activity!!.runOnUiThread {
+                                            place.stories = Utils.parseJSONPlace(psRes.getJSONObject("data")).stories
+                                            showViewStoriesButton()
+                                        }
+                                    }
                                 }
-                            }
-                            runBlocking {
-                                allStories.add(0, Story(
-                                        storyJSON.getString("id"),
-                                        Utils.downloadImage(storyJSON.getJSONObject("profilePicture").getString("url")),
-                                        ArrayList(),
-                                        storyJSON.getInt("seconds")))
-                                storiesAdapter.notifyDataSetChanged()
+                                runBlocking {
+                                    allStories.add(0, Story(
+                                            storyJSON.getString("id"),
+                                            Utils.downloadImage(storyJSON.getJSONObject("profilePicture").getString("url")),
+                                            ArrayList(),
+                                            storyJSON.getInt("seconds")))
+                                    storiesAdapter.notifyDataSetChanged()
+                                }
                             }
                         }
                     }

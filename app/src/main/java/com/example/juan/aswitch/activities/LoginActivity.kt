@@ -68,17 +68,19 @@ class LoginActivity : AppCompatActivity() {
             when {
                 resultCode == Activity.RESULT_OK -> {
                     Utils.setToken(this, FirebaseAuth.getInstance().currentUser) {
-                        userService.get(true) { res ->
-                            if (res.length() == 0) {
-                                Utils.logout(this)
-                            } else {
-                                Utils.setUserAndPreferences(this, res.getJSONObject("data"))
-                                Utils.setSharedPreferencesBooleanValue(
-                                        this,
-                                        "SIGN_UP",
-                                        true
-                                )
-                                openUserFragment()
+                        userService.get(true) { err, res ->
+                            if (!err) {
+                                if (res.length() == 0) {
+                                    Utils.logout(this)
+                                } else {
+                                    Utils.setUserAndPreferences(this, res.getJSONObject("data"))
+                                    Utils.setSharedPreferencesBooleanValue(
+                                            this,
+                                            "SIGN_UP",
+                                            true
+                                    )
+                                    openUserFragment()
+                                }
                             }
                         }
                     }

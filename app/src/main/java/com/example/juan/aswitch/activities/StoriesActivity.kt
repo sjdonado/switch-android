@@ -142,7 +142,9 @@ class StoriesActivity : AppCompatActivity(), StoriesProgressView.StoriesListener
         val jsonObject = JSONObject()
         if(!user.role!!) {
             jsonObject.put("userId", user.id)
-            storiesService.viewStory(storyId, jsonObject) {}
+            storiesService.viewStory(storyId, jsonObject) { err, _ ->
+
+            }
         }
     }
 }

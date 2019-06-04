@@ -50,7 +50,7 @@ class NotificationsFragment : androidx.fragment.app.Fragment() {
                 val jsonObject = JSONObject()
                 jsonObject.put("title", notificationsEditTextNotificationTitle.editText!!.text)
                 jsonObject.put("message", notificationsEditTextNotificationMessage.editText!!.text)
-                placeService.sendNotification(jsonObject) {
+                placeService.sendNotification(jsonObject) { err, _ ->
 //                    Utils.showSnackbar(getView()!!, getString(R.string.alert_info_updated))
                 }
             }

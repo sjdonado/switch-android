@@ -45,12 +45,14 @@ class PlaceFragment : androidx.fragment.app.Fragment() {
 
         placeService = PlaceService(activity!!)
 
-        placeService.get {
-            place = Utils.parseJSONPlace(it.getJSONObject("data"))
-            activity!!.runOnUiThread {
-                Utils.setSharedPreferencesPlaceObject(activity!!, it.getJSONObject("data"))
-                PlaceDetailsFragment.TITLE = FragmentHandler.NO_ADD_TO_BACK_STACK
-                fragmentHandler.add(PlaceDetailsFragment.getInstance(place, false))
+        placeService.get { err, res ->
+            if (!err) {
+                place = Utils.parseJSONPlace(res.getJSONObject("data"))
+                activity!!.runOnUiThread {
+                    Utils.setSharedPreferencesPlaceObject(activity!!, res.getJSONObject("data"))
+                    PlaceDetailsFragment.TITLE = FragmentHandler.NO_ADD_TO_BACK_STACK
+                    fragmentHandler.add(PlaceDetailsFragment.getInstance(place, false))
+                }
             }
         }
 

@@ -5,8 +5,6 @@
       <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-placeholderview-1.0.3.aar/65e9141f8a000b20fd64e91924a7e71a/res" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mindorks.android/placeholderview/1.0.3/db5d29ec00d1604970bffef5134be8b0b605cbdc/placeholderview-1.0.3-sources.jar!/" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>

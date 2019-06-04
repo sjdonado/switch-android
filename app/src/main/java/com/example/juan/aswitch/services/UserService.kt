@@ -7,15 +7,15 @@ import java.io.File
 
 open class UserService (activity: Activity) : MainService("/users", activity) {
 
-    fun get(loading: Boolean, callback: (response: JSONObject) -> Unit) {
+    fun get(loading: Boolean, callback: (err: Boolean, response: JSONObject) -> Unit) {
         super.get("/", callback, loading)
     }
 
-    fun update(jsonObject: JSONObject, callback: (response: JSONObject) -> Unit) {
+    fun update(jsonObject: JSONObject, callback: (err: Boolean, response: JSONObject) -> Unit) {
         super.put("/", jsonObject.toString(), callback, true)
     }
 
-    fun uploadImage(field : String, image : File, callback: (response : JSONObject) -> Unit) {
+    fun uploadImage(field : String, image : File, callback: (err: Boolean, response : JSONObject) -> Unit) {
         val mediaType = if (image.endsWith("png"))
             MediaType.parse("image/png")
         else

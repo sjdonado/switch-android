@@ -134,19 +134,21 @@ class MainActivity : AppCompatActivity() {
             startActivity(loginIntent)
         } else {
             Utils.setToken(this, currentUser) {
-                userService.get(false) { res ->
-                    Utils.setUserAndPreferences(this, res.getJSONObject("data"))
+                userService.get(false) { err, res ->
+                    if (!err) {
+                        Utils.setUserAndPreferences(this, res.getJSONObject("data"))
 
-                    if(Utils.getSharedPreferencesBooleanValue(this, Utils.SIGN_UP)!!){
-                        val loginActivityIntent = Intent(this, LoginActivity::class.java)
-                        loginActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                        loginActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        startActivity(loginActivityIntent)
-                    }else{
-                        val menuActivityIntent = Intent(this, MenuActivity::class.java)
-                        menuActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                        menuActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        startActivity(menuActivityIntent)
+                        if(Utils.getSharedPreferencesBooleanValue(this, Utils.SIGN_UP)!!){
+                            val loginActivityIntent = Intent(this, LoginActivity::class.java)
+                            loginActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            loginActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(loginActivityIntent)
+                        }else{
+                            val menuActivityIntent = Intent(this, MenuActivity::class.java)
+                            menuActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            menuActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(menuActivityIntent)
+                        }
                     }
                 }
             }

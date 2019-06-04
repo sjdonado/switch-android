@@ -93,28 +93,32 @@ class UserFragment : androidx.fragment.app.Fragment() {
         if (role) toggleCompanyFieldsVisibility(true)
 
         if(signUp || (user.role != null && role)) {
-            placeService.getAllCategories {
-                activity!!.runOnUiThread {
-                    Log.d("getCategories", it.toString())
-                    val categories = it.getJSONArray("data")
-                    val spinnerArrayAdapter = ArrayAdapter<String>(activity!!, android.R.layout.simple_spinner_item,
-                            Utils.toStringArray(categories)!!)
-                    spinnerArrayAdapter.setDropDownViewResource(android.R.layout
-                            .simple_spinner_dropdown_item)
-                    userCategorySpinner.adapter = spinnerArrayAdapter
+            placeService.getAllCategories { err, res ->
+                if (!err) {
+                    activity!!.runOnUiThread {
+                        Log.d("getCategories", res.toString())
+                        val categories = res.getJSONArray("data")
+                        val spinnerArrayAdapter = ArrayAdapter<String>(activity!!, android.R.layout.simple_spinner_item,
+                                Utils.toStringArray(categories)!!)
+                        spinnerArrayAdapter.setDropDownViewResource(android.R.layout
+                                .simple_spinner_dropdown_item)
+                        userCategorySpinner.adapter = spinnerArrayAdapter
+                    }
                 }
             }
         }
 
         if(user.role != null && role) {
-            placeService.get {
-                activity!!.runOnUiThread {
-                    place = Utils.parseJSONPlace(it.getJSONObject("data"))
-                    userNitEditText.editText!!.setText(place.nit)
-                    userSignboardEditText.editText!!.setText(place.signboard)
-                    userDescriptionEditText.editText!!.setText(place.description)
-                    setTimePicker(activity!!, userOpeningTimeEditText.editText!!, 0, place.openingTime)
-                    setTimePicker(activity!!, userClosingTimeEditText.editText!!, 1, place.closingTime)
+            placeService.get { err, res ->
+                if (!err) {
+                    activity!!.runOnUiThread {
+                        place = Utils.parseJSONPlace(res.getJSONObject("data"))
+                        userNitEditText.editText!!.setText(place.nit)
+                        userSignboardEditText.editText!!.setText(place.signboard)
+                        userDescriptionEditText.editText!!.setText(place.description)
+                        setTimePicker(activity!!, userOpeningTimeEditText.editText!!, 0, place.openingTime)
+                        setTimePicker(activity!!, userClosingTimeEditText.editText!!, 1, place.closingTime)
+                    }
                 }
             }
         }
@@ -197,14 +201,16 @@ class UserFragment : androidx.fragment.app.Fragment() {
                     userJSONObject.put("closingTime", closingTimeJsonObject)
                 }
                 Log.d("INFO_TO_UPDATE", userJSONObject.toString())
-                userService.update(userJSONObject) { res ->
-                    Utils.showSnackbar(getView()!!, getString(R.string.alert_info_updated))
-                    Utils.setSharedPreferencesBooleanValue(activity!!, "SIGN_UP", false)
-                    Utils.updateSharedPreferencesObjectValue(activity!!, Utils.USER_OBJECT, res.getJSONObject("data"))
-                    activity!!.runOnUiThread {
-                        if(signUp){
-                            val menuActivityIntent = Intent(activity!!, MenuActivity::class.java)
-                            requireActivity().startActivity(menuActivityIntent)
+                userService.update(userJSONObject) { err, res ->
+                    if (!err) {
+                        Utils.showSnackbar(getView()!!, getString(R.string.alert_info_updated))
+                        Utils.setSharedPreferencesBooleanValue(activity!!, "SIGN_UP", false)
+                        Utils.updateSharedPreferencesObjectValue(activity!!, Utils.USER_OBJECT, res.getJSONObject("data"))
+                        activity!!.runOnUiThread {
+                            if(signUp){
+                                val menuActivityIntent = Intent(activity!!, MenuActivity::class.java)
+                                requireActivity().startActivity(menuActivityIntent)
+                            }
                         }
                     }
                 }
@@ -223,19 +229,21 @@ class UserFragment : androidx.fragment.app.Fragment() {
                             activity!!.contentResolver!!.openInputStream(data.data!!)!!,
                             Utils.getMimeType(activity!!, data.data!!)!!
                     )
-                    userService.uploadImage("profilePicture", image) { res ->
-                        activity!!.runOnUiThread {
-                            Utils.updateSharedPreferencesObjectValue(
-                                    activity!!,
-                                    "USER_OBJECT",
-                                    res.getJSONObject("data")
-                            )
-                            Glide.with(activity!!)
-                                    .load(res.getJSONObject("data")
-                                            .getJSONObject("profilePicture")
-                                            .getString("url"))
-                                    .apply(Utils.glideRequestOptions(activity!!))
-                                    .into(userProfilePictureImageView)
+                    userService.uploadImage("profilePicture", image) { err, res ->
+                        if (!err) {
+                            activity!!.runOnUiThread {
+                                Utils.updateSharedPreferencesObjectValue(
+                                        activity!!,
+                                        "USER_OBJECT",
+                                        res.getJSONObject("data")
+                                )
+                                Glide.with(activity!!)
+                                        .load(res.getJSONObject("data")
+                                                .getJSONObject("profilePicture")
+                                                .getString("url"))
+                                        .apply(Utils.glideRequestOptions(activity!!))
+                                        .into(userProfilePictureImageView)
+                            }
                         }
                     }
                 }

@@ -58,26 +58,28 @@ class StarredPlacesFragment : androidx.fragment.app.Fragment() {
             object: PlacesSwipeAdapter.OnSwipeListener {
                 override fun onDelete(place: Place) {
                     Log.d("DELETED", place.toString())
-                    placeUsersPlaceService.remove(place.id) {}
+                    placeUsersPlaceService.remove(place.id) { _, _ -> }
                 }
             }
         )
 
         if(places.size == 0) {
-            placeService.starredPlaces { res ->
-                val placesObjects = res.getJSONArray("data")
-                Log.d("STARRED_PLACES", res.toString())
-                if(placesObjects.length() == 0 ) {
-                    activity!!.runOnUiThread {
-                        starredNotFoundTextView.visibility = View.VISIBLE
-                    }
-                } else {
-                    for (i in 1..placesObjects.length()) {
-                        val place = Utils.parseJSONPlace(placesObjects.getJSONObject(placesObjects.length() - i))
-                        places.add(place)
-                    }
-                    activity!!.runOnUiThread {
-                        placesAdapter.notifyDataSetChanged()
+            placeService.starredPlaces { err, res ->
+                if (!err) {
+                    val placesObjects = res.getJSONArray("data")
+                    Log.d("STARRED_PLACES", res.toString())
+                    if(placesObjects.length() == 0 ) {
+                        activity!!.runOnUiThread {
+                            starredNotFoundTextView.visibility = View.VISIBLE
+                        }
+                    } else {
+                        for (i in 1..placesObjects.length()) {
+                            val place = Utils.parseJSONPlace(placesObjects.getJSONObject(placesObjects.length() - i))
+                            places.add(place)
+                        }
+                        activity!!.runOnUiThread {
+                            placesAdapter.notifyDataSetChanged()
+                        }
                     }
                 }
             }
